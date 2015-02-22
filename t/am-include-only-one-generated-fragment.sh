@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1996-2013 Free Software Foundation, Inc.
+# Copyright (C) 2014 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,27 +14,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Test for bug where install-sh not included in distribution.
+# Check that inclusion of only one '.am' that can be regenerated via
+# a user-defined Makefile rule does not incur in spurious automake
+# warnings about "target redefinition".
 
 . test-init.sh
 
-echo AC_OUTPUT >> configure.ac
-
-cat > Makefile.am << 'END'
-pkgdata_DATA =
-.PHONY: test
-test: distdir
-	find $(distdir) ;: For debugging.
-	echo ' ' $(DISTFILES) ' ' | grep '[ /]install-sh '
-	echo ' ' $(DIST_COMMON) ' ' | grep '[ /]install-sh '
-	test -f $(distdir)/install-sh
+cat >> configure.ac <<'END'
+AC_CONFIG_FILES([sub/Makefile])
+AC_OUTPUT
 END
+
+cat > Makefile.am <<'END'
+include foobar.am
+$(srcdir)/foobar.am: $(srcdir)/touch.sh
+	$(SHELL) $(srcdir)/touch.sh $(srcdir)/foobar.am
+EXTRA_DIST = touch.sh
+END
+
+mkdir sub
+cat > sub/Makefile.am <<'END'
+include $(top_srcdir)/quux.am
+$(top_srcdir)/quux.am: $(top_srcdir)/touch.sh
+	$(SHELL) $(top_srcdir)/touch.sh $@
+END
+
+: > foobar.am
+: > quux.am
 
 $ACLOCAL
 $AUTOMAKE
-$AUTOCONF
-
-./configure
-$MAKE test
 
 :
