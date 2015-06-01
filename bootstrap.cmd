@@ -2,6 +2,6 @@ extproc sh
 
 (cd t && attrib -r "*")
 
-export COMSPEC=/bin/sh
+export MAKESHELL=/bin/sh
 
 ./bootstrap.sh "$@"
