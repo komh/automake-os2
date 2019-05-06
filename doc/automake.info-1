@@ -1,11 +1,11 @@
-This is automake.info, produced by makeinfo version 6.1 from
+This is automake.info, produced by makeinfo version 6.5 from
 automake.texi.
 
-This manual is for GNU Automake (version 1.15.1, 17 June 2017), a
+This manual is for GNU Automake (version 1.16, 25 February 2018), a
 program that creates GNU standards-compliant Makefiles from template
 files.
 
-   Copyright © 1995-2017 Free Software Foundation, Inc.
+   Copyright © 1995-2018 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -31,11 +31,11 @@ File: automake.info,  Node: Top,  Next: Introduction,  Up: (dir)
 GNU Automake
 ************
 
-This manual is for GNU Automake (version 1.15.1, 17 June 2017), a
+This manual is for GNU Automake (version 1.16, 25 February 2018), a
 program that creates GNU standards-compliant Makefiles from template
 files.
 
-   Copyright © 1995-2017 Free Software Foundation, Inc.
+   Copyright © 1995-2018 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -1905,8 +1905,8 @@ source in case you need more recent versions.
      changes in new kernel versions.  Each new release of Automake comes
      with up-to-date copies of these programs.  If your copy of Automake
      is getting old, you are encouraged to fetch the latest versions of
-     these files from <http://savannah.gnu.org/git/?group=config> before
-     making a release.
+     these files from <https://savannah.gnu.org/git/?group=config>
+     before making a release.
 
 ‘depcomp’
      This program understands how to run a compiler so that it will
@@ -1949,7 +1949,7 @@ source in case you need more recent versions.
      Not a program, this file is required for ‘make dvi’, ‘make ps’ and
      ‘make pdf’ to work when Texinfo sources are in the package.  The
      latest version can be downloaded from
-     <http://www.gnu.org/software/texinfo/>.
+     <https://www.gnu.org/software/texinfo/>.
 
 ‘ylwrap’
      This program wraps ‘lex’ and ‘yacc’ to rename their output files.
@@ -2156,6 +2156,10 @@ misunderstand this paragraph: ‘automake’ runs ‘autoconf’ to *scan* your
 ‘--libdir=DIR’
      Look for Automake data files in directory DIR instead of in the
      installation directory.  This is typically used for debugging.
+
+     The environment variable ‘AUTOMAKE_LIBDIR’ provides another way to
+     set the directory containing Automake data files.  However
+     ‘--libdir’ takes precedence over it.
 
 ‘--print-libdir’
      Print the path of the installation directory containing
@@ -2686,6 +2690,10 @@ File: automake.info,  Node: aclocal Options,  Next: Macro Search Path,  Up: aclo
 ‘--automake-acdir=DIR’
      Look for the automake-provided macro files in DIR instead of in the
      installation directory.  This is typically used for debugging.
+
+     The environment variable ‘ACLOCAL_AUTOMAKE_DIR’ provides another
+     way to set the directory containing automake-provided macro files.
+     However ‘--automake-acdir’ takes precedence over it.
 
 ‘--system-acdir=DIR’
      Look for the system-wide third-party macro files (and the special
