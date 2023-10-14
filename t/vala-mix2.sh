@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2018 Free Software Foundation, Inc.
+# Copyright (C) 2012-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ int main ()
 END
 
 cat > foo.h <<'END'
-int foo;
+extern int foo;
 int bar (void);
 int baz (void);
 END
@@ -56,7 +56,7 @@ END
 
 cat > baz.c <<'END'
 #include "foo.h"
-extern int foo = 0;
+int foo = 0;
 int baz (void) { return 0; }
 END
 

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2010-2018 Free Software Foundation, Inc.
+# Copyright (C) 2010-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Test that automake works around a bug of Solaris Make. The bug is the
-# following.  If we have a Makefile containg a file inclusion like this:
+# following.  If we have a Makefile containing a file inclusion like this:
 #   include .//foo.mk
 # Solaris make fails with a message like:
 #   make: ... can't find '/foo.mk': No such file or directory

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2018 Free Software Foundation, Inc.
+# Copyright (C) 2012-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ cat > configure.ac <<'END'
 AC_INIT([Makefile.am])
 AM_INIT_AUTOMAKE([twoargs], [1.0])
 AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
 END
 
 $ACLOCAL

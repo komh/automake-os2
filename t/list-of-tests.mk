@@ -2,7 +2,7 @@
 ## testsuite.  This fragment is meant to be included by the Makefile.am,
 ## but also to be executed directly by make when bootstrapping automake.
 
-## Copyright (C) 2011-2018 Free Software Foundation, Inc.
+## Copyright (C) 2011-2021 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ t/pm/Version3.pl
 
 XFAIL_TESTS = \
 t/all.sh \
-t/auxdir-pr19311.sh \
 t/cond17.sh \
 t/gcj6.sh \
 t/override-conditional-2.sh \
@@ -203,6 +202,7 @@ t/built-sources-check.sh \
 t/built-sources-cond.sh \
 t/built-sources-fork-bomb.sh \
 t/built-sources-install.sh \
+t/built-sources-install-exec.sh \
 t/built-sources-subdir.sh \
 t/built-sources.sh \
 t/candist.sh \
@@ -410,6 +410,7 @@ t/dist-missing-m4.sh \
 t/dist-readonly.sh \
 t/dist-repeated.sh \
 t/dist-pr109765.sh \
+t/dist-no-built-sources.sh \
 t/dist-vs-built-sources.sh \
 t/distcleancheck.sh \
 t/distcom2.sh \
@@ -431,6 +432,7 @@ t/distcheck-writable-srcdir.sh \
 t/distcheck-missing-m4.sh \
 t/distcheck-outdated-m4.sh \
 t/distcheck-no-prefix-or-srcdir-override.sh \
+t/distcheck-override-dvi.sh \
 t/distcheck-override-infodir.sh \
 t/distcheck-pr9579.sh \
 t/distcheck-pr10470.sh \
@@ -529,6 +531,7 @@ t/installdir.sh \
 t/add-missing-install-sh.sh \
 t/install-sh-unittests.sh \
 t/install-sh-option-C.sh \
+t/install-sh-option-S.sh \
 t/instdat.sh \
 t/instdat2.sh \
 t/instdir.sh \
@@ -816,6 +819,7 @@ t/tests-environment-backcompat.sh \
 t/testsuite-summary-color.sh \
 t/testsuite-summary-count.sh \
 t/testsuite-summary-count-many.sh \
+t/testsuite-summary-header.sh \
 t/testsuite-summary-reference-log.sh \
 t/test-driver-acsubst.sh \
 t/test-driver-cond.sh \
@@ -830,6 +834,7 @@ t/test-driver-strip-vpath.sh \
 t/test-driver-trs-suffix-registered.sh \
 t/test-driver-fail.sh \
 t/test-driver-is-distributed.sh \
+t/test-extensions-empty.sh \
 t/test-harness-vpath-rewrite.sh \
 t/test-log.sh \
 t/test-logs-repeated.sh \
@@ -844,6 +849,7 @@ t/test-trs-recover.sh \
 t/test-trs-recover2.sh \
 t/test-extensions.sh \
 t/test-extensions-cond.sh \
+t/toplevelmd.sh \
 t/parse.sh \
 t/percent.sh \
 t/percent2.sh \
@@ -922,6 +928,7 @@ t/python-am-path-iftrue.sh \
 t/python-missing.sh \
 t/python-too-old.sh \
 t/python-dist.sh \
+t/python-prefix.sh \
 t/python-vars.sh \
 t/python-virtualenv.sh \
 t/python-pr10995.sh \
@@ -1188,6 +1195,7 @@ t/tap-summary-color.sh \
 t/tags.sh \
 t/tags2.sh \
 t/tagsub.sh \
+t/tags-lisp-space.sh \
 t/tags-pr12372.sh \
 t/tar-ustar.sh \
 t/tar-pax.sh \
@@ -1214,6 +1222,7 @@ t/txinfo-no-clutter.sh \
 t/txinfo-no-extra-dist.sh \
 t/txinfo-no-installinfo.sh \
 t/txinfo-no-repeated-targets.sh \
+t/txinfo-no-setfilename.sh \
 t/txinfo-other-suffixes.sh \
 t/txinfo-override-infodeps.sh \
 t/txinfo-override-texinfo-tex.sh \
@@ -1246,6 +1255,8 @@ t/vala-configure.sh \
 t/vala-grepping.sh \
 t/vala-headers.sh \
 t/vala-libs.sh \
+t/vala-libs-distcheck.sh \
+t/vala-libs-vpath.sh \
 t/vala-mix.sh \
 t/vala-mix2.sh \
 t/vala-non-recursive-setup.sh \

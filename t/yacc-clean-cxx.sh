@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ cat > sub1/parsefoo.yxx << 'END'
 #include <cstdio>
 // "std::" qualification required by Sun C++ 5.9.
 int yylex (void) { return std::getchar (); }
-void yyerror (const char *s) { return; }
+void yyerror (const char *s) {}
 %}
 %%
 x : 'x' { };

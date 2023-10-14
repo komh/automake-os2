@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2002-2018 Free Software Foundation, Inc.
+# Copyright (C) 2002-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ cat > dir/Makefile.am << 'END'
 BUILT_SOURCES = built2
 built2:
 ## The next line ensures that command1.inc has been built before
-## recurring into the subdir.
+## recursing into the subdir.
 	cp ../built1 $@
 CLEANFILES = built2
 END

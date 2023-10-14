@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2018 Free Software Foundation, Inc.
+# Copyright (C) 2012-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 # An empty "foo_PRIMARY" declaration should *not* cause "make install"
 # to create directory $(foodir).  See automake bug#10997 and bug#11030.
 
+required='makeinfo tex texi2dvi dvips'
 . test-init.sh
 
 cat >> configure.ac <<'END'

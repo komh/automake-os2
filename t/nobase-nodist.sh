@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 . test-init.sh
 
 # Simulate no emacs and no python (it shouldn't be needed in this test).
-EMACS="no" PYTHON=":"; export EMCAS PYTHON
+EMACS="no" PYTHON=":"; export EMACS PYTHON
 
 cat >> configure.ac << 'END'
 AM_PATH_LISPDIR

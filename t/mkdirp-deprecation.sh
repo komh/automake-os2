@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2018 Free Software Foundation, Inc.
+# Copyright (C) 2012-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,12 +19,19 @@
 
 . test-init.sh
 
-echo AM_PROG_MKDIR_P >> configure.ac
+cat > configure.ac <<'END'
+AC_INIT([test], [1.0])
+AM_INIT_AUTOMAKE
+AM_PROG_MKDIR_P
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+END
+
 : > Makefile.am
 
 grep_err ()
 {
-  loc='^configure.ac:4:'
+  loc='^configure.ac:3:'
   grep "$loc.*AM_PROG_MKDIR_P.*deprecated" stderr
   grep "$loc.* use .*AC_PROG_MKDIR_P" stderr
   grep "$loc.* use '\$(MKDIR_P)' instead of '\$(mkdir_p)'.*Makefile" stderr

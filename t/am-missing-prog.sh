@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2003-2018 Free Software Foundation, Inc.
+# Copyright (C) 2003-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,9 +86,9 @@ $AUTOMAKE
 
 $FGREP COMMAND Makefile.in Makefile # For debugging.
 
-grep "^NO_SUCH_COMMAND = \${SHELL} .*/missing .*am-none-none" Makefile
-grep "^MISMATCHED_COMMAND = \${SHELL} .*/missing .*am-exit-63" Makefile
-grep "^COMMAND_FOUND = \${SHELL} .*/missing .*my-command" Makefile
+grep "^NO_SUCH_COMMAND = \${SHELL} .*/missing.* .*am-none-none" Makefile
+grep "^MISMATCHED_COMMAND = \${SHELL} .*/missing.* .*am-exit-63" Makefile
+grep "^COMMAND_FOUND = \${SHELL} .*/missing.* .*my-command" Makefile
 grep '^OVERRIDDEN_COMMAND = am-overridden *$' Makefile
 
 $MAKE test1 test2 test3 test4

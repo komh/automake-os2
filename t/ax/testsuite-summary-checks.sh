@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Check the testsuite summary with the parallel test harness.  This
-# script is meant to be sourced by other test script, so that it can
+# script is meant to be sourced by other test scripts, so that it can
 # be used to check different scenarios (colorized and non-colorized
 # testsuite output, packages with and without bug-report addresses,
 # testsuites in subdirectories, ...)

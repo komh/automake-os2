@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2004-2018 Free Software Foundation, Inc.
+# Copyright (C) 2004-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,27 +60,21 @@ cwd=$(pwd) || fatal_ "getting current working directory"
 $MAKE install
 test -f            "$inst/your/two.py"
 py_installed       "$inst/your/two.pyc"
-py_installed       "$inst/your/two.pyo"
 py_installed --not "$inst/my/one.py"
 py_installed --not "$inst/my/one.pyc"
-py_installed --not "$inst/my/one.pyo"
 $MAKE uninstall
 py_installed --not "$inst/your/two.py"
 py_installed --not "$inst/your/two.pyc"
-py_installed --not "$inst/your/two.pyo"
 
 ../configure --prefix=$cwd/"$inst" one=1
 $MAKE install
 py_installed --not "$inst/your/two.py"
 py_installed --not "$inst/your/two.pyc"
-py_installed --not "$inst/your/two.pyo"
 test -f            "$inst/my/one.py"
 py_installed       "$inst/my/one.pyc"
-py_installed       "$inst/my/one.pyo"
 $MAKE uninstall
 py_installed --not "$inst/my/one.py"
 py_installed --not "$inst/my/one.pyc"
-py_installed --not "$inst/my/one.pyo"
 
 $MAKE disttest
 

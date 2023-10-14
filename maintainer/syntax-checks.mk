@@ -1,6 +1,6 @@
 # Maintainer checks for Automake.  Requires GNU make.
 
-# Copyright (C) 2012-2018 Free Software Foundation, Inc.
+# Copyright (C) 2012-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,9 +36,10 @@ xdefs = \
   $(srcdir)/t/ax/test-lib.sh \
   $(srcdir)/t/ax/test-defs.in
 
+# Must prune test dirs since some are intentionally unreadable.
 ams := $(shell find $(srcdir) -name '*.dir' -prune -o -name '*.am' -print)
 
-# Some simple checks, and then ordinary check.  These are only really
+# Some simple checks, and then ordinary checks.  These are only really
 # guaranteed to work on my machine.
 syntax_check_rules = \
 $(sc_tests_plain_check_rules) \
@@ -80,8 +81,8 @@ sc_tabs_in_texi \
 sc_at_in_texi
 
 $(syntax_check_rules): bin/automake bin/aclocal
-maintainer-check: $(syntax_check_rules)
-.PHONY: maintainer-check $(syntax_check_rules)
+maintainer-check syntax-check: $(syntax_check_rules)
+.PHONY: maintainer-check syntax-check $(syntax_check_rules)
 
 # Check that the list of tests given in the Makefile is equal to the
 # list of all test scripts in the Automake testsuite.
@@ -95,7 +96,8 @@ lint: maintainer-check
 sc_sanity_gnu_grep:
 	$(AM_V_GEN)grep --version | grep 'GNU grep' >/dev/null 2>&1 \
 	  && ab=$$(printf 'a\nb') \
-	  && test "$$(printf 'xa\nb\nc' | grep -Pzo 'a\nb')" = "$$ab" \
+	  && test "$$(printf 'xa\nb\nc' | grep -Pzo 'a\nb' | tr -d '\0')" \
+	       = "$$ab" \
 	  || { \
 	    echo "Syntax checks recipes require a modern GNU grep" >&2; \
 	    exit 1; \
@@ -104,18 +106,18 @@ sc_sanity_gnu_grep:
 $(syntax_check_rules): sc_sanity_gnu_grep
 
 # Check that every subroutine in perl scripts has a corresponding
-# prototype
+# prototype.
 sc_perl_protos:
 	$(AM_V_GEN)$(srcdir)/maintainer/check-perl-protos \
 	  <$(srcdir)/bin/aclocal.in && \
 	$(srcdir)/maintainer/check-perl-protos <$(srcdir)/bin/automake.in
 
 # These check avoids accidental configure substitutions in the source.
-# There are exactly 8 lines that should be modified from automake.in to
-# automake, and 9 lines that should be modified from aclocal.in to
+# There are exactly 7 lines that should be modified from automake.in to
+# automake, and 8 lines that should be modified from aclocal.in to
 # aclocal.
-automake_diff_no = 8
-aclocal_diff_no = 9
+automake_diff_no = 7
+aclocal_diff_no = 8
 sc_diff_automake sc_diff_aclocal: in=$($*_in)
 sc_diff_automake sc_diff_aclocal: out=$($*_script)
 sc_diff_automake sc_diff_aclocal: sc_diff_% :
@@ -228,7 +230,7 @@ sc_perl_at_uscore_in_scalar_context:
 
 ## Allow only few variables to be localized in automake and aclocal.
 sc_perl_local:
-	@if egrep -v '^[ \t]*local \$$[_~]( *=|;)' \
+	@if grep -Ev '^[ \t]*local \$$[_~]( *=|;)' \
 	      $(automake_in) $(aclocal_in) | \
 	    grep '^[ \t]*local [^*]'; then \
 	  echo "Please avoid 'local'." 1>&2; \
@@ -413,7 +415,7 @@ sc_tests_overriding_macros_on_cmdline:
 	        -e 's/ exp="[^"]*"/ /' \
 	        -e 's/ exp=[^ ]/ /' \
 	      $(filter-out %/am-test-lib.sh,$(xtests)) \
-	        | grep '\$$MAKE .*='; then \
+	        | grep -E '\$$MAKE .*\S+='; then \
 	  echo 'Rewrite "$$MAKE foo=bar" as "run_make foo=bar" in the lines above,'; \
 	  echo 'it is more portable.'; \
 	  exit 1; \
@@ -488,9 +490,11 @@ sc_tests_logs_duplicate_prefixes: sc_ensure_testsuite_has_run
 	fi
 
 # Ensure variables are listed before rules in Makefile.in files we generate.
+# (Do not descend into test dirs that are unreadable.)
 sc_tests_makefile_variable_order: sc_ensure_testsuite_has_run
 	@st=0; \
-	for file in `find t -name Makefile.in -print`; do \
+	for file in `find t ! -perm -o+r -prune -o -name Makefile.in -print`; \
+	do \
 	  latevars=`sed -n \
 	    -e :x -e 's/#.*//' \
 	    -e '/\\\\$$/{' -e N -e 'b x' -e '}' \

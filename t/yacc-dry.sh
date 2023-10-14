@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2010-2018 Free Software Foundation, Inc.
+# Copyright (C) 2010-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ END
 cat > parse.y << 'END'
 %{
 int yylex () { return 0; }
-void yyerror (char *s) {}
+void yyerror (const char *s) {}
 %}
 %%
 foobar : 'f' 'o' 'o' 'b' 'a' 'r' {};

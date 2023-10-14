@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 mkdir d
 : > d/f
-chmod a-w d || skip "cannot make directories unwritable"
+chmod a-w d || skip_ "cannot make directories unwritable"
 
 # On Solaris 10, if '/bin/rm' is run with the '-f' option, it doesn't
 # print any error message when failing to remove a file (due to e.g.,

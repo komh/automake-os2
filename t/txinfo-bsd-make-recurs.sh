@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2009-2018 Free Software Foundation, Inc.
+# Copyright (C) 2009-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 # Make sure the documentation targets work as required with BSD make,
 # even in the presence of subdirs (requires presence of default *-am rules).
 
+required='makeinfo tex texi2dvi dvips'
 . test-init.sh
 
 mkdir sub

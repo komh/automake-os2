@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2002-2018 Free Software Foundation, Inc.
+# Copyright (C) 2002-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,6 +42,5 @@ cd build
 $MAKE install
 py_installed inst/my/one.py
 py_installed inst/my/one.pyc
-py_installed inst/my/one.pyo
 
 :

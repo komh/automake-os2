@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,10 +61,7 @@ mkdir -p 1/_/2/_/3/_
 
 ./py-compile foo.py sub/bar.py 1/_/2/_/3/_/0.py
 py_installed foo.pyc
-py_installed foo.pyo
 py_installed sub/bar.pyc
-py_installed sub/bar.pyo
 py_installed 1/_/2/_/3/_/0.pyc
-py_installed 1/_/2/_/3/_/0.pyo
 
 :

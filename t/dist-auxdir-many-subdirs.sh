@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ END
   else
     for f in $required_files; do
       cp "$am_scriptdir"/$f $auxdir/$f \
-        || fatal_ "faild to fetch auxiliary script '$f'"
+        || fatal_ "failed to fetch auxiliary script '$f'"
       # See comments above.
       chmod a-w $auxdir/$f
     done

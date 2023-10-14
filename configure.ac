@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1995-2018 Free Software Foundation, Inc.
+# Copyright (C) 1995-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.69])
-AC_INIT([GNU Automake], [1.16.1], [bug-automake@gnu.org])
+AC_INIT([GNU Automake], [1.16.5], [bug-automake@gnu.org])
 
 AC_CONFIG_SRCDIR([bin/automake.in])
 AC_CONFIG_AUX_DIR([lib])
@@ -44,7 +44,7 @@ AM_INIT_AUTOMAKE([-Wall -Werror dist-xz filename-length-max=99
 
 # Keep this on a line of its own, since it must be found and processed
 # by the 'update-copyright' rule in our Makefile.
-RELEASE_YEAR=2018
+RELEASE_YEAR=2021
 AC_SUBST([RELEASE_YEAR])
 
 # The API version is the base version.  We must guarantee
@@ -123,7 +123,9 @@ fi
 
 AC_CACHE_CHECK([whether autoconf works], [am_cv_autoconf_works],
 [mkdir conftest
-echo 'AC''_INIT' > conftest/conftest.ac
+printf '%s\n' > conftest/conftest.ac \
+  'AC''_INIT([smoke-test], [1])' \
+  'AC''_OUTPUT'
 if AM_RUN_LOG([cd conftest && $am_AUTOCONF -o /dev/null conftest.ac]);
 then
   am_cv_autoconf_works=yes
@@ -139,7 +141,10 @@ fi
 AC_CACHE_CHECK([whether autoconf is recent enough], [am_cv_autoconf_version],
 [mkdir conftest
 dnl Creative quoting required to avoid spurious expansion of AC_PREREQ macro
-echo 'AC'"_PREREQ([[$required_autoconf_version]])" > conftest/conftest.ac
+printf '%s\n' > conftest/conftest.ac \
+  'AC'"_PREREQ([[$required_autoconf_version]])" \
+  'AC''_INIT([smoke-test], [1])' \
+  'AC''_OUTPUT'
 if AM_RUN_LOG([cd conftest && $am_AUTOCONF -o /dev/null conftest.ac]);
 then
   am_cv_autoconf_version=yes
@@ -463,13 +468,13 @@ AS_IF([test x"$GXX" = x"yes"], [am_CXX_is_GNU=yes], [am_CXX_is_GNU=no])
 
 _AM_COMPILER_CAN_FAIL([AC_PROG_FC(dnl
   [xlf95 f95 fort ifort ifc efc pgfortran pgf95 lf95 ftn nagfor] dnl
-  [xlf90 f90 pgf90 pghpf epcf90 g95 gfortran])],
+  [xlf90 f90 armflang flang pgf90 pghpf epcf90 g95 gfortran])],
   [FC=false; _AM_SKIP_COMP_TESTS([Fortran])])
 
 AS_IF([test x"$GFC" = x"yes"], [am_FC_is_GNU=yes], [am_FC_is_GNU=no])
 
 _AM_COMPILER_CAN_FAIL([AC_PROG_F77(dnl
-  [xlf f77 frt pgf77 cf77 fort77 fl32 af77 g77 gfortran])],
+  [xlf f77 frt pgf77 cf77 fort77 fl32 af77 g77 armflang flang gfortran])],
   [F77=false; _AM_SKIP_COMP_TESTS([Fortran 77])])
 
 AS_IF([test x"$G77" = x"yes"], [am_F77_is_GNU=yes], [am_F77_is_GNU=no])

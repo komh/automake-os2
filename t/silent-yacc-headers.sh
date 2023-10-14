@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ EOF
 
 cat > parse.y <<'EOF'
 %{
-void yyerror (char *s) { return; }
+void yyerror (const char *s) {}
 int yylex (void) { return 0; }
 int main (void) { return 0; }
 %}

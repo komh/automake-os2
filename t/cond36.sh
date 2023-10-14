@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2004-2018 Free Software Foundation, Inc.
+# Copyright (C) 2004-2021 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ EOF
 
 $ACLOCAL
 
-# Presently Automake doesn't fully support partially overriden rules
+# Presently Automake doesn't fully support partially overridden rules
 # and should complain.
 AUTOMAKE_fails --add-missing
 grep 'tparse\.h.*already defined' stderr

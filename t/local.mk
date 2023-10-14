@@ -1,5 +1,5 @@
 ## -*- makefile-automake -*-
-## Copyright (C) 1995-2018 Free Software Foundation, Inc.
+## Copyright (C) 1995-2021 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -91,12 +91,13 @@ $(srcdir)/%D%/testsuite-part.am:
 	$(AM_V_at)mv -f %D%/testsuite-part.tmp $@
 EXTRA_DIST += gen-testsuite-part
 
-# The dependecies declared here are not truly complete, but such
+# The dependencies declared here are not truly complete, but such
 # completeness would cause more issues than it would solve.  See
-# automake bug#11347.
+# automake bug#11347 and #44458.
 $(generated_TESTS): $(srcdir)/gen-testsuite-part
 $(srcdir)/%D%/testsuite-part.am: $(srcdir)/gen-testsuite-part
 $(srcdir)/%D%/testsuite-part.am: Makefile.am
+$(srcdir)/%D%/testsuite-part.am: %D%/list-of-tests.mk
 
 # Hand-written tests for stuff in 'contrib/'.
 include $(srcdir)/contrib/%D%/local.mk
@@ -244,11 +245,21 @@ check-parallel:
 test_subdirs = %D% %D%/pm contrib/%D%
 include %D%/CheckListOfTests.am
 
-# Run the testsuite with the installed aclocal and automake.
+# Run the testsuite with the installed aclocal and automake without using
+# the 'pre-inst-env' wrapper script.
 installcheck-local: installcheck-testsuite
 installcheck-testsuite:
 	$(AM_V_GEN)$(MAKE) $(AM_MAKEFLAGS) check \
+	  LOG_COMPILER=$(AM_TEST_RUNNER_SHELL) \
+	  PL_LOG_COMPILER=$(PERL) \
 	  am_running_installcheck=yes
+
+# Ensure that the installed Automake perl modules are found when running 'installcheck' target
+AM_TESTS_ENVIRONMENT += \
+  if test "$${am_running_installcheck}" = yes; then \
+    PERL5LIB="$(DESTDIR)$(pkgvdatadir)/$${PERL5LIB:+$(PATH_SEPARATOR)}$$PERL5LIB"; \
+  fi; \
+  export PERL5LIB;
 
 # Performance tests.
 .PHONY: perf
