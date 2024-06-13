@@ -1149,7 +1149,8 @@ sub parse_ACLOCAL_PATH ()
   # directories, so we use unshift.  However, directories that
   # come first in ACLOCAL_PATH take precedence over directories
   # coming later, which is why the result of split is reversed.
-  foreach my $dir (reverse split /:/, $ENV{"ACLOCAL_PATH"})
+  my $sep = $^O eq 'os2' ? ';' : ':';
+  foreach my $dir (reverse split /$sep/, $ENV{"ACLOCAL_PATH"})
     {
       unshift (@system_includes, $dir) if $dir ne '' && -d $dir;
     }
