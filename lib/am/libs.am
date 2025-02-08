@@ -1,5 +1,5 @@
 ## automake - create Makefile.in from Makefile.am
-## Copyright (C) 1994-2021 Free Software Foundation, Inc.
+## Copyright (C) 1994-2024 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -103,4 +103,4 @@ endif %?INSTALL%
 
 .PHONY clean-am: clean-%DIR%LIBRARIES
 clean-%DIR%LIBRARIES:
-	-test -z "$(%DIR%_LIBRARIES)" || rm -f $(%DIR%_LIBRARIES)
+	-$(am__rm_f) $(%DIR%_LIBRARIES)

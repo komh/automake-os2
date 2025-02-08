@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = c1 c2 cxx1 cxx2 cxx3
 AM_YFLAGS = -d
 
@@ -52,8 +54,14 @@ END
 
 cat > p.y <<'END'
 %{
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C" {
+#endif
 int yylex (void) { int new = 0; return new; }
 void yyerror (const char *s) {}
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+}
+#endif
 %}
 %token ZARDOZ
 %%
@@ -63,6 +71,7 @@ END
 
 cat > 1.c <<'END'
 #include "p.h"
+extern int yyparse (void);
 int main ()
 {
     int new = ZARDOZ;
@@ -72,6 +81,7 @@ int main ()
 END
 
 cat > 2.c <<'END'
+extern int yyparse (void);
 int main ()
 {
     int yyparse ();
@@ -82,10 +92,23 @@ END
 
 cat > parse.yy <<'END'
 %{
+// Include C header to provide global symbols that flex assumes.
+// https://bugs.gnu.org/20031
+#include <stdlib.h>
+// Valid C++, but deliberately invalid C.
 #include <cstdlib>
+using std::exit;
+using std::free;
+using std::malloc;
 #include "parse.hh"
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C" {
+#endif
 int yylex (void) { return 0; }
 void yyerror (const char *s) {}
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+}
+#endif
 %}
 %token FOOBAR
 %%

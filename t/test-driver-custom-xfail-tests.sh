@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ empty =
 TEST_LOG_DRIVER = \$(top_srcdir)/td
 
 # XFAIL_TESTS should gracefully handle TAB characters, and multiple
-# whitespaces.
+# whitespace characters.
 XFAIL_TESTS =\$(empty)${tab}x1.test x2.test${tab}x3.test${tab}\
 x4.test ${tab} x5.test              x6.test${tab}\$(empty)
 

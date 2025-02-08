@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ test "$(cat write)" = "all is ok"
 test ! -e removed
 test -f doc/README
 test -f doc/RELEASE-DATE
-test ! -e doc/HACING
+test ! -e doc/HACKING
 ./execute
 ./execute | grep 'I run successfully'
 cd ..

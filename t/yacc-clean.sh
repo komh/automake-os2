@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ END
 mkdir sub1 sub2
 
 cat > sub1/Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo bar baz qux
 
 foo_SOURCES = main.c parse.y
@@ -65,6 +67,8 @@ END
 
 cat > sub1/parse.y << 'END'
 %{
+#include <stdio.h>
+
 int yylex () { return (getchar ()); }
 void yyerror (const char *s) {}
 %}
@@ -74,6 +78,8 @@ END
 cp sub1/parse.y sub2/parse.y
 
 cat > sub1/main.c << 'END'
+extern int yyparse(void);
+
 int main ()
 {
   return yyparse ();

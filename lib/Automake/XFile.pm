@@ -1,4 +1,4 @@
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,10 +15,10 @@
 
 # Written by Akim Demaille <akim@freefriends.org>.
 
-###############################################################
-# The main copy of this file is in Automake's git repository. #
-# Updates should be sent to automake-patches@gnu.org.         #
-###############################################################
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
 
 package Automake::XFile;
 

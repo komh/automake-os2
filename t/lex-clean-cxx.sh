@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo bar baz qux
 
 foo_SOURCES = mainfoo.cc parsefoo.lxx
@@ -51,12 +53,15 @@ CLEANFILES = parsebaz.l++ parsequx.lpp
 LDADD = $(LEXLIB)
 END
 
+# For the explanation of the conditionals on using extern "C",
+# see https://debbugs.gnu.org/cgi/bugreport.cgi?bug=45205#13.
 cat > parsefoo.lxx << 'END'
 %{
 #define YY_DECL int yylex (void)
-extern "C" YY_DECL;
-#define YY_NO_UNISTD_H 1
-int isatty (int fd) { return 0; }
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C"
+#endif
+YY_DECL;
 %}
 %%
 "GOOD"   return EOF;
@@ -71,7 +76,10 @@ cp parsefoo.lxx parsebar.ll
 
 cat > mainfoo.cc << 'END'
 // This file should contain valid C++ but invalid C.
-extern "C" int yylex (void);
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C"
+#endif
+int yylex (void);
 using namespace std;
 int main (int argc, char **argv)
 {

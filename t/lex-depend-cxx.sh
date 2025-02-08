@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 noinst_PROGRAMS = joe moe
 joe_SOURCES = joe.ll
 moe_SOURCES = moe.l++
@@ -44,12 +46,15 @@ test-obj-updated: joe.$(OBJEXT) moe.$(OBJEXT)
 	is_newest moe.$(OBJEXT) my-hdr.hxx
 END
 
+# For the explanation of the conditionals on using extern "C",
+# see https://debbugs.gnu.org/cgi/bugreport.cgi?bug=45205#13.
 cat > joe.ll << 'END'
 %{
 #define YY_DECL int yylex (void)
-extern "C" YY_DECL;
-#define YY_NO_UNISTD_H 1
-int isatty (int fd) { return 0; }
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C"
+#endif
+YY_DECL;
 %}
 %%
 "foo" return EOF;

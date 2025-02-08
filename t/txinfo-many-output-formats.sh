@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,6 +86,10 @@ $ACLOCAL
 $AUTOMAKE --add-missing
 $AUTOCONF
 
+# Make sure AM_TEXI2FLAGS is passed down.
+grep '\$(TEXI2DVI).*\$(AM_TEXI2FLAGS)' Makefile.in
+grep '\$(TEXI2PDF).*\$(AM_TEXI2FLAGS)' Makefile.in
+
 # To simplify syncing with sister test 'txinfo-many-output-formats.sh'
 srcdir=.
 
@@ -156,6 +160,13 @@ test ! -e share/$me/html/main.html
 test ! -e share/$me/html/main2.html
 test ! -e share/$me/html/main3.html
 
+# Restore the makefile without a broken AM_MAKEINFOFLAGS definition.
+# This must happen before processing any non-html targets.  See
+# https://bugs.gnu.org/30172
+cp -f $srcdir/Makefile.sav $srcdir/Makefile.am
+(cd $srcdir && $AUTOMAKE)
+./config.status Makefile
+
 $MAKE dvi
 test -f main.dvi
 test -f sub/main2.dvi
@@ -199,8 +210,6 @@ test ! -e share/$me/pdf/main2.pdf
 test ! -e share/$me/pdf/main3.pdf
 test ! -e share/$me/pdf/hello
 
-# Restore the makefile without a broken AM_MAKEINFOFLAGS definition.
-cp -f $srcdir/Makefile.sav $srcdir/Makefile.am
 using_gmake || $MAKE Makefile
 $MAKE distcheck
 

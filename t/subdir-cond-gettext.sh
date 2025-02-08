@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,18 +20,18 @@ required=gettext
 . test-init.sh
 
 cat >> configure.ac << 'END'
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT([external])
 AM_CONDITIONAL([MAUDE], [true])
 ALL_LINGUAS=
 AC_SUBST([ALL_LINGUAS])
 END
 
-mkdir po intl
+mkdir po
 : >config.rpath
 
 cat > Makefile.am << 'END'
 if MAUDE
-SUBDIRS = po intl
+SUBDIRS = po
 else
 SUBDIRS =
 endif

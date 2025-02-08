@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,12 +35,16 @@ cat > Makefile.am << 'END'
 SUBDIRS = sub
 bin_PROGRAMS = foo
 AM_YFLAGS = -d
+AM_LFLAGS = --never-interactive
+
 foo_SOURCES = foo.y
 END
 
 cat > sub/Makefile.am << 'END'
 bin_PROGRAMS = bar
 AM_YFLAGS = -d
+AM_LFLAGS = --never-interactive
+
 bar_SOURCES = bar.y main.c
 END
 

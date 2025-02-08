@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2010-2021 Free Software Foundation, Inc.
+# Copyright (C) 2010-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ AC_OUTPUT
 EOF
 
 cat > Makefile.am <<'EOF'
+AM_LFLAGS = --never-interactive
+
 # Need generic and non-generic rules.
 bin_PROGRAMS = foo1 foo2
 foo1_SOURCES = foo.y
@@ -40,6 +42,8 @@ EOF
 
 cat > sub/Makefile.am <<'EOF'
 AUTOMAKE_OPTIONS = subdir-objects
+AM_LFLAGS = --never-interactive
+
 # Need generic and non-generic rules.
 bin_PROGRAMS = bar1 bar2
 bar1_SOURCES = bar.y

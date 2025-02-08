@@ -558,7 +558,7 @@
 	* lib/Makefile.am (dist_script_DATA): Move config-ml.in ...
 	(dist_pkgvdata_DATA): ... here.
 
-	* tests/spy.test: Document overlapping ::-rules incompatibilities,
+	* tests/spy.test: Document overlapping ::-rules incompatibility,
 	and check only non-overlapping ::-rules.
 
 	* doc/automake.texi (Texinfo): Define MAKEINFO, MAKEINFOHTML,
@@ -2338,7 +2338,7 @@
 2003-04-03  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* automake.in (check_trailing_slash): New function (variation on
-	a patch by Peter Muir).  Diagnose whitespaces following trailing
+	a patch by Peter Muir).  Diagnose whitespace following trailing
 	backslash.
 	(read_am_file): Use it.
 	* tests/backsl4.test: New file.
@@ -2965,7 +2965,7 @@
 
 -----
 
-Copyright (C) 2003-2021 Free Software Foundation, Inc.
+Copyright (C) 2003-2024 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification, are
 permitted provided the copyright notice and this notice are preserved.

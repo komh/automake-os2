@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ ls -l # For debugging.
 have_generated_files
 
 # But stamp files should be removed by "maintainer-clean" (the
-# behaviour w.r.t. intermediate C files is still unclear, and
+# behavior w.r.t. intermediate C files is still unclear, and
 # better left undefined for the moment).
 $MAKE maintainer-clean
 ls *vala*.stamp | grep . && exit 1

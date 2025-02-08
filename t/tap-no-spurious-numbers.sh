@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ highno=1000
 
 for result in 'ok' 'not ok'; do
   for spacing in "" " " "$tab"; do
-    subst="$result &$spacing$higno"
+    subst="$result &$spacing$highno"
     sed -e "s|.*|$subst|" prefixes
     for directive in TODO SKIP; do
       test "$result $directive" != "not ok SKIP" || continue

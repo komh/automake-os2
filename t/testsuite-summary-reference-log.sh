@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,11 +46,11 @@ cd build
 ../configure
 
 run_make -O -e FAIL check
-grep '^See \./my_test_suite\.log$' stdout
+grep '^See \./my_test_suite\.log for debugging\.$' stdout
 
 mkdir bar
 run_make -O -e FAIL TEST_SUITE_LOG=bar/bar.log check
-grep '^See \./bar/bar\.log$' stdout
+grep '^See \./bar/bar\.log for debugging\.$' stdout
 
 cd ..
 
@@ -70,13 +70,13 @@ $AUTOMAKE
 
 ./configure
 run_make -O -e FAIL check
-grep '^See sub/test-suite\.log$' stdout
+grep '^See sub/test-suite\.log for debugging\.$' stdout
 cd sub
 run_make -O -e FAIL check
-grep '^See sub/test-suite\.log$' stdout
+grep '^See sub/test-suite\.log for debugging\.$' stdout
 cd ..
 
 run_make -O -e FAIL TEST_SUITE_LOG=foo.log check
-grep '^See sub/foo\.log$' stdout
+grep '^See sub/foo\.log for debugging\.$' stdout
 
 :

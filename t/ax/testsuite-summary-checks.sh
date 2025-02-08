@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ case "$1" in
 esac
 END
 
-# Quite complexish, but allow the tests in client scripts to be written
+# Quite complex, but allow the tests in client scripts to be written
 # in a "data-driven fashion".
 do_check ()
 {

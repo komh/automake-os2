@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1999-2021 Free Software Foundation, Inc.
+# Copyright (C) 1999-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,14 +28,13 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 noinst_PROGRAMS = foo
 foo_SOURCES = foo.l
 END
 
 cat > foo.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "GOOD"   return EOF;
 .

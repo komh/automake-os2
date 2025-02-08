@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ autopoint_version=$(extract_program_version autopoint) \
 cat > configure.ac <<END
 AC_INIT([foo], [1.0])
 AC_PROG_CC
-# Both required by autopoint.
-AM_GNU_GETTEXT
+# Both required by autopoint.  Newer gettext (0.20+) requires external.
+AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([$autopoint_version])
 END
 

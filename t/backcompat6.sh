@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2010-2021 Free Software Foundation, Inc.
+# Copyright (C) 2010-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 
 # Backward-compatibility test: try to build and distribute a package
 # using obsoleted forms of AC_INIT, AM_INIT_AUTOMAKE and AC_OUTPUT,
-# and 'configure.in' as autconf input file.
+# and 'configure.in' as autoconf input file.
 # This script can also serve as mild stress-testing for Automake.
 # See also the similar test 'backcompat5.test'.
 

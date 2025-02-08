@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2010-2021 Free Software Foundation, Inc.
+# Copyright (C) 2010-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 # 'make' and 'make distdir' and check whether the version of 'lexer.c'
 # to be distributed is up to date.
 
-# Please keep this in sync with sister test 'yaccvapth.sh'.
+# Please keep this in sync with sister test 'yaccvpath.sh'.
 
 required='cc lex'
 . test-init.sh
@@ -37,6 +37,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo
 foo_SOURCES = lexer.l foo.c
 LDADD = $(LEXLIB)
@@ -44,9 +46,6 @@ END
 
 # Original lexer, with a "foobar" comment
 cat > lexer.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "END" return EOF;
 .
@@ -89,9 +88,6 @@ $sleep
 
 # New lexer, with 'fubar' comment.
 cat > ../lexer.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "END" return EOF;
 .
@@ -112,9 +108,6 @@ $sleep
 
 # New lexer, with 'maude' comment.
 cat > ../lexer.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "END" return EOF;
 .

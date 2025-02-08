@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ END
 mkdir foo bar baz
 
 cat > foo/Makefile.am <<'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = zardoz
 zardoz_SOURCES = parse.y main.c
 .PHONY: echo-distcom
@@ -47,7 +49,7 @@ cp foo/Makefile.am baz/Makefile.am
 cat > foo/parse.y << 'END'
 %{
 #include "parse.h"
-int yylex () { return 0; }
+int yylex (void) { return 0; }
 void yyerror (const char *s) {}
 %}
 %%
@@ -67,6 +69,7 @@ sed -e 's/parse\.h/y.tab.h/' <foo/parse.y >bar/parse.y
 
 cat > foo/main.c << 'END'
 #include "parse.h"
+extern int yyparse (void);
 int main ()
 {
   return yyparse ();

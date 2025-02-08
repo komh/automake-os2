@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@ END
 mkdir sub1 sub2
 
 cat > sub1/Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo bar baz qux
 
 foo_SOURCES = mainfoo.cc parsefoo.yxx
@@ -68,9 +70,17 @@ cat > sub1/parsefoo.yxx << 'END'
 %{
 // This file should contain valid C++ but invalid C.
 #include <cstdio>
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C" {
+#endif
+
 // "std::" qualification required by Sun C++ 5.9.
 int yylex (void) { return std::getchar (); }
 void yyerror (const char *s) {}
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+}
+#endif
+
 %}
 %%
 x : 'x' { };

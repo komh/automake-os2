@@ -1,6 +1,6 @@
 # -*- shell-script -*-
 #
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -148,7 +148,7 @@ result_ ()
   set -x # Restore shell xtraces.
 }
 
-#  Shorthands for common usages of 'result_'.
+#  Shorthand for common usages of 'result_'.
 ok_ () { result_ 'ok' ${1+"$@"}; }
 not_ok_ () { result_ 'not ok' ${1+"$@"}; }
 skip_ () { result_ 'ok' -D SKIP ${1+"$@"}; }

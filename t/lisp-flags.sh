@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Elisp byte-compilation honours AM_ELCFLAFS and ELCFLAGS.
+# Elisp byte-compilation honors AM_ELCFLAFS and ELCFLAGS.
 
 . test-init.sh
 

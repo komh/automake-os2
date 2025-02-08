@@ -1,5 +1,5 @@
 ## automake - create Makefile.in from Makefile.am
-## Copyright (C) 1994-2021 Free Software Foundation, Inc.
+## Copyright (C) 1994-2024 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ am__make_running_with_option = \
 ## variable $(MFLAGS) behaves much better in that regard.  So use it.
     sane_makeflags=$$MFLAGS; \
   else \
-## Non-GNU make: we must rely on $(MAKEFLAGS).  This is tricker and more
+## Non-GNU make: we must rely on $(MAKEFLAGS).  This is trickier and more
 ## brittle, but is the best we can do.
     case $$MAKEFLAGS in \
 ## If we run "make TESTS='snooze nap'", FreeBSD make will export MAKEFLAGS
@@ -139,6 +139,10 @@ am__make_dryrun = (target_option=n; $(am__make_running_with_option))
 ## ("make -k") or not.  Useful in rules that must recursively descend into
 ## subdirectories, and decide whether to stop at the first error or not.
 am__make_keepgoing = (target_option=k; $(am__make_running_with_option))
+
+## Helper to handle `rm -f` failing with no arguments.
+am__rm_f = rm -f $(am__rm_f_notfound)
+am__rm_rf = rm -rf $(am__rm_f_notfound)
 
 ## Some derived variables that have been found to be useful.
 pkgdatadir = $(datadir)/@PACKAGE@

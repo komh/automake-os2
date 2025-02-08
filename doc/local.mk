@@ -1,5 +1,5 @@
 ## -*- makefile-automake -*-
-## Copyright (C) 1995-2021 Free Software Foundation, Inc.
+## Copyright (C) 1995-2024 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -29,15 +29,30 @@ man1_MANS = \
   %D%/automake-$(APIVERSION).1
 
 $(man1_MANS): $(top_srcdir)/configure.ac
-
 CLEANFILES += $(man1_MANS)
-# XXX: This script should be updated with 'fetch' target.
+
+# In automake, users generate man pages as part of a normal build from
+# release tarballs. This is ok because we also distribute the help2man
+# script, as given below.
+#
+# Autoconf handles this in an alternative way, of including the man
+# pages in the tarballs and thus not requiring help2man to be run by
+# users (q.v.). Neither is better or worse than the other.
+#
+# See the "Errors with distclean" node in the manual for more info.
+
+# XXX: The help2man script we include in the Automake distribution
+# should be updated with 'fetch' target, but isn't. Instead, you must
+# build help2man normally and copy it in manually. Keep the first line as:
+#   #!/usr/bin/perl -w
+# whatever it might have ended up as on your system.
 EXTRA_DIST += %D%/help2man
 
 update_mans = \
-  $(AM_V_GEN): \
-    && $(MKDIR_P) %D% \
-    && ./pre-inst-env $(PERL) $(srcdir)/%D%/help2man --output=$@
+    $(MKDIR_P) %D% \
+    && AUTOMAKE_HELP2MAN=true ./pre-inst-env \
+       $(PERL) $(srcdir)/%D%/help2man --output=$@ --info-page=automake \
+               --name="$${HELP2MAN_NAME}"
 
 %D%/aclocal.1 %D%/automake.1:
 	$(AM_V_GEN): \
@@ -46,26 +61,25 @@ update_mans = \
 	  && echo ".so man1/$$f-$(APIVERSION).1" > $@
 
 %D%/aclocal-$(APIVERSION).1: $(aclocal_script) lib/Automake/Config.pm
-	$(update_mans) aclocal-$(APIVERSION)
+	$(AM_V_GEN):; HELP2MAN_NAME="Generate aclocal.m4 by scanning configure.ac"; export HELP2MAN_NAME; $(update_mans) $(aclocal_script)
 %D%/automake-$(APIVERSION).1: $(automake_script) lib/Automake/Config.pm
-	$(update_mans) automake-$(APIVERSION)
+	$(AM_V_GEN):; HELP2MAN_NAME="Generate Makefile.in files for configure from Makefile.am"; export HELP2MAN_NAME; $(update_mans) $(automake_script)
 
-## This target is not invoked as a dependency of anything. It exists
-## merely to make checking the links in automake.texi (that is,
+## This checklinkx target is not invoked as a dependency of anything.
+## It exists merely to make checking the links in automake.texi (that is,
 ## automake.html) more convenient. We use a slightly-enhanced version of
 ## W3C checklink to do this. We intentionally do not have automake.html
 ## as a dependency, as it seems more convenient to have its regeneration
 ## under manual control. See https://debbugs.gnu.org/10371.
 ##
 checklinkx = $(top_srcdir)/contrib/checklinkx
-# that 4-second sleep seems to be what gnu.org likes.
+# that particular sleep seems to be what gnu.org likes.
 chlx_args = -v --sleep 8 #--exclude-url-file=/tmp/xf
 # Explanation of excludes:
 # - w3.org dtds, they are fine (and slow).
 # - mailto urls, they are always forbidden.
 # - vala, redirects to a Gnome subpage and returns 403 to us.
 # - cfortran, forbidden by site's robots.txt.
-# - search.cpan.org, gets
 # - debbugs.gnu.org/automake, forbidden by robots.txt.
 # - autoconf.html, forbidden by robots.txt (since served from savannah).
 # - https://fsf.org redirects to https://www.fsf.org and nothing to do
@@ -76,7 +90,6 @@ chlx_excludes = \
     -X 'mailto:.*' \
     -X 'https://www\.vala-project\.org/' \
     -X 'https://www-zeus\.desy\.de/~burow/cfortran/' \
-    -X 'http://xsearch\.cpan\.org/~mschwern/Test-Simple/lib/Test/More\.pm' \
     -X 'https://debbugs\.gnu\.org/automake' \
     -X 'https://www\.gnu\.org/software/autoconf/manual/autoconf\.html' \
     -X 'https://fsf\.org/'

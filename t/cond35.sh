@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2004-2021 Free Software Foundation, Inc.
+# Copyright (C) 2004-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ EOF
 
 cat > Makefile.am <<'EOF'
 AM_YFLAGS               =       -d
+AM_LFLAGS               =       --never-interactive
 
 BUILT_SOURCES           =       tparse.h
 
@@ -58,9 +59,6 @@ $FGREP 'tparse.h' Makefile.in # For debugging.
 test $($FGREP -c 'tparse.h:' Makefile.in) -eq 1
 
 cat > tscan.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "END"   return EOF;
 %%
@@ -73,6 +71,8 @@ END
 
 cat > tparse.y << 'END'
 %{
+extern int yylex(void);
+
 void yyerror (const char *s) {}
 %}
 %token EOF

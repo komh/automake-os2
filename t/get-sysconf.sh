@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 st=0
 if test -d "$am_top_srcdir"/.git; then
   # We are running from a git checkout.
-  (cd "$am_top_srcdir" && git log -1) || st=1
+  (cd "$am_top_srcdir" && git --no-pager log -1) || st=1
 elif test -f "$am_top_srcdir"/ChangeLog; then
   # We are probably running from a distribution tarball.
   awk '
@@ -46,13 +46,20 @@ $PERL -V || st=1
 # happen with older perl installation, or on MinGW/MSYS.
 $PERL -e 'use TAP::Parser; print $TAP::Parser::VERSION, "\n"' || :
 
+$AUTOCONF --version
+$AUTOCONF --help
+
+# It's OK if libtool is missing, as the relevant tests skip.
+libtoolize --version || :
+libtoolize --help || :
+
 # It's OK if the selected Lex and Yacc programs don't know how to print
 # the version number or the help screen; those are usually available only
 # for Flex and Bison.
-$LEX --version || :
-$LEX --help || :
-$YACC --version || :
-$YACC --help || :
+$LEX --version </dev/null || :
+$LEX --help </dev/null || :
+$YACC --version </dev/null || :
+$YACC --help </dev/null || :
 
 cat "$am_top_builddir/config.log" || st=1
 cat "$am_top_builddir/bin/aclocal-$APIVERSION" || st=1

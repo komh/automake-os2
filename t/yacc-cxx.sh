@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo1 foo2 foo3 foo4
 foo1_SOURCES = parse1.yy  foo.cc
 foo2_SOURCES = parse2.y++ bar.c++
@@ -43,12 +45,25 @@ END
 
 cat > parse1.yy << 'END'
 %{
+// Include C header to provide global symbols that flex assumes.
+// https://bugs.gnu.org/20031
+#include <stdlib.h>
 // Valid C++, but deliberately invalid C.
 #include <cstdio>
 #include <cstdlib>
+using std::exit;
+using std::free;
+using std::malloc;
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+extern "C" {
+#endif
 // "std::" qualification required by Sun C++ 5.9.
 int yylex (void) { return std::getchar (); }
 void yyerror (const char *s) {}
+#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+}
+#endif
+
 %}
 %%
 a : 'a' { exit(0); };

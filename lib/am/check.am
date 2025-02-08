@@ -1,5 +1,5 @@
 ## automake - create Makefile.in from Makefile.am
-## Copyright (C) 2001-2021 Free Software Foundation, Inc.
+## Copyright (C) 2001-2024 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -172,6 +172,7 @@ am__sh_e_setup = case $$- in *e*) set +e;; esac
 # Default flags passed to test drivers.
 am__common_driver_flags = \
   --color-tests "$$am__color_tests" \
+  $$am__collect_skipped_logs \
   --enable-hard-errors "$$am__enable_hard_errors" \
   --expect-failure "$$am__expect_failure"
 
@@ -197,6 +198,11 @@ if test -f "./$$f"; then dir=./;			\
 elif test -f "$$f"; then dir=;				\
 else dir="$(srcdir)/"; fi;				\
 tst=$$dir$$f; log='$@'; 				\
+if test -n '$(IGNORE_SKIPPED_LOGS)'; then		\
+  am__collect_skipped_logs='--collect-skipped-logs no';	\
+else							\
+  am__collect_skipped_logs='';				\
+fi;							\
 if test -n '$(DISABLE_HARD_ERRORS)'; then		\
   am__enable_hard_errors=no; 				\
 else							\
@@ -246,6 +252,7 @@ am--force-recheck:
 ## Exists only to be overridden.  See bug#11745.
 AM_TESTSUITE_SUMMARY_HEADER = ' for $(PACKAGE_STRING)'
 
+## emacs-page
 $(TEST_SUITE_LOG): $(TEST_LOGS)
 	@$(am__set_TESTS_bases); \
 ## Helper shell function, tells whether a path refers to an existing,
@@ -319,9 +326,11 @@ $(TEST_SUITE_LOG): $(TEST_LOGS)
 	else \
 	  success=false; \
 	fi; \
-## Make $br a line of exactly 76 '=' characters, that will be used to
+##
+## Make $br a line of exactly 76 '=' characters, which will be used to
 ## enclose the testsuite summary report when displayed on the console.
 	br='==================='; br=$$br$$br$$br$$br; \
+##
 ## When writing the test summary to the console, we want to color a line
 ## reporting the count of some result *only* if at least one test
 ## experienced such a result.  This function is handy in this regard.
@@ -343,6 +352,7 @@ $(TEST_SUITE_LOG): $(TEST_LOGS)
 	    fi; \
 	    echo "$${color_start}# $$desc $$count$${color_end}"; \
 	}; \
+##
 ## A shell function that creates the testsuite summary.  We need it
 ## because we have to create *two* summaries, one for test-suite.log,
 ## and a possibly-colorized one for console output.
@@ -356,12 +366,54 @@ $(TEST_SUITE_LOG): $(TEST_LOGS)
 	  result_count $$1 "XPASS:" $$xpass "$$red"; \
 	  result_count $$1 "ERROR:" $$error "$$mgn"; \
 	}; \
+##
+## Function to write some basic system info in the log.
+	output_system_information () \
+	{ \
+## Omit the hostname for privacy.  Always a single word.
+## Start the line with a label for clarity, and so commands like
+## grep ^Linux don't get a false hit.
+## By the way, $(AWK) should always be defined since AC_PROG_AWK is
+## required by AM_INIT_AUTOMAKE nowadays.
+          echo;                                     \
+	  { uname -a | $(AWK) '{                    \
+  printf "System information (uname -a):";          \
+  for (i = 1; i < NF; ++i)                          \
+    {                                               \
+      if (i != 2)                                   \
+        printf " %s", $$i;                          \
+    }                                               \
+  printf "\n";                                      \
+}'; } 2>&1;                                         \
+	  if test -r /etc/os-release; then          \
+	    echo "Distribution information (/etc/os-release):"; \
+	    sed 8q /etc/os-release;                 \
+	  elif test -r /etc/issue; then             \
+	    echo "Distribution information (/etc/issue):";      \
+	    cat /etc/issue;                         \
+	  fi;                                       \
+	}; \
+##
+## Function to output the "please report bugs" message.
+	please_report () \
+	{ \
+echo "Some test(s) failed.  Please report this to $(PACKAGE_BUGREPORT),";    \
+echo "together with the test-suite.log file (gzipped) and your system";      \
+echo "information.  Thanks.";                                                \
+	}; \
+##
+## emacs-page
 ## Write "global" testsuite log.
 	{								\
 	  echo "$(PACKAGE_STRING): $(subdir)/$(TEST_SUITE_LOG)" |	\
 	    $(am__rst_title);						\
 	  create_testsuite_report --no-color;				\
+	  output_system_information;                                    \
 	  echo;								\
+## What is this line for? It's a Sphinx reStructuredText directive that
+## would insert a table of contents that goes two levels deep on headings.
+## But why is it in test-suite.log? No other references to it are evident.
+## Please inform automake@gnu.org.
 	  echo ".. contents:: :depth: 2";				\
 	  echo;								\
 	  for b in $$bases; do echo $$b; done				\
@@ -384,9 +436,9 @@ $(TEST_SUITE_LOG): $(TEST_LOGS)
 	create_testsuite_report --maybe-color;				\
 	echo "$$col$$br$$std";						\
 	if $$success; then :; else					\
-	  echo "$${col}See $(subdir)/$(TEST_SUITE_LOG)$${std}";		\
+	  echo "$${col}See $(subdir)/$(TEST_SUITE_LOG) for debugging.$${std}";\
 	  if test -n "$(PACKAGE_BUGREPORT)"; then			\
-	    echo "$${col}Please report to $(PACKAGE_BUGREPORT)$${std}";	\
+	    please_report | sed -e "s/^/$${col}/" -e s/'$$'/"$${std}"/; \
 	  fi;								\
 	  echo "$$col$$br$$std";					\
 	fi;								\
@@ -405,8 +457,8 @@ RECHECK_LOGS = $(TEST_LOGS)
 ## ------------------------------------------ ##
 
 check-TESTS: %CHECK_DEPS%
-	@list='$(RECHECK_LOGS)';           test -z "$$list" || rm -f $$list
-	@list='$(RECHECK_LOGS:.log=.trs)'; test -z "$$list" || rm -f $$list
+	@$(am__rm_f) $(RECHECK_LOGS)
+	@$(am__rm_f) $(RECHECK_LOGS:.log=.trs)
 ## We always have to remove $(TEST_SUITE_LOG), to ensure its rule is run
 ## in any case even in lazy mode: otherwise, if no test needs rerunning,
 ## or a prior run plus reruns all happen within the same timestamp (can
@@ -414,14 +466,13 @@ check-TESTS: %CHECK_DEPS%
 ## OTOH, this means that, in the rule for '$(TEST_SUITE_LOG)', we
 ## cannot use '$?' to compute the set of lazily rerun tests, lest
 ## we rely on .PHONY to work portably.
-	@test -z "$(TEST_SUITE_LOG)" || rm -f $(TEST_SUITE_LOG)
+	@$(am__rm_f) $(TEST_SUITE_LOG)
 	@set +e; $(am__set_TESTS_bases); \
 	log_list=`for i in $$bases; do echo $$i.log; done`; \
-	trs_list=`for i in $$bases; do echo $$i.trs; done`; \
 ## Remove newlines and normalize whitespace.  Trailing (and possibly
 ## leading) whitespace is known to cause segmentation faults on
 ## Solaris 10 XPG4 make.
-	log_list=`echo $$log_list`; trs_list=`echo $$trs_list`; \
+	log_list=`echo $$log_list`; \
 	$(MAKE) $(AM_MAKEFLAGS) $(TEST_SUITE_LOG) TEST_LOGS="$$log_list"; \
 ## Be sure to exit with the proper exit status (automake bug#9245).  See
 ## comments in the recipe of $(TEST_SUITE_LOG) above for more information.
@@ -432,7 +483,7 @@ check-TESTS: %CHECK_DEPS%
 recheck: all %CHECK_DEPS%
 ## See comments above in the check-TESTS recipe for why remove
 ## $(TEST_SUITE_LOG) here.
-	@test -z "$(TEST_SUITE_LOG)" || rm -f $(TEST_SUITE_LOG)
+	@$(am__rm_f) $(TEST_SUITE_LOG)
 	@set +e; $(am__set_TESTS_bases); \
 ## We must only consider tests that had an unexpected outcome (FAIL
 ## or XPASS) in the earlier run.

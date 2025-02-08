@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ ${br}"
 
 footer="\
 ${br}
-See ./test-suite.log
+See ./test-suite.log for debugging.
 ${br}"
 
 echo AC_OUTPUT >> configure.ac

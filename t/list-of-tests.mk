@@ -2,7 +2,7 @@
 ## testsuite.  This fragment is meant to be included by the Makefile.am,
 ## but also to be executed directly by make when bootstrapping automake.
 
-## Copyright (C) 2011-2021 Free Software Foundation, Inc.
+## Copyright (C) 2011-2024 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# FIXME: this "expected failures" are in truth an hack used to
+# FIXME: These "expected failures" are a kludge used to
 # FIXME: to verify that some incorrect usages of our perl libraries
 # FIXME: raise an error.  We should find a cleaner way to check that.
 perl_fake_XFAIL_TESTS = \
@@ -28,6 +28,9 @@ t/pm/DisjCon3.pl \
 t/pm/Version2.pl \
 t/pm/Version3.pl
 
+# These must be separately/redundantly included in handwritten_TESTS
+# below.  Despite the redundancy, it seems cleaner to keep
+# handwritten_TESTS as a list of all such .sh tests.
 XFAIL_TESTS = \
 t/all.sh \
 t/cond17.sh \
@@ -36,6 +39,7 @@ t/override-conditional-2.sh \
 t/override-conditional-pr13940.sh \
 t/dist-pr109765.sh \
 t/instdir-cond2.sh \
+t/instdir-ltlib.sh \
 t/java-nobase.sh \
 t/objext-pr10128.sh \
 t/remake-timing-bug-pr8365.sh \
@@ -160,6 +164,7 @@ t/ar2.sh \
 t/ar3.sh \
 t/ar4.sh \
 t/ar5.sh \
+t/ar_override.sh \
 t/asm.sh \
 t/asm2.sh \
 t/asm3.sh \
@@ -187,6 +192,7 @@ t/auxdir-computed.tap \
 t/auxdir-misplaced.sh \
 t/auxdir-nonexistent.sh \
 t/auxdir-pr19311.sh \
+t/auxdir-subsubdir.sh \
 t/auxdir-unportable.tap \
 t/backcompat.sh \
 t/backcompat2.sh \
@@ -264,7 +270,9 @@ t/comment8.sh \
 t/comment9.sh \
 t/commen10.sh \
 t/commen11.sh \
+t/comment12.sh \
 t/comment-block.sh \
+t/comments-escaped-in-var.sh \
 t/comments-in-var-def.sh \
 t/compile.sh \
 t/compile2.sh \
@@ -588,6 +596,7 @@ t/lex3.sh \
 t/lex5.sh \
 t/lexcpp.sh \
 t/lexvpath.sh \
+t/lex-args.sh \
 t/lex-subobj-nodep.sh \
 t/lex-header.sh \
 t/lex-lib.sh \
@@ -723,6 +732,7 @@ t/no-extra-c-stuff.sh \
 t/no-extra-makefile-code.sh \
 t/no-spurious-install-recursive.sh \
 t/nobase.sh \
+t/nobase-dist.sh \
 t/nobase-libtool.sh \
 t/nobase-python.sh \
 t/nobase-nodist.sh \
@@ -809,6 +819,7 @@ t/parallel-tests-fork-bomb.sh \
 t/parallel-tests-empty-testlogs.sh \
 t/parallel-tests-driver-install.sh \
 t/parallel-tests-no-color-in-log.sh \
+t/parallel-tests-without-skipped-logs.sh \
 t/parallel-tests-no-spurious-summary.sh \
 t/parallel-tests-exit-statuses.sh \
 t/parallel-tests-console-output.sh \
@@ -867,6 +878,7 @@ t/pluseq8.sh \
 t/pluseq9.sh \
 t/pluseq10.sh \
 t/pluseq11.sh \
+t/posixtarget.sh \
 t/posixsubst-data.sh \
 t/posixsubst-extradist.sh \
 t/posixsubst-ldadd.sh \
@@ -916,6 +928,7 @@ t/py-compile-basic.sh \
 t/py-compile-basedir.sh \
 t/py-compile-destdir.sh \
 t/py-compile-env.sh \
+t/py-compile-files.sh \
 t/py-compile-option-terminate.sh \
 t/py-compile-usage.sh \
 t/python.sh \
@@ -932,6 +945,7 @@ t/python-prefix.sh \
 t/python-vars.sh \
 t/python-virtualenv.sh \
 t/python-pr10995.sh \
+t/ranlib_override.sh \
 t/recurs-user.sh \
 t/recurs-user2.sh \
 t/recurs-user-deeply-nested.sh \
@@ -1009,6 +1023,7 @@ t/sanity.sh \
 t/seenc.sh \
 t/silent-c.sh \
 t/silent-cxx.sh \
+t/silent-defaults.sh \
 t/silent-lt.sh \
 t/silent-f77.sh \
 t/silent-f90.sh \
@@ -1223,6 +1238,8 @@ t/txinfo-no-extra-dist.sh \
 t/txinfo-no-installinfo.sh \
 t/txinfo-no-repeated-targets.sh \
 t/txinfo-no-setfilename.sh \
+t/txinfo-no-setfilename-no-inputs.sh \
+t/txinfo-no-texi-but-texi-in.sh \
 t/txinfo-other-suffixes.sh \
 t/txinfo-override-infodeps.sh \
 t/txinfo-override-texinfo-tex.sh \
@@ -1265,6 +1282,7 @@ t/vala-per-target-flags.sh \
 t/vala-recursive-setup.sh \
 t/vala-vapi.sh \
 t/vala-vpath.sh \
+t/varempty.sh \
 t/vars.sh \
 t/vars3.sh \
 t/var-recurs.sh \

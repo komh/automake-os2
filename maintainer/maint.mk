@@ -1,6 +1,6 @@
 # Maintainer makefile rules for Automake.
 #
-# Copyright (C) 1995-2021 Free Software Foundation, Inc.
+# Copyright (C) 1995-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,9 +27,11 @@ WGET = wget
 
 gitlog_to_changelog_command = $(PERL) $(srcdir)/lib/gitlog-to-changelog
 gitlog_to_changelog_fixes = $(srcdir)/.git-log-fix
-gitlog_to_changelog_options = --amend=$(gitlog_to_changelog_fixes) \
-                              --since='2011-12-28 00:00:00' \
-                              --no-cluster --format '%s%n%n%b'
+gitlog_to_changelog_options = \
+  --srcdir=$(srcdir) \
+  --amend=$(gitlog_to_changelog_fixes) \
+  --since='2011-12-28 00:00:00' \
+  --no-cluster --format '%s%n%n%b'
 
 EXTRA_DIST += lib/gitlog-to-changelog
 EXTRA_DIST += $(gitlog_to_changelog_fixes)
@@ -109,14 +111,23 @@ EXTRA_DIST += lib/gnupload
 
 # First component of a version number (mandatory).
 rx-0 = ^[1-9][0-9]*
-# Later components of a version number (optional).
-rx-1 = \.[0-9][0-9]*
+#
+# Minor component of a version number (omitted only for a major
+# release): .1, .10, etc. Assume we won't go beyond .99.
+rx-1 = \.[0-9]{1,2}
+#
+# Micro component of a version number (optional):
+# Either a single digit 0-9, or multiple digits starting with 0-8.
+# Multiple digits starting with 9 (.90, etc.) are for test releases.
+rx-2 = \.([0-9]|[0-8][0-9]+)
+#
 # Used in recipes to decide which kind of release we are.
 stable_major_version_rx = $(rx-0)\.0$$
 stable_minor_version_rx = $(rx-0)$(rx-1)$$
-stable_micro_version_rx = $(rx-0)$(rx-1)$(rx-1)$$
-beta_version_rx = $(rx-0)($(rx-1)){1,2}[bdfhjlnprtvxz]$$
-alpha_version_rx  = $(rx-0)($(rx-1)){1,2}[acegikmoqsuwy]$$
+stable_micro_version_rx = $(rx-0)$(rx-1)$(rx-2)$$
+# The 9* is for pretests beyond the first five, e.g., .990, .992, ...
+beta_version_rx = $(rx-0)$(rx-1)\.99*[02468]$$
+alpha_version_rx  = $(rx-0)$(rx-1)\.99*[13579]$$
 match_version = echo "$(VERSION)" | $(EGREP) >/dev/null
 
 # Check that we don't have uncommitted or unstaged changes.
@@ -288,6 +299,7 @@ announcement: NEWS
 	  && $(determine_release_type) \
 	  && ftp_base="https://$$dest.gnu.org/gnu/$(PACKAGE)" \
 	  && X () { printf '%s\n' "$$*" >> $@-t; } \
+	  && AO () { if test "$$dest" = alpha; then X "$$*"; else :; fi; } \
 	  && X "We are pleased to announce the $(PACKAGE_NAME) $(VERSION)" \
 	       "$$announcement_type." \
 	  && X \
@@ -304,21 +316,30 @@ announcement: NEWS
 	  && X "  $$ftp_base/$(PACKAGE)-$(VERSION).tar.xz" \
 	  && X \
 	  && X "Please report bugs and problems to" \
-	       "<$(PACKAGE_BUGREPORT)>," \
+	       "<$(PACKAGE_BUGREPORT)>" \
+	  && X "(instead of replying to this mail)," \
 	  && X "and send general comments and feedback to" \
-	       "<$(PACKAGE_MAILINGLIST)>." \
+	       "<$(PACKAGE_MAILINGLIST)>," \
+	  && X "and patches to" \
+	       "<automake-patches@gnu.org>." \
 	  && X \
 	  && X "Thanks to everyone who has reported problems, contributed" \
-	  && X "patches, and helped testing Automake!" \
+	  && X "patches, and helped test Automake!" \
 	  && X \
 	  && X "-*-*-*-" \
 	  && X \
+  && AO "If you install this test release in its own prefix (recommended)" \
+  && AO "and you use libtool, you'll need to arrange for the libtool m4 files"\
+  && AO "to be found by aclocal. For info on this, see:" \
+  && AO "  https://gnu.org/s/automake/manual/automake.html#Libtool-library-used-but-LIBTOOL-is-undefined" \
+  && AO \
 	  && $(AWK) '\
 	        ($$0 ~ /^New in .*:/) { wait_for_end=1; } \
 		(/^~~~/ && wait_for_end) { print; exit(0) } \
 		{ print } \
 	     ' <$(srcdir)/NEWS >> $@-t \
-	  && mv -f $@-t $@
+	  && mv -f $@-t $@ \
+	  && ls -l ./$@
 .PHONY: announcement
 CLEANFILES += announcement
 
@@ -334,7 +355,7 @@ SV_GIT_CF = 'https://$(git-sv-host)/gitweb/?p=config.git;a=blob_plain;hb=HEAD;f=
 SV_GIT_GL = 'https://$(git-sv-host)/gitweb/?p=gnulib.git;a=blob_plain;hb=HEAD;f='
 
 # Files that we fetch and which we compare against.
-# Note that the 'lib/COPYING' file must still be synced by hand.
+# Note that the 'lib/COPYING' file and help2man must still be synced by hand.
 FETCHFILES = \
   $(SV_GIT_CF)config.guess \
   $(SV_GIT_CF)config.sub \
@@ -347,8 +368,9 @@ FETCHFILES = \
   $(SV_GIT_GL)doc/INSTALL
 
 # Fetch the latest versions of few scripts and files we care about.
-# A retrieval failure or a copying failure usually mean serious problems,
+# A retrieval or copying failure usually means serious problems,
 # so we'll just bail out if 'wget' or 'cp' fail.
+# Update the top-level INSTALL in sync with lib/INSTALL as a special case.
 fetch:
 	$(AM_V_at)rm -rf Fetchdir
 	$(AM_V_at)mkdir Fetchdir
@@ -362,6 +384,7 @@ fetch:
 	   else \
 	     echo "$@: updating file $$file"; \
 	     cp Fetchdir/$$file $(srcdir)/lib/$$file || exit 1; \
+	     test "$$file" != INSTALL || cp Fetchdir/$$file ../$$file; \
 	   fi; \
 	done
 	$(AM_V_at)rm -rf Fetchdir
@@ -383,6 +406,11 @@ export CVS_RSH
 
 .PHONY: web-manual web-manual-update
 web-manual web-manual-update: t = $@.dir
+
+MANUAL_VERSION_HTML = \
+	<p>See the <a href="index-full.html">full version index</a> for the manual for other releases of Automake.</p>
+MANUAL_VERSION_HTML_PARENT = \
+	<p>See the <a href="../index-full.html">full version index</a> for the manual for other releases of Automake.</p>
 
 # Build manual in several formats.  Note to the recipe:
 # 1. The symlinking of automake.texi into the temporary directory is
@@ -422,14 +450,20 @@ web-manual-update:
 	$(AM_V_at)mkdir $t
 	$(AM_V_at)cd $t \
 	  && $(CVS) -z3 -d :ext:$(CVS_USER)@$(WEBCVS_ROOT)/$(PACKAGE) \
-	            co $(PACKAGE)
+	            co -l $(PACKAGE)/manual \
+	  && cd $(PACKAGE)/manual \
+	  && $(CVS) up html_node
 	@# According to the rsync manpage, "a trailing slash on the
 	@# source [...] avoids creating an additional directory
 	@# level at the destination".  So the trailing '/' after
 	@# '$(web_manual_dir)' below is intended.
 	$(AM_V_at)$(RSYNC) -avP $(web_manual_dir)/ $t/$(PACKAGE)/manual
+	$(AM_V_at)sed -i '/This page generated by the/i$(MANUAL_VERSION_HTML)\n' $t/$(PACKAGE)/manual/index.html
+	$(AM_V_at)$(RSYNC) -avP $(web_manual_dir)/ $t/$(PACKAGE)/manual/$(VERSION)
+	$(AM_V_at)sed -i '/This page generated by the/i$(MANUAL_VERSION_HTML_PARENT)\n' $t/$(PACKAGE)/manual/$(VERSION)/index.html
 	$(AM_V_GEN): \
 	  && cd $t/$(PACKAGE)/manual \
+	  && $(CVS) add $(VERSION) $(VERSION)/*/ \
 	  && new_files=`$(CVSU) --types='?'` \
 	  && new_files=`echo "$$new_files" | sed s/^..//` \
 	  && { test -z "$$new_files" || $(CVS) add -ko $$new_files; } \
@@ -475,7 +509,7 @@ files_without_copyright += lib/mkinstalldirs
 # This script has an MIT-style license
 files_without_copyright += lib/install-sh
 
-# The UPDATE_COPYRIGHT_YEAR environment variable is honoured by the
+# The UPDATE_COPYRIGHT_YEAR environment variable is honored by the
 # 'lib/update-copyright' script.
 .PHONY: update-copyright
 update-copyright:
@@ -602,7 +636,7 @@ ALL_PACKAGES = \
 
 pkg-targets = check dist
 
-# Note: "ttp" stays for "Third Party Package".
+# Note: "ttp" stands for "Third Party Package".
 
 ttp-check ttp-check-all: do-clone = $(GIT) clone --verbose
 ttp-check: ttp-packages = $(FEW_PACKAGES)

@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,6 +12,11 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
 
 package Automake::Getopt;
 
@@ -63,7 +68,7 @@ sub parse_options (%)
   if (@ARGV && $ARGV[0] =~ /^-./)
     {
       my %argopts;
-      for my $k (keys %option)
+      for my $k (keys %option) # sort keys not needed
 	{
 	  if ($k =~ /(.*)=s$/)
 	    {

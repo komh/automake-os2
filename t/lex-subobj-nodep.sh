@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ END
 
 cat >Makefile.am <<\END
 AUTOMAKE_OPTIONS = subdir-objects
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = p1 p2
 p1_SOURCES = sub1/s1.l
 p2_SOURCES = sub2/s2.l
@@ -37,9 +39,6 @@ END
 mkdir sub1 sub2
 
 cat >sub1/s1.l <<\END
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "END"   return EOF;
 .

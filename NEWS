@@ -1,5 +1,152 @@
-For planned incompatibilities in a future Automake 2.0 release,
+For planned incompatibilities in a possible future Automake 2.0 release,
 please see NEWS-2.0 and start following the advice there now.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New in 1.17:
+
+* New features added
+
+  - AM_PATH_PYTHON will, after checking "python", prefer any Python 3
+    version (latest versions checked first) over any Python 2
+    version. If a specific version of Python 2 is still needed, the
+    $PYTHON variable should be set beforehand.
+
+  - AM_PATH_PYTHON will also search for Python versions 3.20 through 3.10.
+    It previously searched for 3.9 through 3.0. (bug#53530)
+
+  - RANLIB may be overridden on a per-target basis.
+
+  - AM_TEXI2FLAGS may be defined to pass extra flags to TEXI2DVI & TEXI2PDF.
+
+  - New option "posix" to emit the special target .POSIX for make.
+    (bug#55025, bug#67891)
+
+  - Systems with non-POSIX "rm -f" behavior are now supported, and the
+    prior intent to drop support for them has been reversed.
+    The ACCEPT_INFERIOR_RM_PROGRAM setting no longer exists.
+    (bug#10828)
+
+  - Variables using escaped \# will trigger portability warnings, but be
+    retained when appended.  GNU Make & BSD Makes are known to support it.
+    (bug#7610)
+
+  - GNU Make's default pattern rules are disabled, for speed and debugging.
+    (.SUFFIXES was already cleared.) (bug#64743)
+
+  - For Texinfo documents, if a .texi.in file exists, but no .texi, the
+    .texi.in will be read. Texinfo source files need not be present at
+    all, and if present, need not contain @setfilename. Then the file name
+    as given in the Makefile.am will be used.  If @setfilename is present,
+    it should be the basename of the Texinfo file, extended with .info.
+    (bug#54063)
+
+  - aclocal has a new option --aclocal-path to override $ACLOCAL_PATH.
+    (https://lists.gnu.org/archive/html/automake-patches/2022-01/msg00029.html)
+
+  - The missing script also supports autoreconf, autogen, and perl.
+    (https://lists.gnu.org/archive/html/automake-patches/2015-08/msg00000.html)
+
+  - test-suite.log now contains basic system information, and the
+    console message about bug reporting on failure has a bit more detail.
+    (bug#68746, bug#71421)
+
+  - When using the (default) "parallel" test driver, you can now omit the
+    output of skipped tests from test-suite.log by defining the
+    variable IGNORE_SKIPPED_LOGS to a non-empty value. (bug#71422)
+
+* Bugs fixed
+
+  - Generated file timestamp checks handle filesystems with subsecond
+    timestamp granularity dynamically, greatly speeding up the sleep
+    done by AC_OUTPUT when generating config.status (all packages) and
+    Automake's make check.
+    
+    However, this subsecond-mtime support requires an autom4te from
+    Autoconf 2.72 or later (or random test failures and other timing
+    problems may ensue), as well as a Perl, sleep program, make program,
+    and filesystem that all support subsecond resolution; otherwise, we
+    fall back to a two-second granularity, not even testing the (common)
+    1s case since that would induce a 2s delay for all configure scripts
+    in all packages on all systems that don't support subsecond mtimes.
+    
+    When everything is supported, a line "Features: subsecond-mtime" is
+    now printed by automake --version and autom4te --version. 
+    
+    To override this check and delay, e.g. to use 1 second:
+      am_cv_filesystem_timestamp_resolution=1
+      export am_cv_filesystem_timestamp_resolution
+      
+    (commit 720a11531,
+      https://lists.gnu.org/archive/html/automake-commit/2022-02/msg00009.html
+    then bug#60808, bug#64756, bug#67670, bug#68808, bug#71652,
+    history reviewed in
+      https://lists.gnu.org/archive/html/automake/2024-06/msg00054.html
+    and more info in surrounding threads.)
+
+  - The default value of $ARFLAGS is now "cr" instead of "cru", to better
+    support deterministic builds. (bug#20082)
+
+  - Automake's make dist now uses -9 instead of --best with gzip,
+    because Alpine gzip does not support --best. Also, GZIP_ENV is used
+    only for compression, not decompression, because of the same system.
+    (bug#68151)
+
+  - Dependency files are now empty, instead of "# dummy", for speed.
+    (https://lists.gnu.org/archive/html/automake/2022-05/msg00006.html)
+
+  - Compiling Python modules with Python 3.5+ uses multiple optimization
+    levels. (bug#38043)
+
+  - If the Python installation "scheme" is set to posix_local (Debian),
+    it is reset to either deb_system (if the prefix = /usr), or
+    posix_prefix (otherwise). (bug#54412, bug#64837)
+
+  - As a result of the Python scheme change, the installation directory
+    for Python files again defaults to "site-packages" under the usual
+    installation prefix, even on systems (generally Debian-based) that
+    would normally use the "dist-packages" subdirectory under
+    /usr/local.
+
+  - When compiling Emacs Lisp files, emacs is run with --no-site-file to
+    disable user config files that might hang or access the terminal;
+    and -Q is not used, since its support and behavior varies. (bug#58102)
+
+  - Emacs Lisp compilations respect silent make output.
+
+  - Automake no longer incorrectly warns that the POSIX make variables
+    $(*D) and the like are non-POSIX. Unfortunately, the make
+    implementations which do not correctly implement all the POSIX
+    variables are not detected, but this seems to have little impact
+    in practice. (bug#9587)
+
+  - Pass libtool tags OBJC and OBJCXX for the respective languages.
+    (bug#67539)
+
+  - distcleancheck ignores "silly rename" files (.nfs* .smb* .__afs*)
+    that can show up on network file systems.
+    (https://lists.gnu.org/archive/html/automake/2022-09/msg00002.html)
+
+  - Pass any options given to AM_PROG_LEX on to AC_PROG_LEX.
+    (bug#65600, bug#65730)
+
+  - aclocal: recognize ; as path separator on OS/2 and Windows. (bug#71534)
+
+  - Hash iterations with external effects now consistently sort keys.
+    (bug#25629, bug#46744)
+
+  - tests: avoid some declaration conflicts for lex et al. on SunOS.
+    (bug#34151 and others)
+
+  - tests: declare yyparse before use and use (void) parameter lists
+    instead of (), to placate C23. (bug#71425)
+
+  - Typos in code and other doc fixes. (bug#68003, bug#68004, et al.)
+
+* Obsolescence:
+
+  - py-compile no longer supports Python 0.x or 1.x versions.  Python 2.0,
+    released in 2000, is currently the minimum required version.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -297,7 +444,7 @@ New in 1.15:
         include $(srcdir)/fragment.am
         ...
 
-    If the use forgot to add data.txt and/or preproc.sh in the distribution
+    If the user forgot to add data.txt and/or preproc.sh in the distribution
     tarball, "make distcheck" would have erroneously succeeded!  This issue
     is now fixed.
 
@@ -385,7 +532,7 @@ New in 1.14:
   - The 'compile' script is now unconditionally required for all packages
     that perform C compilation (if you are using the '--add-missing'
     option, automake will fetch that script for you, so you shouldn't
-    need any explicit adjustment).  This new behaviour is needed to avoid
+    need any explicit adjustment).  This new behavior is needed to avoid
     obscure errors when the 'subdir-objects' option is used, and the
     compiler is an inferior one that doesn't grasp the combined use of
     both the "-c -o" options; see discussion about automake bug#13378 for
@@ -413,7 +560,7 @@ New in 1.14:
   - The AM_PROG_CC_C_O macro can still be called, albeit that should no
     longer be necessary. This macro is now just a thin wrapper around the
     Automake-enhanced AC_PROG_CC.  This means, among the other things,
-    that its behaviour is changed in three ways:
+    that its behavior is changed in three ways:
 
       1. It no longer invokes the Autoconf-provided AC_PROG_CC_C_O
          macro behind the scenes.
@@ -738,7 +885,7 @@ New in 1.13:
   - Elisp files placed in a subdirectory are now byte-compiled to '.elc'
     files in the same subdirectory; for example, byte-compiling of file
     'sub/foo.el' file will result in 'sub/foo.elc' rather than in
-    'foo.elc'.  This behaviour is backward-incompatible with older
+    'foo.elc'.  This behavior is backward-incompatible with older
     Automake versions, but it is more natural and more sane.  See also
     automake bug#7441.
 
@@ -795,7 +942,7 @@ New in 1.13:
   - The missing script has thus become useless as a (poor) way to work
     around the sketched-timestamps issues that can happen for projects
     that keep generated files committed in their VCS repository.  Such
-    projects are now encouraged to write a custom "fix-timestamps.sh"
+    projects are now encouraged to write a custom "fix-timestamp.sh"
     script to avoid such issues; a simple example is provided in the
     "CVS and generated files" chapter of the automake manual.
 
@@ -822,9 +969,8 @@ New in 1.13:
     include directories.  Formerly, one had to specify it with an explicit
     '-I' option to the 'aclocal' invocation.
 
-  - The special make variable ACLOCAL_AMFLAGS is deprecated; future
-    Automake versions will warn about its use, and later version will
-    remove support for it altogether.
+  - The special make variable ACLOCAL_AMFLAGS may be deprecated in
+    a future Automake major release.
 
 * The depcomp script:
 
@@ -832,7 +978,7 @@ New in 1.13:
 
   - Various internal refactorings.  They should cause no visible change,
     but the chance for regression is there anyway, so please report any
-    unexpected or suspicious behaviour.
+    unexpected or suspicious behavior.
 
   - Support for pre-8.0 versions of the Intel C Compiler has been dropped.
     This should cause no problem, since icc 8.0 has been released in
@@ -914,7 +1060,7 @@ New in 1.12.5:
 
 * Miscellaneous changes:
 
-  - automake and aclocal no longer honours the 'perllibdir' environment
+  - automake and aclocal no longer honors the 'perllibdir' environment
     variable.  That had always been intended only as an hack required in
     the testsuite, not meant for any use beyond that.
 
@@ -950,7 +1096,7 @@ New in 1.12.3:
 * Miscellaneous changes:
 
   - The '.m4' files provided by Automake no longer define serial numbers.
-    This should cause no difference in the behaviour of aclocal though.
+    This should cause no difference in the behavior of aclocal though.
 
   - Some testsuite weaknesses and spurious failures have been fixed.
 
@@ -1223,7 +1369,7 @@ New in 1.12:
 
   - Slightly backward-incompatible change, relevant only for use of Yacc
     with C++: the extensions of the header files produced by the Yacc
-    rules are now modelled after the extension of the corresponding
+    rules are now modeled after the extension of the corresponding
     sources.  For example, yacc files named "foo.y++" and "bar.yy" will
     produce header files named "foo.h++" and "bar.hh" respectively, where
     they would have previously produced header files named simply "foo.h"
@@ -1574,12 +1720,12 @@ Bugs fixed in 1.11.2:
     and error out if `javadir' is undefined, instead of silently producing
     a broken Makefile.in.
 
-  - aclocal and automake now honour the configure-time definitions of
+  - aclocal and automake now honor the configure-time definitions of
     AUTOCONF and AUTOM4TE when they spawn autoconf or autom4te processes.
 
   - The `install-info' recipe no longer tries to guess whether the
     `install-info' program is from Debian or from GNU, and adaptively
-    change its behaviour; this has proven to be frail and easy to
+    change its behavior; this has proven to be frail and easy to
     regress.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2719,7 +2865,7 @@ Bugs fixed in 1.7.3:
   - use `_dirstamp' when the file-system doesn't support `.dirstamp'
   - install/uninstall `*.i[0-9][0-9]'-style info files
   - more changes that affect only the Automake package (not its output)
-* Fix some incompatibilities with upcoming perl-5.10.
+* Fix some incompatibility with upcoming perl-5.10.
 * Properly quote AC_PACKAGE_TARNAME and AC_PACKAGE_VERSION when defining
   PACKAGE and VERSION.
 * depcomp fixes:
@@ -3102,7 +3248,7 @@ New in 0.20:
 
 -----
 
-Copyright (C) 1995-2021 Free Software Foundation, Inc.
+Copyright (C) 1995-2024 Free Software Foundation, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,9 @@ AC_PROG_RANLIB
 AC_OUTPUT
 END
 
-cat > Makefile.am << 'END'
+cat > Makefile.am <<  'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = zardoz
 
 zardoz_SOURCES = main.c
@@ -56,6 +58,10 @@ cat > main.c << 'END'
 #include <stdlib.h>
 #include <string.h>
 
+extern int yylex (void);
+extern int foolex (void);
+extern int bar_lex (void);
+
 int main (int argc, char *argv[])
 {
   if (argc != 2)
@@ -72,9 +78,6 @@ int main (int argc, char *argv[])
 END
 
 cat > 0.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "VANILLA" { printf (":%s:\n", yytext); return 121; }
 . { printf (":%s:\n", yytext); return 1; }

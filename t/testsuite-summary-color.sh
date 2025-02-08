@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,8 +46,7 @@ ${red}${br}${std}"
 
 failure_footer="\
 ${red}${br}${std}
-${red}See ./test-suite.log${std}
-${red}Please report to bug-automake@gnu.org${std}
+$failure_footer_text_colorized
 ${red}${br}${std}"
 
 do_check '' <<END

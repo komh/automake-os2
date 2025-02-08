@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ END
 $AUTOMAKE
 
 # Make sure we diagnose trailing backslash at the end of a file.
-# Report from Akim Demaile <akim@epita.fr>.
+# Report from Akim Demaille <akim@epita.fr>.
 echo 'foo = \' > Makefile.am
 AUTOMAKE_fails
 grep 'trailing backslash' stderr

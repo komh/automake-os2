@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2010-2021 Free Software Foundation, Inc.
+# Copyright (C) 2010-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ test: display
 	test x'$(PACKAGE_VERSION)' = x
 	test x'$(PACKAGE_TARNAME)' = x
 	test x'$(PACKAGE_STRING)' = x
+
+.NOTPARALLEL:
 END
 
 for ac_init in 'AC_INIT' 'AC_INIT([Makefile.am])'; do

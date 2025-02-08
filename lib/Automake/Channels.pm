@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2021 Free Software Foundation, Inc.
+# Copyright (C) 2002-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,10 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-###############################################################
-# The main copy of this file is in Automake's git repository. #
-# Updates should be sent to automake-patches@gnu.org.         #
-###############################################################
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
 
 package Automake::Channels;
 
@@ -286,7 +286,7 @@ sub _reset_duplicates (\%)
 {
   my ($ref) = @_;
   my $dup = 0;
-  foreach my $k (keys %$ref)
+  foreach my $k (keys %$ref) # sort keys not needed
     {
       $dup += $ref->{$k};
     }
@@ -328,7 +328,7 @@ sub _merge_options (\%%)
   my ($hash, %options) = @_;
   local $_;
 
-  foreach (keys %options)
+  foreach (sort keys %options)
     {
       if (exists $hash->{$_})
 	{
@@ -628,7 +628,13 @@ sub msg ($$;$%)
       $location = '';
     }
 
-  confess "unknown channel $channel" unless exists $channels{$channel};
+  if (!exists $channels{$channel})
+    {
+      # This can happen as a result of e.g. m4_warn([nonsense], [message])
+      # so it should not crash.
+      report_bad_channel($channel, $location);
+      $channel = 'syntax';
+    }
 
   my %opts = %{$channels{$channel}};
   _merge_options (%opts, %options);
@@ -662,6 +668,45 @@ sub msg ($$;$%)
     }
 }
 
+sub report_bad_channel ($$)
+{
+  my ($channel, $location) = @_;
+  my $message;
+  my $report_as = 'error';
+
+  # quotemeta is both too aggressive (e.g. it escapes '-') and
+  # too generous (it turns control characters into \ + themselves,
+  # not into symbolic escapes).
+  my $q_channel = $channel;
+  $q_channel =~ s/(?=[\"\$\'\@\`\\])/\\/g;
+  $q_channel =~ s/([^\x20-\x7e])/sprintf('\\x%02X', ord $1)/eg;
+  $q_channel = '"' . $q_channel . '"';
+
+  if ($channel eq '' || $channel eq 'all')
+    {
+      # Prior to version 2.70, the Autoconf manual said it was valid to use
+      # "all" and the empty string as the category argument to m4_warn, so
+      # don't treat those cases as errors.
+      $report_as = 'obsolete';
+      $message = "use of $q_channel as a diagnostic category is obsolete\n";
+      $message .= "(see automake --help for a list of valid categories)";
+    }
+  elsif ($channel eq 'none'
+         || ($channel =~ /^no-/ && exists $channels{substr($channel, 3)}))
+    {
+      # Also recognize "none" and "no-[category]", as someone might have
+      # thought anything acceptable to -W is also acceptable to m4_warn.
+      # Note: m4_warn([error], [...]) does actually issue an error.
+      $message = "-W accepts $q_channel, but it is not a diagnostic category";
+    }
+  else
+    {
+      $message = "unknown diagnostic category " . $q_channel;
+    }
+
+  msg $report_as, $location, $message;
+}
+
 
 =item C<setup_channel ($channel, %options)>
 
@@ -686,7 +731,7 @@ with those specified by C<%options>.
 sub setup_channel_type ($%)
 {
   my ($type, %opts) = @_;
-  foreach my $channel (keys %channels)
+  foreach my $channel (sort keys %channels)
     {
       setup_channel $channel, %opts
 	if $channels{$channel}{'type'} eq $type;
@@ -714,7 +759,7 @@ our @_saved_werrors = ();
 sub dup_channel_setup ()
 {
   my %channels_copy;
-  foreach my $k1 (keys %channels)
+  foreach my $k1 (keys %channels) # sort keys not needed
     {
       $channels_copy{$k1} = {%{$channels{$k1}}};
     }
@@ -778,7 +823,7 @@ and the key to use for serialization.
 sub setup_channel_queue ($$)
 {
   my ($queue, $key) = @_;
-  foreach my $channel (keys %channels)
+  foreach my $channel (sort keys %channels)
     {
       setup_channel $channel, queue => $queue, queue_key => $key
         if $channels{$channel}{'ordered'};

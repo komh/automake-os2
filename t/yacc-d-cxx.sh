@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,11 +26,23 @@ write_parse ()
   header=$1
   unindent <<END
     %{
+    // Include C header to provide global symbols that flex assumes.
+    // https://bugs.gnu.org/20031
+    #include <stdlib.h>
     // Valid C++, but deliberately invalid C.
     #include <cstdlib>
+    using std::exit;
+    using std::free;
+    using std::malloc;
     #include "$header"
+    #if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+    extern "C" {
+    #endif
     int yylex (void) { return 0; }
     void yyerror (const char *s) {}
+    #if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+    }
+    #endif
     %}
     %%
     x : 'x' {};
@@ -64,6 +76,8 @@ mkdir foo bar baz qux baz/sub
 
 # These makefiles will be extended later.
 cat > Makefile.am <<'END'
+AM_LFLAGS = --never-interactive
+
 .PHONY: echo-distcom
 echo-distcom:
 	@echo ' ' $(DIST_COMMON) ' '

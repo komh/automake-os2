@@ -1,3 +1,2966 @@
+2024-07-10  Karl Berry  <karl@freefriends.org>
+
+	maint: prepare for 1.17 release.
+
+	* configure.ac (AC_INIT): 1.17.
+	(APIVERSION): also 1.17. (Yikes.)
+	* m4/amversion.m4: likewise (auto-updated).
+	* HACKING: tweak release info some more.
+
+2024-07-10  Karl Berry  <karl@freefriends.org>
+
+	maint: ignore all *.out in .gitignore.
+
+	* .gitignore (*.out): ignore all at top level; common temp files.
+
+2024-07-09  Karl Berry  <karl@freefriends.org>
+
+	test: explanation of MTIME_RESOLUTION resetting.
+
+	* t/ax/test-defs.in (MTIME_RESOLUTION): separate the case
+	where am_cv_filesystem_timestamp_resolution is not set for
+	more explanations, but still reset MTIME_RESOLUTION to 1
+	even if it is already set. Which it should be when running
+	tests, because config.status is sourced. But it's too late in
+	the release process to change this now; after the release,
+	can try keeping a non-empty MTIME_RESOLUTION.
+
+2024-07-08  Karl Berry  <karl@freefriends.org>
+
+	automake: info about Automake and Libtool being in different prefixes.
+
+	In response to https://bugs.gnu.org/71847.
+
+	* doc/automake.texi (Libtool library used but LIBTOOL is undefined):
+	new node. Tweak aclocal section.
+	* lib/Automake/Variable.pm (require_variables): refer to the
+	new node in the message for LT_INIT.
+	* maintainer/maint.mk (announcement) <AO>: new fn; use it
+	to output a link to the new node for test releases only.
+	* HACKING: mention M-x texinfo-master-menu, et al.
+	* doc/amhello/README: mention that the package is named amhello.
+
+2024-07-08  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* lib/gendocs.sh: update with make fetch.
+	* lib/gitlog-to-changelog: likewise.
+	* lib/gnupload: likewise.
+	* lib/update-copyright: likewise.
+
+2024-07-03  Karl Berry  <karl@freefriends.org>
+
+	doc: tweak announce-gen invocation HACKING.
+
+	* HACKING: generalize gnulib/build-aux/announce-gen invocation.
+
+2024-07-03  Bruno Haible  <bruno@clisp.org>
+
+	automake: display whether sleep supports fractional seconds as yes/no.
+
+	https://lists.gnu.org/archive/html/automake/2024-07/msg00003.html
+
+	* m4/sanity.m4 (_AM_SLEEP_FRACTIONAL_SECONDS): Set
+	am_cv_sleep_fractional_seconds to yes/no, not true/false,
+	for consistency with other results.
+	Also "quote" this and other $am_cv values.
+	(_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): Test for yes/no.
+	* t/ax/test-defs.in: Set am_cv_sleep_fractional_seconds to 'no',
+	not 'false'.
+
+2024-07-01  Karl Berry  <karl@freefriends.org>
+
+	doc: tweak release info in HACKING.
+
+	* HACKING: mention gnulib/build-aux/announce-gen, etc.
+
+2024-06-30  Karl Berry  <karl@freefriends.org>
+
+	automake: avoid Perl-level warning on empty variable $().
+
+	https://lists.gnu.org/archive/html/automake/2024-06/msg00085.html
+
+	* lib/Automake/Variable.pm (scan_variable_expansions): recognize
+	and do nothing if the variable name is empty: $().
+	* t/varempty.sh: new test.
+	* t/list-of-tests.mk (handwritten_TESTS): add it.
+
+2024-06-29  Karl Berry  <karl@freefriends.org>
+
+	automake: test $MAKE if that's defined.
+
+	https://lists.gnu.org/archive/html/automake/2024-06/msg00051.html
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): test $MAKE
+	if it's defined, else "make".
+
+2024-06-20  Jim Meyering  <meyering@meta.com>
+
+	maint: post-release: bump version to 1.16.93
+
+	* configure.ac (AC_INIT): Post-release version bump to 1.16.93.
+	* am/amversion.m4: Update by running ./bootstrap.
+
+2024-06-20  Karl Berry  <karl@freefriends.org>
+
+	test-driver: rm spurious blank line.
+
+	* lib/test-driver (print_usage): remove spurious blank line.
+	Report from Bruno,
+	https://lists.gnu.org/archive/html/automake/2024-06/msg00075.html
+
+2024-06-20  Karl Berry  <karl@freefriends.org>
+
+	maint: prepare for 1.16.92 pretest.
+
+	* configure.ac (AC_INIT): 1.16.92.
+	* m4/amversion.m4: likewise (auto-updated).
+
+2024-06-20  Karl Berry  <karl@freefriends.org>
+
+	maint: wording tweaks for announcement.
+
+	* NEWS: Automake 2.0 may not happen.
+	* maintainer/maint.mk (announcement): missed newline.
+
+2024-06-20  Karl Berry  <karl@freefriends.org>
+
+	test: sync list-of-tests.
+
+	* t/list-of-tests.mk (handwritten_TESTS): add back t/instdir-ltlib.sh;
+	turns out all tests need to be listed there, XFAIL_TESTS is not
+	included, and that seems ok.
+	* t/CheckListOfTests.am (maintainer-check-list-of-tests): only
+	delete temp files if result is successful.
+
+2024-06-19  Karl Berry  <karl@freefriends.org>
+
+	automake: insane typo * instead of 2.
+
+	* m4/sanity.m4 (AM_SANITY_CHECK): managed to replace 2 with *
+	in ls -t test. Clearly I have gone insane.
+
+2024-06-19  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* lib/gendocs.sh: update with make fetch.
+	* lib/gitlog-to-changelog: likewise.
+
+2024-06-19  Karl Berry  <karl@freefriends.org>
+
+	doc: rewrite subsecond NEWS entry, sanity.m4 "make" testing wrong, etc.
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): mention
+	that testing of "make" is wrong here; but $(MAKE) is not available?
+	Do some special pleading that it won't matter in practice; we'll see.
+	https://lists.gnu.org/archive/html/automake/2024-06/msg00051.html
+	(AM_SANITY_CHECK): use $[]* instead of $[*]2 to avoid
+	the confusing apparent (but not) use of shell arrays; the square
+	brackets are parsed off by m4.
+	* lib/am/check.am (output_system_information): en passant, mention
+	that $(AWK) should always be defined since AC_PROG_AWK is part of
+	AM_INIT_AUTOMAKE nowadays.
+	* NEWS: rewrite subsecond NEWS entry:workaround, more references.
+
+2024-06-19  Karl Berry  <karl@freefriends.org>
+
+	doc: original purpose of $sleep is when AC_OUTPUT is not used.
+
+	* t/ax/test-defs.in (sleep): mention original purpose of $sleep,
+	namely when AC_OUTPUT is not used and hence the sleep done in
+	AC_CONFIG_COMMANDS_* is not done:
+	  https://lists.gnu.org/archive/html/bug-automake/2010-10/msg00000.html
+	Discovered by Bruno in his rearch on the "sleep" history:
+	  https://lists.gnu.org/archive/html/automake/2024-06/msg00054.html
+
+2024-06-19  Karl Berry  <karl@freefriends.org>
+
+	lib scripts: add "(GNU Automake)" to --version output, etc.
+
+	* lib/ar-lib: add "(GNU Automake)" to --version output,
+	and the "Report bugs" block to --help.
+	* lib/compile: likewise.
+	* lib/depcomp: likewise.
+	* lib/install-sh: likewise.
+	* lib/mdate-sh: likewise.
+	* lib/missing: likewise.
+	* lib/mkinstalldirs: likewise.
+	* lib/py-compile: likewise.
+	* lib/tap-driver.sh: likewise.
+	* lib/test-driver: likewise.
+	* lib/ylwrap: likewise.
+	* t/py-compile-usage.sh: update --version pattern.
+
+2024-06-18  Mike Frysinger  <vapier@gentoo.org>
+
+	aclocal: add --aclocal-path option to override ACLOCAL_PATH envvar.
+
+	From https://lists.gnu.org/archive/html/automake-patches/2022-01/msg00029.html
+	(plus wording tweaks from Karl; and thanks to Bogdan for research).
+
+	* bin/aclocal.in (usage): relabel output of m4 search path
+	components to be somewhat more correct (Karl), although it's still
+	a mess.
+	(parse_arguments): add new option --aclocal-path=s.
+	(parse_ACLOCAL_PATH): use $aclocal_path instead of hardwiring envvar.
+	* doc/automake.texi (aclocal Options): document it.
+	(dirlist): new anchor so we can reference it.
+	(Modifying the Macro Search Path: @file{ACLOCAL_PATH}): mention
+	the option.
+	(Possible future incompatibility): tone down; it might never happen.
+	* t/aclocal-path-precedence.sh: test the option.
+	* NEWS: mention the new option.
+
+2024-06-18  Karl Berry  <karl@freefriends.org>
+
+	doc: preserve old node name.
+
+	Following 4981e5997 (doc: modernize version control doc).
+
+	* doc/automake.texi (CVS): insert @anchor{CVS} so this (prior)
+	node name will still work, e.g., in HTML. Reflow surrounding source.
+
+2024-06-17  Bruno Haible  <bruno@clisp.org>
+
+	automake: omit 1s test in _AM_FILESYSTEM_TIMESTAMP_RESOLUTION, for speed.
+
+	From https://lists.gnu.org/archive/html/automake/2024-06/msg00055.html
+	plus https://lists.gnu.org/archive/html/automake/2024-06/msg00054.html.
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): Don't test
+	whether 1 sec works; instead just accept the 2 sec delay in the
+	Automake test $sleep in exchange for not incurring the 2s delay of
+	running the test for all packages on 1s-resolution platforms.
+	Platforms that support subsecond mtimes will still use them.
+
+2024-06-17  Collin Funk  <collin.funk1@gmail.com>
+
+	test: Improve output of system information in test-suite.log.
+
+	Fixes https://bugs.gnu.org/71421.
+
+	* lib/am/check.am ($(TEST_SUITE_LOG): Use $(AWK) instead of 'awk'.
+	Remove an extra space in uname output.  Start the line with
+	"System information", and other sections with "Distribution
+	information".
+	* NEWS: add reference to #71421.
+
+2024-06-17  Bruno Haible  <bruno@clisp.org>
+
+	automake: allow omitting logs of skipped tests from test-suite.log.
+
+	* doc/automake.texi (Parallel Test Harness): Describe the contents of
+	test-suite.log. Mention IGNORE_SKIPPED_LOGS.
+	(Command-line arguments for test drivers): Document the
+	--collect-skipped-logs option.
+	* lib/test-driver (print_usage): Document --collect-skipped-logs.
+	(collect_skipped_logs): New variable.
+	(gcopy): Use collect_skipped_logs.
+	* lib/am/check.am (am__common_driver_flags): Add the contents of
+	am__collect_skipped_logs.
+	(am__check_pre): Set am__collect_skipped_logs.
+	* t/parallel-tests-without-skipped-logs.sh: New file, based on
+	t/parallel-tests-no-color-in-log.sh.
+	* t/list-of-tests.mk (handwritten_TESTS): Add it.
+	* NEWS: Mention the change.
+
+2024-06-17  Karl Berry  <karl@freefriends.org>
+
+	doc: more subsecond references.
+
+	* NEWS: add the original commit reference: 720a11531,
+	        https://lists.gnu.org/archive/html/automake-commit/2022-02/msg00009.html
+
+2024-06-16  Collin Funk  <collin.funk1@gmail.com>
+
+	test: Accommodate C23 compilers.
+
+	From https://bugs.gnu.org/71425.
+
+	* t/yacc-deleted-headers.sh: Declare yyparse before use.
+	* t/yacc-depend.sh: Likewise.
+	* t/yacc-mix-c-cxx.sh: Likewise.
+	* t/yacc-d-basic.sh: Likewise. Use void instead of empty parameter
+	list.
+	* t/yacc-depend2.sh: Likewise.
+	* NEWS: mention this.
+	* THANKS: add Collin.
+
+2024-06-16  Karl Berry  <karl@freefriends.org>
+
+	test: the instdir-ltlib test is expected to fail.
+
+	Discussed in https://bugs.gnu.org/71596.
+
+	* t/list-of-tests.mk (handwritten_TESTS): move t/instdir-ltlib.sh
+	(XFAIL_TESTS): to here. It previously worked by accident
+	because lib_LTLIBRARIES was misspelled as lib_LTIBRARIES;
+	Paul Eggert fixed that on June 7,
+	commit 1d35638b23e95fe6f41c828a3442f6d7f242f4c4, and the
+	test started failing as a result.
+
+	* t/instdir-ltlib.sh: add some doc.
+	* t/all.sh: likewise. (Another xfail test, which is mysterious to me.)
+
+2024-06-16  Karl Berry  <karl@freefriends.org>
+
+	aclocal: path separator is ; on OS/2 and Windows.
+
+	Adapted from and fixes https://bugs.gnu.org/71534.
+
+	* bin/aclocal.in (parse_ACLOCAL_PATH): use $^O to recognize OS/2
+	and Windows for the environment path element separator.
+	* NEWS: mention this.
+
+2024-06-15  Yves Orton  <demerphq@gmail.com>
+
+	automake: sort keys for reproducibility.
+
+	Fixes https://bugs.gnu.org/25629.
+
+	* bin/aclocal.in: sort keys for reproducibility.
+	* bin/automake.in: likewise.
+	* contrib/tap-driver.pl: likewise.
+	* lib/Automake/Channels.pm: likewise.
+	* lib/Automake/Condition.pm: likewise.
+	* lib/Automake/DisjConditions.pm: likewise.
+	* lib/Automake/Getopt.pm: likewise.
+	* lib/Automake/Rule.pm: likewise.
+	* THANKS: Add Yves.
+	* NEWS: mention this.
+
+2024-06-12  Karl Berry  <karl@freefriends.org>
+
+	automake: omit make subsecond tests if at one-second resolution.
+
+	Partially ameliorates report from Bruno Haible, thread at
+	https://lists.gnu.org/archive/html/automake/2024-06/msg00015.html
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): if
+	resolution is only one second, assume make works, to
+	avoid several sleeps.
+
+2024-06-12  Karl Berry  <karl@freefriends.org>
+
+	doc: typo in t/color-tests2.sh comment.
+
+	* t/color-tests2.sh: "a working a working".
+
+2024-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	doc: modernize version control doc
+
+	Be more generic about version control instead of saying “CVS”.
+	In the specific examples, use Git instead of CVS.
+
+2024-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: spelling and whitespace fixes
+
+	Most of these spelling fixes are just to comments and documentation.
+	However, some affect tests as follows:
+	* t/cond36.sh (tparse.h): Fix misspelling of dependency.
+	* t/disthook.sh: Fix misspelling of file.
+	* t/help3.sh: Fix misspelling of long option.
+	* t/instdir-ltlib.sh: Fix misspellings of macro names.
+	This causes the test to fail, so someone with libtool
+	expertise needs to look into this.
+	* t/tap-no-spurious-numbers.sh (highno): Fix misspelling of shell var.
+
+2024-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: fix version mismatch
+
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION)
+	(AM_SET_CURRENT_AUTOMAKE_VERSION): Bump to 1.16.91 (auto-updated).
+
+2024-06-06  Jim Meyering  <meyering@meta.com>
+
+	maint: post-release: bump version to 1.16.91
+
+	* configure.ac (AC_INIT): Post-release version bump to 1.16.91.
+
+2024-06-02  Jim Meyering  <meyering@meta.com>
+
+	tests: work also with v2.72-9-g7a6347d1 and newer
+
+	* t/dist-missing-m4.sh: Accommodate a slightly different diagnostic
+	("undefined or overquoted macro" rather than "possibly undefined macro")
+	in autoconf as of v2.72-9-g7a6347d1.
+
+2024-06-02  Karl Berry  <karl@freefriends.org>
+
+	maint: support test releases numbered from .90 for announcements.
+
+	* maintainer/maint.mk (beta_version_rx, alpha_version_rx):
+	update to use MAJOR.MINOR.90, .92, ..., for "beta" (test) releases,
+	and .91, .93, ... for "alpha" (development). Follows the
+	2024-01-21 change.
+	* HACKING: typo en passant.
+
+2024-05-31  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* doc/help2man: restore copyright list as in upstream.
+	* lib/gendocs.sh: update with make fetch.
+	* lib/texinfo.tex: likewise.
+
+2024-05-31  Karl Berry  <karl@freefriends.org>
+
+	maint: prepare for next pretest.
+
+	* HACKING: typo, tweak release info.
+	* maintainer/maint.mk: typo.
+	* maintainer/syntax-checks.mk: typo, and exclude test-defs.sh
+	(actually .in) from the `...` test because I can't figure out how
+	to get the same results with $(...).
+
+2024-05-29  Karl Berry  <karl@freefriends.org>
+
+	missing: shellcheck disable=SC2006,SC2268
+
+	From Jacob Bachmeyer, in thread around
+	https://lists.gnu.org/archive/html/automake-patches/2022-01/msg00014.html
+
+	* lib/missing: disable shellcheck warnings about `...`.
+	We must support pre-POSIX shells in Automake.
+	(scriptversion=2024-05-29.18)
+
+2024-05-27  Karl Berry  <karl@freefriends.org>
+
+	test: check that subsecond mtime works with make.
+
+	Trying to fix https://bugs.gnu.org/68808.
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): check
+	that make works with subsecond mtimes, as well as sleep and ls.
+	(Known to fail with the make 3.81 that ships with macOS.)
+	* configure.ac (MTIME_RESOLUTION): notice if it erroneously
+	expands to the empty string, i.e., fall back to 1 if
+	$am_cv_filesystem_timestamp_resolution ended up being unset.
+	* t/ax/test-defs.in (MTIME_RESOLUTION): also fall back to 1
+	if the variable to not set, with a message.
+	Fix other typos en passant.
+	* HACKING: tweak.
+
+2024-05-26  Bogdan  <bogdro_rep@gmx.us>
+
+	test: objc tests on openbsd.
+
+	Fixes https://bugs.gnu.org/68179.
+
+	* t/objcxx-deps.sh: test for objc_getProperty and other
+	functions in the objc library.
+	* t/objcxx-minidemo.sh: likewise.
+	* t/strip2.sh (STRIP): use -x instead of --verbose to test
+	strip with multiple words, to work with openbsd (and aix) strip.
+
+2024-05-21  Mark Wooding  <mdw@distorted.org.uk>
+
+	doc: test-driver option args are separate words.
+
+	For https://bugs.gnu.org/70638.
+
+	As now mentioned in the manual, the description of the
+	test-driver command-line interface has been wrong since 2011
+	when it was first added. The manual, and the driver usage
+	messages themselves, have consistently shown option arguments
+	joined to the option name with `=' characters, while the
+	implementation of Automake has always provided option arguments
+	in the following argument word, and the provided test drivers
+	only accepted option arguments in the following argument word.
+
+	Because Automake has never used the `=' syntax, there can't
+	possibly be a working driver which actually follows the
+	specification as written, so, despite the fierce language of the
+	manual, we agreed that changing the specification was the right
+	approach. The `test-driver' program's usage message has already
+	been fixed (#22445), but the full extent of the problem wasn't
+	noticed at that time.
+
+	* doc/automake.texi (Command-line arguments for test drivers): Fix the
+	table of options to show arguments passed as separate words; add
+	footnote explaining this rather sorry situation.
+	* doc/automake.texi (Use TAP with the Automake test harness):
+	Remove `=' from documentation of `--diagnostic-string', because
+	that was never acceptable either.
+	* lib/tap-driver.sh: Fix usage message.
+	* contrib/tap-driver.pl: Change usage message to match the defined
+	protocol.  (This implementation parses options using Perl's
+	`Getopt::Long' module, so it accepts the `=' syntax as specified, but
+	this program isn't actually used.)
+
+2024-05-21  Karl Berry  <karl@freefriends.org>
+
+	doc: NEWS subsecond reference.
+
+	* NEWS: another subsecond reference.
+
+2024-05-06  Reuben Thomas  <rrt@sc3d.org>
+
+	doc: update Vala documentation
+
+	From https://bugs.gnu.org/70557#29.
+
+	* doc/automake.texi (Vala Support): Update the URL for Vala.
+	Drop the mention of a version requirement, as no current system
+	  will have a too-old version of Vala.
+	Note the restriction on conditional inclusion of source files in
+	  *_SOURCES.
+
+2024-04-29  Reuben Thomas  <rrt@sc3d.org>
+
+	doc: typos in test file.
+
+	From https://bugs.gnu.org/70557#23.
+
+	* t/vala-vapi.sh: typos.
+
+2024-04-27  Reuben Thomas  <rrt@sc3d.org>
+
+	doc: Vala-related typo in automake.in
+
+	From https://bugs.gnu.org/70557.
+
+	* bin/automake.in (lang_vala_finish_target): typo.
+
+2024-02-07  Bogdan  <bogdro_rep@gmx.us>
+
+	test: protect more yacc declarations against C vs. C++ linkage.
+
+	Fix for more of https://bugs.gnu.org/68832.
+
+	* t/yacc-clean-cxx.sh: more #ifdef of yylex, etc., following
+	https://debbugs.gnu.org/cgi/bugreport.cgi?bug=62886,
+	now for OpenIndiana. Specifically:
+	#if (defined __cplusplus) && ((!defined __sun) || (defined __EXTERN_C__))
+	* t/yacc-cxx.sh: likewise.
+	* t/yacc-d-cxx.sh: likewise.
+	* t/yacc-mix-c-cxx.sh: likewise.
+
+2024-02-03  Karl Berry  <karl@freefriends.org>
+
+	test: make bug-reporting message on test failure more explicit.
+
+	From https://bugs.gnu.org/68855.
+
+	* NEWS: mention this.
+	* lib/am/check.am ($(TEST_SUITE_LOG)) <please_report>: new fn,
+	new wording.
+	* t/ax/test-defs.in (failure_footer_text): new wording.
+	(failure_footer_text_colorized): add red.
+	* t/ax/tap-summary-aux.sh (failure_footer): use failure_footer_text*.
+	* t/tap-doc2.sh: change grep.
+	* t/testsuite-summary-color.sh: likewise.
+	* t/testsuite-summary-count-many.sh: likewise.
+	* t/testsuite-summary-count.sh: likewise.
+	* t/testsuite-summary-reference-log.sh: likewise.
+
+2024-01-30  Karl Berry  <karl@freefriends.org>
+
+	doc: mention pyenv.
+
+	* HACKING: mention pyenv as a way to test different Python versions.
+
+2024-01-29  Karl Berry  <karl@freefriends.org>
+
+	test: elide leading spaces within case for macOS sh.
+
+	Yet another fix in https://bugs.gnu.org/68119.
+
+	* t/py-compile-basedir.sh: sed away the leading spaces
+	from wc -l output within the case statement.
+
+2024-01-28  Bogdan  <bogdro_rep@gmx.us>
+
+	test: another check for PEP-3147 induced by Python 3.12.1.
+
+	Fix for more of https://bugs.gnu.org/68119.
+
+	* t/ax/am-test-lib.sh (python_has_pep3147) <am_pep3147_tag>:
+	check sys.implementation.cache_tag as well as the (old)
+	imp.get_tag. For Python 3.12.1.
+
+2024-01-28  Karl Berry  <karl@freefriends.org>
+
+	test: more rerunning autotools, C++ std:: portability.
+
+	Trying to fix more of https://bugs.gnu.org/68119.
+
+	* t/aclocal-deleted-header-aclocal-amflags.sh: $sleep
+	before file modifications.
+	* t/aclocal-deleted-header.sh: likewise.
+	* t/aclocal-deps.sh: likewise.
+	* t/subdir-add2-pr46.sh: likewise.
+	* t/yacc-mix-c-cxx.sh: #include <cstdlib> before using std::...,
+	following yacc-cxx and yacc-d-cxx tests.
+
+2024-01-27  Karl Berry  <karl@freefriends.org>
+
+	test: output system information after summary report.
+
+	From https://bugs.gnu.org/68746.
+
+	* lib/am/check.am ($(TEST_SUITE_LOG)) <output_system_information>:
+	new shell fn, called inline to write basic os information
+	into test-suite.log.
+	Also, question (do not change) the ".. contents:: :depth: 2"
+	line; what is this for?
+
+2024-01-27  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* INSTALL: updated from make distcheck.
+	* maintainer/maint.mk (fetch): update top-level INSTALL
+	if we update lib/INSTALL.
+	* lib/gendocs.sh: update with make fetch.
+
+2024-01-24  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch'.
+
+	* lib/INSTALL: update with make fetch.
+	* lib/config.guess: likewise.
+	* lib/config.sub: likewise.
+	* lib/gitlog-to-changelog: likewise.
+	* lib/update-copyright: likewise.
+
+2024-01-24  Karl Berry  <karl@freefriends.org>
+
+	doc: typo for Channels.pm, mention files for which we are the master.
+
+	* HACKING: mention files for which we are the master.
+	* lib/Automake/ChannelDefs.pm: typo for Automake::Channels;
+	mention that we hold the master copy of this.
+	* lib/Automake/Channels.pm: update/add text for master copy notice.
+	* lib/Automake/Configure_ac.pm: likewise.
+	* lib/Automake/FileUtils.pm: likewise.
+	* lib/Automake/Getopt.pm: likewise.
+	* lib/Automake/XFile.pm: likewise.
+
+2024-01-24  Karl Berry  <karl@freefriends.org>
+
+	doc: more about pretest numbering.
+
+	* HACKING: mention change to numbered pretests.
+	* configure.ac: and hence am_beta_version_rx won't match any more.
+	Let's just call all pretests development snapshots.
+
+2024-01-23  Karl Berry  <karl@freefriends.org>
+
+	automake: recommend autoreconf -f with version mismatches.
+
+	From https://bugs.gnu.org/68674.
+
+	* bin/automake.in (scan_autoconf_traces): change error
+	to suggest running autoreconf -f. The version mismatch is
+	most likely to happen due to the cache files, which
+	aclocal && automake (the previous recommendation) does not delete.
+	(scan_autoconf_files): likewise.
+	* doc/automake.texi (Auto-generating aclocal.m4): mention autoreconf.
+	Other minor wording changes.
+
+2024-01-21  Karl Berry  <karl@freefriends.org>
+
+	maint: use 1.xx.90-style pretest versions.
+
+	In response to https://bugs.gnu.org/54412.
+
+	* configure.ac (AC_INIT): 1.16.90.
+	* m4/amversion.m4: Likewise (auto-updated).
+
+2024-01-20  Karl Berry  <karl@freefriends.org>
+
+	python: use deb_system instead of posix_local if prefix = /usr.
+
+	Continuing with https://debbugs.gnu.org/cgi/bugreport.cgi?bug=54412.
+
+	* m4/python.m4 (AM_PATH_PYTHON) <am_python_setup_scheme>:
+	factor out common scheme-related code to this new variable.
+	If the scheme is posix_local and the prefix is /usr,
+	use deb_system (for Debian package builds).
+	* NEWS: more explanations (and unrelated references, en passant).
+
+2024-01-17  Gianfranco Costamagna  <locutusofborg@debian.org>
+
+	python: use posix_prefix instead of posix_local on Debian.
+
+	From https://debbugs.gnu.org/cgi/bugreport.cgi?bug=54412#17.
+	(Patch slightly adapted by Bogdan from original by Gianfranco,
+	as posted by Stefano Rivera in message#14.)
+
+	* m4/python.m4 (AM_PATH_PYTHON): replace Debian's posix_local
+	scheme with posix_prefix.
+	* doc/automake.texi (Python) <pythondir>: say a bit more.
+	* NEWS: mention this.
+
+2024-01-17  Karl Berry  <karl@freefriends.org>
+
+	automake: a millisecond is too fast for subsecond-mtime.
+
+	This patch is from https://bugs.gnu.org/68325.
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): don't try
+	for a millisecond; make a hundredth of a second the fastest we'll go.
+
+	Apparently there are plenty of systems which supposedly support
+	subsecond-mtimes down to the millisecond and yet randomly
+	fail parallelized tests. For example:
+	https://debbugs.gnu.org/cgi/bugreport.cgi?bug=68119#18
+	Maybe the tests themselves need fixing. (The ones that run
+	autotools multiple times in succession.) A work in progress.
+
+2024-01-17  Karl Berry  <karl@freefriends.org>
+
+	doc: mention debian python 3.10 changes; master menu; etc.
+
+	* doc/automake.texi (Creating amhello): mention libtool too.
+	(FAQ): remove spurious leftover "Errors with distclean" menu entry.
+	(Top): Regenerate master menu (M-x texinfo-master-menu).
+
+2024-01-13  Mike Frysinger  <vapier@gentoo.org>
+
+	python: add 3.20 - 3.16 to the version search list.
+
+	* m4/python.m4: Add python3.20 - python3.16.
+	* NEWS: Mention these versions too.
+
+2024-01-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: make update-copyright
+
+2024-01-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: make fetch
+
+2023-12-31  Karl Berry  <karl@freefriends.org>
+
+	doc: overview of autotools ordering.
+
+	* doc/automake.texi (Creating amhello): briefly mention the order
+	in which to run the autotools, a la autoreconf. A couple other tweaks.
+
+2023-12-31  Bruno Haible  <bruno@clisp.org>
+
+	test: don't hang waiting for Solaris lex/yacc to read from stdin.
+
+	From https://bugs.gnu.org/68165.
+
+	* t/get-sysconf.sh: Don't let $LEX or $YACC read from stdin when
+	trying --version and --help. Only lex --version hangs, but may
+	as well avoid it in general.
+
+2023-12-30  Bruno Haible  <bruno@clisp.org>
+
+	dist: Use -9 instead of --best, and only for gzip, to pacify Alpine.
+
+	From https://bugs.gnu.org/68151.
+
+	* lib/am/distdir.am (GZIP_ENV): Set to -9, not --best, since
+	Alpine does not support --best.
+	(distcheck): Don't use GZIP_ENV when invoking gzip for decompression,
+	since Alpine does not support -1..-9 with decompression.
+	* doc/automake.texi (The Types of Distributions): Document the change.
+	* NEWS: mention this. (En passant, add more change links.)
+
+2023-12-27  Jim Meyering  <meyering@meta.com>
+
+	maint: avoid a false-positive syntax-check failure
+
+	* maintainer/syntax-checks.mk (sc_tests_plain_sleep): This would match
+	the "sleep 1" in a comment.  So filter out shell-style comments before
+	matching.
+
+2023-12-27  Jim Meyering  <meyering@meta.com>
+
+	maint: avoid a racy distcheck failure
+
+	* lib/am/distdir.am (am__remove_distdir): Use ";" not "&&" after
+	the chmod-running find, so that a failing find doesn't cause the
+	entire rule to fail.  This could happen when a directory like
+	doc/automake.t2d being processed by find is concurrently deleted
+	by another rule.
+
+2023-12-26  Hans Ulrich Niedermann  <hun@n-dimensional.de>
+
+	doc: typos in NEWS.
+
+	From https://lists.gnu.org/archive/html/automake/2023-12/msg00037.html.
+
+	* NEWS: typos.
+
+2023-12-25  Karl Berry  <karl@freefriends.org>
+
+	test: silent-defaults.sh rerun autotools each time.
+
+	Follow-up to https://bugs.gnu.org/32868.
+
+	* t/silent-defaults.sh: rerun $ACLOCAL && $AUTOMAKE for each trial,
+	else test failed. (Why it has always succeeded before now, and/or
+	what has changed, I don't know.) Remake the cache for each trial,
+	for reliability. Echo trial description.
+	* doc/automake.texi (Silent Rules): tweak text.
+	(Unsilencing Automake): new node.  Mention
+	make --debug=p to completely unsilence rules.
+
+2023-12-25  Karl Berry  <karl@freefriends.org>
+
+	test: self-announce leading installcheck/protocol/PATH information.
+
+	* t/ax/am-test-lib.sh (am_extra_info): self-announce where the
+	initial reports on installcheck, test protocol, and PATH
+	come from. Apparently this doesn't disturb the tests.
+	If other people don't like the extra verbiage, no problem to remove.
+
+2023-12-25  Karl Berry  <karl@freefriends.org>
+
+	test: force long sleep with explicit cache variable setting.
+
+	From https://bugs.gnu.org/67670.
+
+	* t/ax/test-defs.in: when MTIME_RESOLUTION is set to 1
+	because automake/autom4te do not support subsecond-mtime,
+	also set am_cv_sleep_fractional_seconds=false. Otherwise
+	the random parallel test failures from given bug and others return.
+	* m4/sanity.m4 (_AM_SLEEP_FRACTIONAL_SECONDS): reformat.
+	(_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): elide "the" in AC_CACHE_CHECK.
+	* t/amassign.sh: end with :.
+	* HACKING: more on debugging tests.
+	* NEWS: update.
+
+2023-12-24  Dimitri Papadopoulos  <dimitri.papadopoulos@gmail.com>
+
+	doc: typos from codespell.
+
+	Report and patch: https://bugs.gnu.org/68003.
+
+	* bin/automake.in: typo from codespell.
+	* configure.ac: likewise.
+	* t/dist-auxdir-many-subdirs.sh: likewise.
+	* t/instmany-mans.sh: likewise.
+	* t/instmany-python.sh: likewise.
+	* t/instmany.sh: likewise.
+	* t/nostdinc.sh: likewise.
+	* t/parallel-tests-fork-bomb.sh: likewise.
+	* t/rm-f-probe.sh: likewise.
+	* t/tap-basic.sh: likewise.
+	* t/test-driver-custom-multitest.sh: likewise.
+	* t/txinfo-vtexi3.sh: likewise.
+
+2023-12-24  Dimitri Papadopoulos  <dimitri.papadopoulos@gmail.com>
+
+	doc: update location of FETCHFILES variable.
+
+	Report and patch: https://bugs.gnu.org/68004.
+
+	* HACKING: FETCHFILES has been moved: Makefile.am ->
+	maintainer/maint.mk.
+
+2023-12-24  Karl Berry  <karl@freefriends.org>
+
+	maint: email in THANKS for Zack Weinberg.
+
+	* THANKS (Zack Weinberg): update from zackw@panix.com to
+	zack@owlfolio.org, per Zack.
+
+2023-12-24  Karl Berry  <karl@freefriends.org>
+
+	test: do not leave files as mode zero.
+
+	Follows up on https://bugs.gnu.org/67868.
+
+	* t/dist-with-unreadable-makefile-fails.sh: chmod u+rw at end.
+	Also follow usual pattern of ending tests with :, not explicit exit.
+	* t/tap-bad-prog.tap: chmod u+r at end (since only r removed).
+
+2023-12-24  Karl Berry  <karl@freefriends.org>
+
+	warn: avoid "only used once" warning for subsecond_mtime.
+
+	* bin/automake.in (version): uselessly use
+	$Automake::FileUtils::subsecond_mtime a second time to
+	avoid Perl warning.
+
+2023-12-23  Karl Berry  <karl@freefriends.org>
+
+	doc: more on help2man and "Errors with distclean".
+
+	This fixes (the rest of) https://bugs.gnu.org/67891.
+
+	* doc/automake.texi (Errors with distclean): make a subsection of
+	"Checking the Distribution". Contrast help2man usage examples of
+	Autoconf (includes man pages in distribution) and
+	Automake (no man pages, distributes the help2man script instead).
+	(Checking the Distribution): convert subheadings to subsections.
+	* doc/local.mk: also mention autoconf vs. automake approaches here,
+	and point to the manual.
+	(checklinkx): en passant, remove unused checklinkx exclude.
+
+2023-12-22  Zack Weinberg  <zack@owlfolio.org>
+
+	maint: sync autoconf Channels.pm and ChannelsDefs.pm.
+
+	Patch from https://bugs.gnu.org/67971.
+
+	The changes address <https://savannah.gnu.org/support/?110872>,
+	about m4_warn code/documentation consistency.
+	It should be impossible to reach report_bad_channel from code in
+	Automake.
+
+	* lib/Automake/Channels.pm (msg): If the channel argument is invalid,
+	don't crash; report the mistake and use the `syntax' channel.
+	(report_bad_channel): New function for reporting invalid channels.
+
+	* lib/Automake/ChannelDefs.pm (usage): Clarify that the list of
+	warning categories is exhaustive, and that ``all'', ``none'',
+	``no-CATEGORY'', and ``error'' are not warning categories.
+
+2023-12-21  Karl Berry  <karl@freefriends.org>
+
+	maint: tweak announcement text again.
+
+	* maintainer/maint.mk (announcement):
+	"(instead of replying to this mail),"
+
+2023-12-21  Karl Berry  <karl@freefriends.org>
+
+	automake: avoid unnecessary use of \K.
+
+	This fixes (part of) https://bugs.gnu.org/67891
+	and follows up on https://bugs.gnu.org/55025.
+
+	* bin/automake.in (generate_makefile) <posix>: avoid use of
+	\K when removing comment and blank lines before a .POSIX target,
+	since Solaris 10 has perl 5.8.4, and \K was added in 5.10.
+
+2023-12-20  Dave Hart  <davehart@gmail.com>
+
+	doc: typo in tap-driver.sh.
+
+	* lib/tap-driver.sh: to not too.
+
+2023-12-20  Karl Berry  <karl@freefriends.org>
+
+	maint: post-release administrivia.
+
+	* configure.ac (AC_INIT): now 1.16j, since 1.16i pretest was
+	released (on 2023-12-18).
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
+2023-12-18  Karl Berry  <karl@freefriends.org>
+
+	maint: announcement text tweaks.
+
+	* HACKING: mention DEVEL_SNAPSHOT=1 for us.
+	* NEWS: tweak text.
+	* maintainer/maint.mk (announcement): tweak text,
+	ls -l ./announcement as a clue as to where the result is.
+
+2023-12-17  karl  <karl@mist.freefriends.org.(none)>
+
+	dist: more forcefully deal with mode 0 directories created by tests.
+
+	From https://bugs.gnu.org/67868.
+
+	* lib/am/distdir.am (am__remove_distdir): make directories
+	readable and searchable, not just writable. (Also typo.)
+	* t/local.mk (clean-local-check): ensure directories are
+	at least mode 700
+	* t/uninstall-fail.sh: restore reasonable permissions of
+	the mode 0 $inst/share directory at the end.
+
+2023-12-13  Karl Berry  <karl@freefriends.org>
+
+	doc: checklinkx tweaks.
+
+	* HACKING: mention checklinkx to check for broken links.
+	* contrib/checklinkx: mention us in version info;
+	use warnings instead of -w.
+
+2023-12-11  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch'.
+
+	* lib/INSTALL: update with make fetch.
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gendocs.sh: Likewise.
+	* lib/gendocs_template: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+
+2023-12-10  Reuben Thomas  <rrt@sc3d.org>
+
+	doc: add advice to list Yacc/Lex generated sources in BUILT_SOURCES.
+
+	For https://bugs.gnu.org/62791.
+
+	* doc/automake.texi (Yacc and Lex): it seems to be necessary to
+	list the generated C source file for a Yacc/Lex file, as well as the
+	header file, in BUILT_SOURCES.
+
+2023-12-10  Karl Berry  <karl@freefriends.org>
+
+	doc: NEWS entry for OBJC[XX] tags.
+
+	This helps https://bugs.gnu.org/67539.
+
+	* NEWS: update; forgot to commit with prior code change.
+
+2023-12-10  Karl Berry  <karl@freefriends.org>
+
+	automake: pass OBJC and OBJCXX tags to libtool.
+
+	This helps https://bugs.gnu.org/67539.
+
+	* bin/automake.in <register_language>: pass libtool_flag
+	of OBJC and OBJCXX for the respective languages.
+
+2023-12-10  Zack Weinberg  <zack@owlfolio.org>
+
+	automake: again revise file mtime resolution support.
+
+	This patch is from https://bugs.gnu.org/67670.
+
+	In order for the Automake testsuite to be able to use sub-second
+	delays to control whether certain files are considered newer
+	than others, five(!) separate pieces of software all need to
+	cooperate: automake itself, autoconf's internal `autom4te'
+	utility, the Perl interpreter and its libraries, the sleep(1)
+	shell utility, and finally the filesystem hosting the build
+	directory. The existing tests for this are a combination of
+	inadequate and incorrect. This patch, in conjunction with a
+	patch just committed to Autoconf trunk,
+	https://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=39d96e6fff7ceae63b823872602caf4d255a38c8
+
+	should make everything much more robust, as follows:
+
+	- _AM_FILESYSTEM_TIMESTAMP_RESOLUTION is completely rewritten.
+	 It no longer looks for autom4te at all, because this macro is
+	 invoked unconditionally from AM_INIT, so *every* project that
+	 uses Automake would get this test that's only relevant to
+	 Automake's own testsuite. Also, it tries sleeping for as little
+	 as one millisecond (smaller delays consistently get rounded up
+	 to 1ms on my computer and I expect that's universal), it should
+	 accurately detect FAT's two-second resolution now, and it should
+	 not be tripped up anymore by running at precisely the moment
+	 that will make a 0.1s sleep cross a 1s boundary (this may sound
+	 unlikely but it used to cause a couple of test failures *every
+	 time* I ran the automake testsuite on a network filesystem that
+	 only supported 1s resolution).
+
+	- In support of the above, the test for working ls -t moved from
+	 AM_SANITY_CHECK to _AM_FILESYSTEM_TIMESTAMP_RESOLUTION. This
+	 allowed me to simplify the test for $srcdir/configure being
+	 older than a freshly created file.
+
+	- If automake is capable of reading high-resolution file
+	 modification timestamps from the operating system, it prints
+	 `Features: subsecond-mtime' as the second line of --version
+	 output. (We can't just assume this works for sufficiently new
+	 automake, because it depends on whether the Perl interpreter
+	 provides this capability, and that's not a simple question of
+	 which version of Perl you have, either.)
+
+	- The Autoconf patch mentioned above adds the same annotation to the
+	 output of autom4te --version.
+
+	- Finally, t/ax/test-defs.in looks for the
+	 `Features: subsecond-mtime' string from both automake and
+	 autom4te and resets the sleep time to one second if it's not
+	 there. There might be a better place to put this, somewhere
+	 it'll execute every time the *overall testsuite* is invoked
+	 rather than once for each test, but I couldn't find one.
+
+	Tested on x86-64-linux with development automake and development
+	autoconf.
+
+	Previous discussion:
+	- https://lists.gnu.org/archive/html/automake/2023-03/msg00000.html
+	- https://lists.gnu.org/archive/html/automake/2023-04/msg00002.html
+	- https://lists.gnu.org/archive/html/automake/2023-12/msg00005.html
+	- https://debbugs.gnu.org/cgi/bugreport.cgi?bug=64756
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): Rewrite for
+	greater reliability.  Don't probe autom4te at all here.
+	Check for working ls -t here.
+	(AM_SANITY_CHECK): Do not cache the result.
+	Do not check for working `ls -t' here.
+	Disentangle control flow in the loop probing the relative ages of
+	  build and source directory.
+
+	* lib/Automake/FileUtils.pm: Sync from autoconf.
+	* bin/automake.in (version): Include `Features: subsecond-mtime'
+	  in the output if $Automake::FileUtils::subsecond_mtime is true.
+	* configure.ac: Rename the substitution variable MODIFICATION_DELAY
+	  to MTIME_RESOLUTION.
+	* t/ax/test-defs.in: Require both $AUTOMAKE and $AUTOM4TE to report
+	  support for high-resolution timestamps before setting $sleep to
+	  delay for less than one second.
+	* NEWS: Update info.
+
+2023-12-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Simplify recent $PERL check
+
+	* configure.ac: Don’t spin off subprocesses to check $PERL.
+
+2023-12-02  Karl Berry  <karl@freefriends.org>
+
+	configure: better check for the perl patch containing whitespace.
+
+	More for https://bugs.gnu.org/62896.
+
+	* configure.ac: quote "$PERL" and check directly with grep.
+
+2023-12-02  Karl Berry  <karl@freefriends.org>
+
+	doc: autoconf portability link, python NEWS.
+
+	        More for https://bugs.gnu.org/67268.
+
+	* doc/automake.texi (Usage of Conditionals): link to
+	Autoconf's Limitations of Builtins, e.g.,
+	https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/html_node/Limitations-of-Builtins.html
+	* NEWS: Python version preferences are not just miscellaneous.
+
+2023-12-02  Mike Frysinger  <vapier@gentoo.org>
+
+	python: prioritize python 3.x over 2.x
+
+	Since Python 2.x went EOL years ago, stop searching for it before
+	any of the Python 3 versions.
+
+	* m4/python.m4: Move python2 after all python3 versions.
+	* NEWS: Mention update in version search.
+
+2023-11-24  Olly Betts  <olly@survex.com>
+
+	compile: support libtool .lo, needed for Xapian on Windows.
+
+	* lib/compile (func_cl_wrapper):handle *.lo like *.o.
+
+2023-11-23  Karl Berry  <karl@freefriends.org>
+
+	missing et al.: mention automake home page and gnu.org/gethelp.
+
+	* lib/compile: in --help message, include automake home page
+	and gnu.org/gethelp, following automake --help.
+	* lib/depcomp: likewise.
+	* lib/install-sh: likewise.
+	* lib/mdate-sh: likewise.
+	* lib/missing: likewise.
+	* lib/mkinstalldirs: likewise.
+	* lib/py-compile: likewise.
+	* lib/ylwrap: likewise.
+
+2023-11-23  Alex Vong  <alexvong1995@gmail.com>
+
+	missing: add autoreconf, autogen and perl as supported programs.
+
+	From:
+	https://lists.gnu.org/archive/html/automake-patches/2015-08/msg00000.html
+
+	* lib/missing: add autoreconf, autogen and perl as supported programs,
+	potentially especially useful from bootstrap scripts. Alphabetize.
+	* NEWS: mention.
+	* THANKS: new contributor.
+
+2023-11-21  Karl Berry  <karl@freefriends.org>
+
+	contrib: remove test-driver.scm, maintained elsewhere.
+
+	* contrib/test-driver.scm: remove.
+	Original patch and discussion:
+	https://lists.gnu.org/archive/html/automake-patches/2016-05/msg00000.html
+
+	Suggestion from guile-devel in 2023 that it's been updated outside
+	of Automake, and merging would not be especially helpful:
+	https://lists.gnu.org/archive/html/guile-devel/2023-11/msg00036.html
+
+2023-11-21  Pavel Raiskup  <praiskup@redhat.com>
+
+	automake: make the ARFLAGS default 'cr' instead of 'cru'.
+
+	In some GNU/Linux distributions people started to compile 'ar'
+	binary with --enable-deterministic-archives (binutils project).
+	That, however, in combination with our previous long time working
+	default AR_FLAGS=cru causes warnings on such installations:
+	ar: `u' modifier ignored since `D' is the default (see `U')
+
+	The 'u' option (at least with GNU binutils) did small optimization
+	during repeated builds because it instructed 'ar' to not
+	open/close unchanged *.o files and to rather read their contents
+	from old archive file.  However, its removal should not cause a
+	big performance hit for usual workflows.
+
+	Distributions started using --enable-deterministic-archives
+	knowing that it would disable the 'u', just to rather have a bit
+	more deterministic builds.
+
+	Also, to justify this change a bit more, keeping 'u' in ARFLAGS
+	could only result in many per-project changes to override
+	Automake's ARFLAGS default, just to silence such warnings.
+
+	Fixes bug#20082.  Reported by Eric Blake.
+
+	* bin/automake.in (handle_libraries): Use 'ARFLAGS=cr' by default.
+	* doc/automake.texi (Building a library): Mention the changed
+	ARFLAGS default.
+	(@c LocalWords): Replace 'cru' with 'cr'.
+	* m4/ar-lib.m4 (AM_PROG_AR): Cut out 'cru' string into separate
+	ARFLAGS variable with new default 'cr'.
+	* NEWS: Document.
+
+2023-11-19  Jakub Wilk  <jwilk@jwilk.net>
+
+	doc: typos in tap-driver.sh.
+
+	* lib/tap-driver.sh: fix typos.
+
+2023-11-18  Karl Berry  <karl@freefriends.org>
+
+	doc: mention shell operators preferred over `test` options.
+
+	* doc/automake.texi (Usage of Conditionals): mention that shell
+	operators (&&, ||, ()) are preferred over `test` options (-a, -o,
+	\(\)). Idea and POSIX url reference from Michael Stapelberg,
+	https://lists.gnu.org/archive/html/automake-patches/2016-10/msg00002.html
+
+2023-11-15  Karl Berry  <karl@freefriends.org>
+
+	tests: give input file to sed.
+
+	* t/posixtarget.sh: sed ... Makefile | grep,
+	not sed ... | grep Makefile, to avoid waiting forever on stdin.
+
+2023-11-15  Mike Frysinger  <vapier@gentoo.org>
+
+	m4: use AS_IF instead of ! builtin.
+
+	* m4/sanity.m4: Switch `if !` to AS_IF.
+
+2023-11-01  Jim Meyering  <meyering@meta.com>
+
+	fix: syntax error in sanity.m4
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): Fix
+	syntax error from preceding change: add a missing double quote.
+
+2023-11-01  Karl Berry  <karl@freefriends.org>
+
+	doc: more NEWS on fractional seconds.
+
+	* NEWS: fixed autom4te is not yet released.
+
+2023-11-01  Karl Berry  <karl@freefriends.org>
+
+	doc: references for non-fractional timestamps.
+
+	The non-fractional fix from Bogdan fixes
+	https://bugs.gnu.org/64756, discussed earlier in a long thread on
+	automake in 2023-03 and 2023-04; references in the bug.
+	Jacob Bachmeyer contributed to the analysis and fixes.
+
+	* m4/sanity.m4:
+
+2023-11-01  Karl Berry  <karl@freefriends.org>
+
+	doc: add bug numbers to NEWS.
+
+	* NEWS: add some bug numbers.
+
+2023-11-01  Bogdan  <bogdro_rep@gmx.us>
+
+	m4: fall back to non-fractional timestamps with older autom4te.
+
+	* m4/sanity.m4 (_AM_FILESYSTEM_TIMESTAMP_RESOLUTION): if
+	HiRes is not present in Autom4te/FileUtils.pm, do not consider
+	fractional sleeps.
+
+2023-11-01  Karl Berry  <karl@freefriends.org>
+
+	m4: syntax fix for lex change.
+
+	* m4/lex.m4: dnl caused "fiif" in output.
+
+2023-11-01  Karl Berry  <karl@freefriends.org>
+
+	doc: tiny Texinfo cleanups.
+
+	* doc/automake.texi (Public macros): Missed @var usage.
+	(Dependencies): "The Autoconf Manual" in cross-manual xref.
+
+2023-11-01  Bogdan  <bogdro_rep@gmx.us>
+
+	tests: add new test for AM_PROG_LEX arguments.
+
+	See https://bugs.gnu.org/65600 and https://bugs.gnu.org/65730
+	and https://lists.gnu.org/archive/html/automake/2023-07/msg00007.html.
+
+	* t/lex-args.sh: New test.
+	* t/list-of-tests.mk (handwritten_tests): Add it.
+
+2023-11-01  Łukasz Stelmach  <stlman@poczta.fm>
+
+	m4: update invocation of AC_PROG_LEX.
+
+	* m4/lex.m4: Pass on any arguments given to AC_PROG_LEX.
+	* doc/automake.texi: Describe this.
+	* NEWS: Mention this.
+	* THANKS: New contributor.
+
+2023-10-30  Karl Berry  <karl@freefriends.org>
+
+	doc: user conditional for dependency tracking.
+
+	* doc/automake.texi (Automatic dependency tracking): Describe
+	basing a conditional for dependency tracking on the shell variable
+	enable_dependency_tracking. Mentioned by Nick Bowler.
+	https://lists.gnu.org/archive/html/automake/2023-09/msg00004.html
+
+	* HACKING: Capitalization.
+
+2023-10-06  Karl Berry  <karl@freefriends.org>
+
+	tests: add test for new posix option.
+
+	See https://bugs.gnu.org/55025.
+
+	* t/posixtarget.sh: New test.
+	* t/list-of-tests.mk (handwritten_tests): Add it.
+	* t/README: mention using existing tests as a basis.
+
+2023-10-06  Vincent Lefevre  <vincent@vinc17.net>
+
+	automake: new option posix to emit .POSIX target first.
+
+	This patch is from https://bugs.gnu.org/55025.
+
+	* lib/Automake/Options.pm (_is_valid_easy_option): declare new
+	option "posix".
+	* bin/automake.in (generate_makefile): if the "posix" option is
+	present, add a .POSIX special target as the first non-comment
+	line in the Makefile.in files.
+	* NEWS: mention this.
+	* doc/automake.texi: likewise.
+
+2023-08-29  Frédéric Bérat  <fberat@redhat.com>
+
+	tests: avoid implicit function declarations.
+
+	This patch is from https://bugs.gnu.org/59993 (v2 part 2).
+
+	* t/c-demo.sh: This patch is related to an effort to prepare
+	Automake for future GCC/Clang versions which set c99 as default
+	standard to be used.
+
+	C99 requires that functions be properly declared before use.
+	This is true for both user functions and standard functions,
+	e.g., printf.
+
+	* t/cond35.sh: Likewise.
+	* t/dist-vs-built-sources.sh: Likewise.
+	* t/lex-clean.sh: Likewise.
+	* t/lex-multiple.sh: Likewise.
+	* t/lex-nodist.sh: Likewise.
+	* t/ltcond2.sh: Likewise.
+	* t/ltconv.sh: Likewise.
+	* t/subobj-clean-lt-pr10697.sh: Likewise.
+	* t/subobj-clean-pr10697.sh: Likewise.
+	* t/tags-pr12372.sh: Likewise.
+	* t/yacc-basic.sh: Likewise.
+	* t/yacc-clean.sh: Likewise.
+	* t/yacc-nodist.sh: Likewise.
+
+	This patch is from https://bugs.gnu.org/59993.
+
+2023-08-28  Frédéric Bérat  <fberat@redhat.com>
+
+	tests: don't try to prevent flex from including unistd.h.
+
+	This patch is from https://bugs.gnu.org/59994.
+
+	* t/cond35.sh: This patch is related to an effort to prepare
+	Automake for future GCC/Clang versions which set c99 as default
+	standard to be used.
+
+	In the current version of flex, not having unistd.h leads to
+	implicit function declarations that are not compatible with C99.
+
+	A future version of flex will (hopefully) make the "NO_UNISTD"
+	flag a no-op, and include unistd.h by default.
+
+	Also, while flex-dedicated tests had this macro set,
+	yacc tests did not, despite their use of flex.
+
+	For consistency, all the yacc/flex related tests now have the
+	"--never-interactive" option set in AM_LFLAGS, and do not try
+	define an isatty function.
+
+	* t/lex-clean-cxx.sh: Likewise.
+	* t/lex-clean.sh: Likewise.
+	* t/lex-depend-cxx.sh: Likewise.
+	* t/lex-depend.sh: Likewise.
+	* t/lex-header.sh: Likewise.
+	* t/lex-lib-external.sh: Likewise.
+	* t/lex-lib.sh: Likewise.
+	* t/lex-libobj.sh: Likewise.
+	* t/lex-line.sh: Likewise.
+	* t/lex-multiple.sh: Likewise.
+	* t/lex-nodist.sh: Likewise.
+	* t/lex-noyywrap.sh: Likewise.
+	* t/lex-pr204.sh: Likewise.
+	* t/lex-subobj-nodep.sh: Likewise.
+	* t/lex3.sh: Likewise.
+	* t/lex5.sh: Likewise.
+	* t/lexvpath.sh: Likewise.
+	* t/silent-lex.sh: Likewise.
+	* t/silent-many-languages.sh: Likewise.
+	* t/silent-yacc-headers.sh: Likewise.
+	* t/silent-yacc.sh: Likewise.
+	* t/subpkg-yacc.sh: Likewise.
+	* t/suffix10.tap: Likewise.
+	* t/yacc-auxdir.sh: Likewise.
+	* t/yacc-basic.sh: Likewise.
+	* t/yacc-bison-skeleton-cxx.sh: Likewise.
+	* t/yacc-bison-skeleton.sh: Likewise.
+	* t/yacc-clean-cxx.sh: Likewise.
+	* t/yacc-clean.sh: Likewise.
+	* t/yacc-cxx-grepping.sh: Likewise.
+	* t/yacc-cxx.sh: Likewise.
+	* t/yacc-d-basic.sh: Likewise.
+	* t/yacc-d-cxx.sh: Likewise.
+	* t/yacc-d-vpath.sh: Likewise.
+	* t/yacc-deleted-headers.sh: Likewise.
+	* t/yacc-depend.sh: Likewise.
+	* t/yacc-depend2.sh: Likewise.
+	* t/yacc-dist-nobuild-subdir.sh: Likewise.
+	* t/yacc-dist-nobuild.sh: Likewise.
+	* t/yacc-dry.sh: Likewise.
+	* t/yacc-grepping.sh: Likewise.
+	* t/yacc-grepping2.sh: Likewise.
+	* t/yacc-headers-and-dist-pr47.sh: Likewise.
+	* t/yacc-line.sh: Likewise.
+	* t/yacc-misc.sh: Likewise.
+	* t/yacc-mix-c-cxx.sh: Likewise.
+	* t/yacc-nodist.sh: Likewise.
+	* t/yacc-pr204.sh: Likewise.
+	* t/yacc-subdir.sh: Likewise.
+	* t/yacc-vpath.sh: Likewise.
+	* t/yacc-weirdnames.sh: Likewise.
+	* t/yflags-cmdline-override.sh: Likewise.
+	* t/yflags-cxx.sh: Likewise.
+	* t/yflags-d-false-positives.sh: Likewise.
+	* t/yflags-force-conditional.sh: Likewise.
+	* t/yflags-force-override.sh: Likewise.
+	* t/yflags-var-expand.sh: Likewise.
+	* t/yflags.sh: Likewise.
+
+2023-08-28  Frédéric Bérat  <fberat@redhat.com>
+
+	tests: avoid implicit function declaration in t/depcomp.sh.
+
+	This patch is from https://bugs.gnu.org/60962.
+
+	* t/ax/depcomp.sh: save and restore sub/subfoo.h, so its
+	declaration will be seen, as required by C99.
+	* THANKS: add Frédéric.
+
+2023-08-09  Karl Berry  <karl@freefriends.org>
+
+	maint: Ineiev in THANKS.
+
+	* THANKS: add Ineiev.
+
+2023-08-09  Jan Engelhardt  <jengelh@inai.de>
+
+	automake: portability warning for dollar-escaped dollar signs.
+
+	This bug and fix was posted at
+	https://lists.gnu.org/archive/html/automake/2023-08/msg00003.html.
+
+	* lib/Automake/Variable.pm (scan_variable_expansions): rewrite
+	scan_variable_expansions regex to handle dollar-escaped dollar signs.
+	* t/dollarvar2.sh: test it.
+
+2023-08-05  Ineiev  <ineiev@gnu.org>
+
+	doc: missing docdir and lispdir in _DATA description.
+
+	This changes fixes https://bugs.gnu.org/65032.
+
+	* doc/automake.texi (Data): add docdir and lispdir,
+	index doc_DATA and lisp_DATA.
+
+2023-07-20  Bruno Haible  <bruno@clisp.org>
+
+	automake: disable GNU make's internal pattern rules, for speed.
+
+	From https://bugs.gnu.org/64743.
+
+	* lib/am/footer.am: Disable GNU make's internal pattern rules.
+	* lib/Automake/Rule.pm (_conditionals_for_rule): Add special handling
+	for these pattern rules from footer.am.
+	(define): Likewise.
+	* t/nodep.sh: Update test to avoid matching the new %:: rules.
+	* t/fnoc.sh: Update test to avoid matching the new %:: SCCS rule.
+
+	* NEWS: Mention this.
+	* doc/automake.texi (Suffixes): Likewise.
+	(Doc changes written by Karl.)
+
+2023-07-14  Mike Frysinger  <vapier@gentoo.org>
+
+	automake: set test delays to am_cv_filesystem_timestamp_resolution.
+
+	This patch is from https://bugs.gnu.org/60808.
+
+	* configure.ac: Set test delays to
+	am_cv_filesystem_timestamp_resolution, instead of hardwiring
+	5sec on DJGPP and 2sec elsewhere. This speeds up test runs
+	significantly, informally as much 30%.
+
+2023-07-13  Bogdan  <bogdro_rep@gmx.us>
+
+	texi: assume .texi.in generates .texi.
+
+	This change refines the fix for https://bugs.gnu.org/54063.
+
+	* bin/automake.in (scan_texinfo_file): if .texi doesn't exist,
+	but .texi.in exists, read the latter for the Texinfo source.
+	Use the @setfilename argument, if present, to generate rules.
+	* t/txinfo-no-texi-but-texi-in.sh: new test.
+	* t/list-of-tests.mk (handwritten_tests): add it.
+
+	* doc/automake.texi (Texinfo): document this.
+	* NEWS: mention this.  (Doc changes written by Karl.)
+
+2023-07-09  Bogdan  <bogdro_rep@gmx.us>
+
+	tests: avoid some SunOS declaration conflicts.
+
+	This change: finishes fixing https://bugs.gnu.org/34151
+	  and https://bugs.gnu.org/30612 and https://bugs.gnu.org/42393;
+	fixes https://bugs.gnu.org/44795 and https://bugs.gnu.org/49755;
+	partially fixes https://bugs.gnu.org/45205
+	  and https://bugs.gnu.org/55073.
+	Still open: https://bugs.gnu.org/15256;
+
+	* t/lex-clean-cxx.sh: test __cplusplus, __sun, and __EXTERN_C__
+	before using extern "C" for the yylex decl, as explained at
+	https://debbugs.gnu.org/cgi/bugreport.cgi?bug=45205#13.
+	* t/lex-depend-cxx.sh: likewise.
+
+	* t/yacc-cxx.sh: "using" std::exit, std::free, std::malloc.
+	* t/yacc-d-cxx.sh: likewise.
+	* t/yacc-mix-c-cxx.sh: likewise.
+
+	* NEWS: mention this.
+
+2023-07-06  Bogdan  <bogdro_rep@gmx.us>
+
+	python: generalize tests.
+
+	This change finishes fixing https://bugs.gnu.org/30556.
+
+	* t/python-prefix.sh: use $PYTHON if set, not hardwiring "python".
+	* t/python-virtualenv.sh (get-pyexecdir): new make target;
+	use it instead of hardwiring $py_site.
+
+2023-07-05  Bogdan  <bogdro_rep@gmx.us>
+
+	python: support noinst_PYTHON preceding foo_PYTHON.
+
+	This change fixes https://bugs.gnu.org/24507.
+
+	* lib/am/python.am (am__pep3147_tweak): remove conditional
+	on %?INSTALL%.
+	* t/python-pr10995.sh: test with make uninstall.
+
+2023-07-01  Bogdan  <bogdro_rep@gmx.us>
+
+	automake: do not warn that POSIX variables are non-POSIX.
+
+	This change fixes https://bugs.gnu.org/9587.
+
+	* lib/Automake/Variable.pm (_VARIABLE_PATTERN_EXTRA_POSIX):
+	new variable for $(*D) and the like.
+	(_VARIABLE_PATTERN): use it.
+	* t/vars3.sh: update test.
+	* NEWS: mention this.
+	POSIX spec (currently):
+	  https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html
+
+2023-06-29  Karl Berry  <karl@freefriends.org>
+
+	doc: discuss setting uid/gid information in tarballs.
+
+	In response to https://bugs.gnu.org/19615.
+
+	* doc/automake.texi (Basics of Distribution): give
+	example of specifying the TAR_OPTIONS (environment)
+	variable used by GNU tar.
+
+2023-06-28  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch'.
+
+	* lib/INSTALL: update with make fetch.
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gitlog-to-changelog: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+
+2023-06-27  Karl Berry  <karl@freefriends.org>
+
+	doc: discuss workaround for V=99 failing.
+
+	In response to https://bugs.gnu.org/20077.
+
+	* doc/automake.texi (Tricks For Silencing Make): state and discuss
+	workarounds for the limitation of $(V) only being settable to 0 or 1.
+
+2023-06-24  Karl Berry  <karl@freefriends.org>
+
+	doc: bring a few examples up to date.
+
+	* doc/automake.texi (Built Sources Example): use @kbd for typed
+	commands; show current output.
+	(Checking the Distribution): refer to Third-Party Makefiles
+	for the do-nothing dvi target example.
+	Other small wording tweaks throughout.
+
+	* HACKING: consistently omit $ prompt.
+	Say a bit more about versions of Autoconf.
+	Describe actual current status of branches (only master in use).
+	Give some topic examples.
+	"rerun" not "re-run".
+	Other small wording tweaks throughout.
+
+2023-06-23  Karl Berry  <karl@freefriends.org>
+
+	test: avoid sometime-race condition for dist-no-built-sources test.
+
+	* t/dist-no-built-sources.sh: rm the dist .tar.gz and .tar
+	generated after inspecting, to avoid it being considered up to
+	date on the second time through the loop.
+
+2023-06-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	depcomp spelling fix
+
+	* lib/depcomp: Fix spelling in comment.
+	Originally reported by Josh Soref <jsoref@gmail.com> in:
+	https://lists.gnu.org/r/bug-gnulib/2023-06/msg00057.html
+
+2023-05-29  Karl Berry  <karl@freefriends.org>
+
+	doc: improve NAME string for man pages.
+
+	This change fixes https://bugs.gnu.org/62853 and
+	https://bugs.gnu.org/62854.
+
+	* doc/local.mk (update_mans): move $(AM_V_GEN): to calls;
+	include --name="$${HELP2MAN_NAME}".
+	(-%D%/aclocal-$(APIVERSION).1, %D%/automake-$(APIVERSION).1):
+	set HELP2MAN_NAME in environment to pass to help2man.
+
+2023-05-27  Bogdan  <bogdro_rep@gmx.us>
+
+	configure: exit explicitly if the path to perl contains spaces.
+
+	This change ameloriates https://bugs.gnu.org/62896.
+
+	* configure.ac: exit explicitly if the result of AC_PATH_PROG for
+	perl contains spaces, since shebang lines cannot support such paths.
+	* THANKS (Bogdan): add.
+
+2023-05-27  Karl Berry  <karl@freefriends.org>
+
+	doc: HACKING bug merge; doc/local.mk help2man update hints.
+
+	* HACKING: give bug merge example.
+	* doc/local.mk: how to update help2man manually;
+	fix checklinkx sleep comment.
+
+2023-05-27  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch' + help2man.
+
+	* lib/INSTALL: update with make fetch.
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gendocs.sh: Likewise.
+	* lib/gnupload: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+	* doc/help2man: now 1.49.1.
+
+2023-03-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port py-compile to Python 2.6-
+
+	* lib/py-compile: Port to Python 2.6 and earlier,
+	which lack importlib.
+
+2023-03-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	do not assume GNU tar in test
+
+	* t/dist-no-built-sources.sh: Don’t assume
+	GNU Tar’s ability of decompressing tarballs.
+	Solaris 10 ‘tar’ doesn’t do that.
+
+2023-03-29  Jacob Bachmeyer  <jcb@gnu.org>  (tiny change)
+
+	Remove parentheses around test argument lists
+
+	This works around a parser bug in Perl 5.6.2.
+	* t/pm/General.pl: Remove parentheses on argument lists.
+
+2023-03-29  Jacob Bachmeyer  <jcb@gnu.org>  (tiny change)
+
+	Improve test for blocked signals
+
+	This fixes ERRORs reported by:
+	 * t/parallel-tests-interrupt.tap
+	 * t/self-check-exit.tap
+	 * t/self-check-is-blocked-signal.tap
+	 * t/tap-signal.tap
+
+	 * t/ax/am-test-lib.sh (is_blocked_signal): Revise Perl code
+	   to more closely follow documented interfaces where
+	   available.  This also works around bugs and limitations
+	   of the POSIX module in Perl 5.6.
+
+2023-03-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port 'make check' to platforms lacking libtool
+
+	* t/get-sysconf.sh: Don’t fail if libtoolize is missing.
+
+2023-03-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	configure: recommend perl 5.10 or better
+
+	* configure.ac (PERL): Recommend perl 5.10 or better,
+	since 5.10 has higher-resolution timestamps.
+
+2023-03-29  Jacob Bachmeyer  <jcb@gnu.org>  (tiny change)
+
+	Gracefully degrade if Time::HiRes is not available
+
+2023-03-29  Jacob Bachmeyer  <jcb@gnu.org>  (tiny change)
+
+	Revert "maint: require perl 5.010 or later"
+
+	This reverts commit 4e3744a15c4d8bdb46c11ead2fb56c5f591b714b.
+
+2023-03-01  Karl Berry  <karl@freefriends.org>
+
+	doc: tweak old NEWS about ACLOCAL_AMFLAGS.
+
+	* NEWS: any ACLOCAL_AMFLAGS deprecation will be in a major
+	release (the hypothetical 2.0), not sooner.
+	* NEWS-2.0: developers who don't wish to be maintainers are also
+	welcome and needed.
+
+2023-02-28  Karl Berry  <karl@freefriends.org>
+
+	dirstamp: revert change of Jan 11 2023.
+
+	Fixes (hopefully) automake bug https://bugs.gnu.org/61867.
+
+	* bin/automake.in: restore explicit per-directory pattern rules,
+	since evidently @D is not supported on BSD-derived makes,
+	whatever POSIX says.  That is, revert this commit:
+	https://git.savannah.gnu.org/gitweb/?p=automake.git;a=commitdiff;h=55f8fcfd08cbf15d65d61dd2db934b6c3171cf06
+
+2023-02-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use higher-resolution file timestamps
+
+	* lib/Automake/FileUtils.pm (mtime):
+	Return higher-resolution file timestamps.
+	This isn’t perfect, but it’s better than what we had.
+	Code change taken from Autoconf to partially fix a race
+	<https://bugs.gentoo.org/show_bug.cgi?id=782985>.
+
+2023-02-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: require perl 5.010 or later
+
+	This is needed for better treatment of high-res timestamps.
+
+2023-01-15  Frédéric Bérat  <fberat@redhat.com>
+
+	tests: depcomp: ensure make_ok() fails when run_make fails
+
+	While running automake tests with -std-gnu=c99, the compiler report
+	errors which lead to make to fail. Yet, these failures are ignored
+	during the tests, which considers them to be successful as stderror is
+	check for one specific pattern.
+
+	If make fails, investigation should be made to discover why, whatever
+	the reason for the failure is.
+
+	* t/ax/depcomp.sh: Make make_ok fail when make fails.
+
+2023-01-14  Mike Frysinger  <vapier@gentoo.org>
+
+	distdir/emacs: avoid `test -d` with MKDIR_P
+
+	We don't need to do the `test -d ... || mkdir ...` dance when we
+	have the MKDIR_P helper, so simplify this code a bit.
+
+	* lib/am/distdir.am: Use $(MKDIR_P).
+	* lib/am/lisp.am: Drop redundant `test -d`.
+
+2023-01-13  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: rework gettext to only check 'external' behavior
+
+	The gettext project deprecated non-external use back in 2010 with the
+	0.18 release, and made it fatal with the 0.20 release in 2019.  With
+	that version, calling AM_GNU_GETTEXT() fails, which means all Automake
+	tests are now skipped.  The t/gettext-macros.sh helper probes gettext
+	as such:
+
+	>+ autopoint --force
+	>  autopoint: *** AM_GNU_GETTEXT without 'external' argument is no longer supported in version 0.21.1
+	>  autopoint: *** Stop.
+	> ...
+	>+ aclocal-1.16 -Werror -Wno-syntax -I m4 --install
+	>  aclocal-1.16: warnings are treated as errors
+	>  configure.ac:4: warning: macro 'AM_GNU_GETTEXT' not found in library
+	>  configure.ac:5: warning: macro 'AM_GNU_GETTEXT_VERSION' not found in library
+	>+ echo skip_all_ "couldn't find or get gettext macros"
+
+	Since t/gettext-macros.sh generates a helper that all other gettext
+	tests use to see if gettext is available, all they get skipped.
+
+	Rework our existing tests to only check the 'external' gettext mode.
+	This should work with older versions, and we don't really need to
+	keep track of old non-external mode since it's been deprecated for
+	so long.
+
+	* t/gettext-basics.sh: Use external gettext mode, and adjust tests.
+	* t/gettext-config-rpath.sh: Likewise.
+	* t/gettext-macros.sh: Likewise.
+	* t/gettext-pr381.sh: Likewise.
+	* t/subdir-cond-gettext.sh: Likewise.
+
+2023-01-13  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: disable git log pager usage
+
+	When running this code locally, the git log call can trigger a pager
+	depending on the local settings, which in turn forces the test to be
+	interactive.  Run git with --no-pager to force disable it.
+
+	* t/get-sysconf.sh: Run git with --no-pager.
+
+2023-01-13  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: change `sort|uniq` to `sort -u`
+
+	These are equivalent, but more performant.  We already use `sort -u`
+	elsewhere in the codebase, so nothing new here really.
+
+	* t/add-missing.tap: Change `sort|uniq` to `sort -u`.
+	* t/CheckListOfTests.am: Likewise.
+
+2023-01-12  Frédéric Bérat  <fberat@redhat.com>
+
+	tests: Fix 'type defaults' error in link_cond due to main not being properly declared
+
+	This is related to an effort to prepare Automake for future GCC/Clang
+	versions which set c99 as default standard to be used.
+	Not properly declaring main as "int main(...)" is rejected since c99.
+
+	* t/link_cond.sh: Add (void) to main definition.
+
+2023-01-12  Mike Frysinger  <vapier@gentoo.org>
+
+	dirstamp: switch to a pattern rule
+
+	We can leverage $(@D) to generate a single pattern rule for all dirstamp
+	rules.  This saves many lines in the output -- normally we create 2 rules
+	(or 6 lines) per subdir, and projects that use subdirs tend to use them
+	quite a bit.
+
+	In the most extreme & unlikely case (1 subdir, no depdir support), the
+	line count is the same.  In every other case, it's always a win.
+
+	Looking at a few real world projects, the line deltas:
+	* GNU libgloss: +3 -66
+	* GNU newlib:   +3 -714
+	* GNU sim:      +3 -138
+
+	There shouldn't be any concerns about portability with $(@D) because:
+	(0) This has been in POSIX (and beyond) for decades,
+	(1) We only generate this rule iff we know the dirstamp is in a subdir
+	    (so we'd never have a case where $(@D) would expand to the cwd, and
+	    that is where a few implementations are known to be buggy),
+	(2) We already rely on $(@D) in our depdir code, and have since 2014
+	    (the Automake 1.16 release).
+
+2023-01-11  Mike Frysinger  <vapier@gentoo.org>
+
+	dirstamp: use append too instead of truncate
+
+	We changed the depfiles logic to use >> (append) instead of > (truncate)
+	due to it being slightly faster & nicer to the disk.  Do the same with
+	the dirstamp files as we only need the files to exist -- we don't care
+	about their content, and we never put anything in them ourselves.  If
+	someone else were to, we clean them up normally with `make clean`.
+
+	Simple test case on my Linux 6.1 w/ext4 on SSD:
+
+	@: > foo.txt
+	for (i = 0; i < 1000000; ++i) close(open("foo.txt", O_WRONLY|O_CREAT|O_TRUNC, 0666));
+	-> 769 msec
+
+	@: >>foo.txt
+	for (i = 0; i < 1000000; ++i) close(open("foo.txt", O_WRONLY|O_CREAT|O_APPEND, 0666));
+	-> 2 sec
+
+2023-01-08  Mike Frysinger  <vapier@gentoo.org>
+
+	rm: convert more cases to am__rm_f
+
+	Fixes automake bug https://bugs.gnu.org/10828.
+
+	Clean up a few more cases where we were doing `test ... || rm ...` to
+	avoid calling `rm -f` without arguments by leveraging am__rm_f.  These
+	were harder to find in the source due to their constructed nature.
+
+	The clean programs rules in particular were much more complicated than
+	they needed to be.  This logic boiled down to two things: delete the
+	list of programs, and then delete the list without the exeext suffix,
+	but only if the list of programs is non-empty.
+
+	The check-TESTS rule was converted to am__rm_f, but a simplification
+	was missed where the $list variable is inlined.
+
+	* bin/automake.in: Delete test -z logic and always call am__rm_f.
+	* contrib/check-html.am: Use $(am__rm_f) helper.
+	* doc/automake.texi: Update examples to match current behavior.
+	* lib/am/check.am: Inline $list variable.
+	* lib/am/progs.am: Rewrite rule to use $(am__rm_f).
+
+2023-01-08  Karl Berry  <karl@freefriends.org>
+
+	doc: overriding targets doesn't mean third-party Makefiles.
+
+	Fixes automake bug https://bugs.gnu.org/60607.
+
+	* doc/automake.texi (dvi and distcheck): simply show
+	dvi: as an example of a do-nothing Makefile (xref to Extending),
+	instead of cross-referencing the complicated method in
+	Third-Party Makefiles.
+	(Clean, Extending): wording tweaks.
+
+2023-01-04  Mike Frysinger  <vapier@gentoo.org>
+
+	check: drop unused trs_list variable
+
+	When the code that used this variable was removed, the variable
+	itself was left behind.  Clean that up now too.
+
+	* lib/am/check.am: Delete trs_list.
+
+2023-01-03  Mike Frysinger  <vapier@gentoo.org>
+
+	depend: trim spurious leading tab
+
+	These vars are replaced with a list of remove commands that are joined
+	with a \n and each line always has a leading \t inserted.  That means
+	the literal tab here before the var leads to 2 tabs included in the
+	output.  While not functionally a problem, it can be a bit confusing
+	when reading the output as it implies something is amiss.  Trimming
+	the tab also aligns with the other .am files which don't include it.
+
+	* lib/am/depend.am: Delete tab before %DISTRMS%.
+
+2023-01-03  Mike Frysinger  <vapier@gentoo.org>
+
+	maint: make update-copyright
+
+2023-01-03  Mike Frysinger  <vapier@gentoo.org>
+
+	maint: Update files from upstream with 'make fetch'
+
+	Pulls some 2023 copyright updates.
+
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gendocs.sh: Likewise.
+	* lib/gendocs_template: Likewise.
+	* lib/gitlog-to-changelog: Likewise.
+	* lib/gnupload: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+
+2022-12-12  Karl Berry  <karl@freefriends.org>
+
+	test: avoid apostrophe in test document.
+
+	From automake patch https://bugs.gnu.org/59989
+	(though a different solution), suggestion by Frederic Berat.
+
+	* t/txinfo-include.sh: avoid apostrophes in test document,
+	since Texinfo 7.0 turns them into UTF-8 by default.
+
+2022-10-06  Kelvin M. Klann  <kmk3.code@protonmail.com>
+
+	doc: typo in HACKING changes.
+
+	* HACKING: allow backward compatibilities again.
+
+2022-10-01  Karl Berry  <karl@freefriends.org>
+
+	distcheck: more .NOTPARALLEL.
+
+	* t/backcompat.sh: add .NOTPARALLEL.
+	* t/subdir-add2-pr46.sh: likewise.
+	(Maybe the problem is more general?)
+
+2022-10-01  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch' + help2man.
+
+	* INSTALL: update with make fetch.
+
+2022-10-01  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch' + help2man.
+
+	* lib/INSTALL: update with make fetch.
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gendocs.sh: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* doc/help2man: now 1.49.1.
+
+2022-10-01  Karl Berry  <karl@freefriends.org>
+
+	maintcheck: placate maintainer-check and grep 3.8.
+
+	* maintainer/syntax-checks.mk (sc_rm_minus_f): no \ before -
+	(diagnosed by grep 3.8).
+	* t/comment12.sh: use $(...) instead of `...`.
+	* t/comments-escaped-in-var.sh: use AUTOMAKE_fails and grep
+	for expected warning message.
+	* t/list-of-tests.mk (handwritten_TESTS): add t/py-compile-files.sh.
+	* t/subdir-add2-pr46.sh (.NOTPARALLEL): add; showed up with
+	parallelized internal make. Seems unreproducible.
+
+2022-10-01  Karl Berry  <karl@freefriends.org>
+
+	more HACKING tweaks
+
+2022-10-01  Karl Berry  <karl@freefriends.org>
+
+	aclocal: protect against Perl undefined warnings.
+
+	* bin/aclocal.in (usage): check that envvars (ACLOCAL_AUTOMAKE_DIR,
+	ACLOCAL_PATH) are defined before printing values.
+	* HACKING: describe running scripts from checkout, et al.
+
+2022-09-28  Karl Berry  <karl@freefriends.org>
+
+	doc: rearrange NEWS.
+
+	* NEWS: reclassify bugs vs. features.
+
+2022-09-28  Zack Weinberg  <zackw@panix.com>
+
+	python: better Python compilation portability.
+
+	This change is per automake thread:
+	https://lists.gnu.org/archive/html/automake/2022-09/msg00002.html
+
+	* lib/py-compile: Test directly for availability of
+	importlib.util.cache_from_source.  Untangle logic for when
+	to generate -O and -OO bytecode.  Reformat embedded Python fragments.
+
+2022-09-28  Karl Berry  <karl@freefriends.org>
+
+	forgot NEWS update
+
+2022-09-28  Zack Weinberg  <zackw@panix.com>
+
+	dist: ignore "silly rename" files from nfs/afs/smb.
+
+	This change is per automake thread:
+	https://lists.gnu.org/archive/html/automake/2022-09/msg00002.html
+
+	* lib/am/distdir.am (distcleancheck_listfiles): filter "silly rename"
+	files (.nfs* .smb* .__afs*), unavoidably created by deleting files
+	that are still open in some process on network file systems.
+
+2022-09-27  Richard Hopkins  <emacs@unbit.co.uk>
+
+	automake: do not use -Q with emacs invocations.
+
+	This change is for https://bugs.gnu.org/58102.
+	(By the way, the previous two commits were for bugs
+	58026 (silent .elc compilation) and
+	58025 (load bytecomp), respectively, but I forgot to mention them.)
+
+	* m4/lispdir.m4 (AM_PATH_LISPDIR): omit -Q option.
+	Also (from karl), use -no-site-file (one hyphen) for consistency
+	with the other options.
+	* NEWS: mention this.
+	* doc/automake.texi (Hard-Coded Install Paths): likewise.
+
+2022-09-26  Richard Hopkins  <emacs@unbit.co.uk>
+
+	automake: load -l bytecomp for Emacs.
+
+	* lib/am/lisp.am (.el.elc): Require the bytecomp library so
+	byte-compile-dest-file-function can be used when available.
+
+2022-09-26  Richard Hopkins  <emacs@unbit.co.uk>
+
+	automake: silent make output for Emacs byte compilation.
+
+	* lib/am/lisp.am: Use $(AM_V_GEN) in .el.elc rule.
+	* NEWS: mention this.
+	* THANKS: add new contributor.
+
+2022-09-18  Karl Berry  <karl@freefriends.org>
+
+	doc: typo in depcomp.
+
+	* lib/depcomp: obsosete -> obsolete. Report from anonymous.
+
+2022-07-25  Alexander Neumann  <neumann@imt.uni-luebeck.de>
+
+	compile: look for clang-cl.
+
+	* lib/compile: check for clang-cl, calling func_cl_wrapper.
+	* THANKS: add new contributor.
+
+2022-05-23  Jim Meyering  <meyering@fb.com>
+
+	fix: autoreconf fails due to .m4 files added but not installed
+
+	* m4/local.mk (dist_automake_ac_DATA): Add both rmf.m4 and xargsn.m4.
+	Building grep from "make maintainer-clean" state, failed like this:
+	  configure.ac:41: warning: _AM_PROG_RM_F is m4_require'd but not\
+	    m4_defun'd
+	  configure.ac:41: warning: _AM_PROG_XARGS_N is m4_require'd but not\
+	    m4_defun'd
+	  configure:5058: error: possibly undefined macro: _AM_PROG_RM_F
+	  configure:5059: error: possibly undefined macro: _AM_PROG_XARGS_N
+
+2022-05-23  Jan Engelhardt  <jengelh@inai.de>
+
+	deps: create empty file instead of dummy file.
+
+	This change is per an automake thread, see both before and after:
+	https://lists.gnu.org/archive/html/automake/2022-05/msg00006.html
+
+	* lib/am/depend.am ($(am__depfiles_remade)): create empty files
+	for dependencies instead of files with a line '# dummy'. Turns out
+	this is noticeably faster.
+	* THANKS: update Jan's email address.
+	* NEWS: mention this.
+
+2022-03-12  Mike Frysinger  <vapier@gentoo.org>
+
+	doc: refer to automake manual in all man pages
+
+	Fixes automake bug https://bugs.gnu.org/54363.
+
+	There is no "aclocal" manual as it's all integrated into the automake
+	manual, so have all the help2man calls force automake as the manual.
+
+	* doc/local.mk: Use --info-page=automake for man pages.
+
+2022-03-05  Mike Frysinger  <vapier@gentoo.org>
+
+	automake: fall back gracefully when texinfo inputs don't exist
+
+	Fixes automake bug https://bugs.gnu.org/54063.
+
+	The function scanning for @setfilename will fall back to a default
+	value if the input doesn't have one defined.  But we need to handle
+	the case where the file doesn't even exist before falling back.
+
+	* bin/automake.in: Scan /dev/null for @setfilename if input doesn't exist.
+	* t/list-of-tests.mk: Add txinfo-no-setfilename-no-inputs.sh.
+	* t/txinfo-no-setfilename-no-inputs.sh: New test.
+
+2022-03-05  Mike Frysinger  <vapier@gentoo.org>
+
+	m4: handle id failures when checking ustar support
+
+	Fixes automake bug https://bugs.gnu.org/20713.
+
+	If `id` fails, display a specific warning message to the user.
+
+	* m4/tar.m4: Check $am_uid & $am_gid if they're unknown.
+
+2022-02-27  Mike Frysinger  <vapier@gentoo.org>
+
+	m4: rework silent-rules macros to avoid double expansion
+
+	Fixes automake bug https://bugs.gnu.org/32868.
+
+	The AM_SILENT_RULES macro defines all the silent-rules related setup.
+	It's also called by users to change the default verbosity level.  This
+	leads to a quirk where automake calls it, expands the full context,
+	and then users call it, and it's fully expanded again.
+
+	Instead, let's rename AM_SILENT_RULES to _AM_SILENT_RULES and move the
+	initialization logic to late in the configure stage.  This allows the
+	user-centric AM_SILENT_RULES call to expand into a single line to set
+	the default verbosity.
+
+	* m4/init.m4: Switch to _AM_SILENT_RULES.
+	* m4/silent.m4: Rename AM_SILENT_RULES to _AM_SILENT_RULES.  Delay
+	evaluation of AM_SILENT_RULES to the end.  Define new AM_SILENT_RULES to
+	set default rules verbosity.
+	* t/silent-defaults.sh: New tests.
+	* t/list-of-tests.mk: Add t/silent-defaults.sh.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: make silent-custom regex a little more robust
+
+	Fixes automake bug https://bugs.gnu.org/32800.
+
+	Have the regex match the entire path with word boundaries on both
+	sides.  This should reduce false positives when the full cwd happens
+	to match parent directories.
+
+	* t/silent-custom.sh: Update the header output regex.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	py-compile: fix optimized compiling for Python 3.5+
+
+	Fixes automake bug https://bugs.gnu.org/38043.
+
+	Split the optimized compilation logic into a new section.  This avoids
+	trying to support multiple versions of major versions in a single script
+	as it gets harder to verify new changes don't break old versions as time
+	goes on.
+
+	Now for Python 3.5+, compile with -O0 (which is "higher" than -O).
+
+	* NEWS: Mention fix.
+	* THANKS: Add Michal Górny.
+	* lib/py-compile: Add new section for compiling Python 3.5+.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	manual: mention LT_INIT
+
+	The AC_PROG_LIBTOOL macro name is the old/deprecated one, so include
+	LT_INIT here too to avoid confusing people who have switched.
+
+	* doc/automake.texi: Add LT_INIT after AC_PROG_LIBTOOL.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	automake: allow required files to be in subdirs
+
+	Fixes automake bug https://bugs.gnu.org/20300.
+
+	The internal method for caching path lookups expects the $filename to
+	only be a filename.  If it's actually a subdir/file itself, then the
+	cache logic gets confused, and it never matches.  This manifests as
+	AC_REQUIRE_AUX_FILE([subdir/file]) claiming that the subdir/file path
+	doesn't exist even when it does.
+
+	Before we process any required files, since we already construct the
+	full path locally, reset the dir & file inputs to the final values.
+
+	* bin/automake.in: Split dir & file name back out from the constructed
+	required file path.
+	* t/auxdir-subsubdir.sh: New test.
+	* t/list-of-tests.mk: Add t/auxdir-subsubdir.sh.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: fix yacc C++ tests with some C++ compilers
+
+	Fixes automake bug https://bugs.gnu.org/20031.
+
+	The C++ standard does not require symbols be placed into the global
+	namespace, just in the std namespace.  The GNU implementation will
+	place symbols in both.  For our specific code, we don't care either.
+
+	Unfortunately, it looks like generated flex code assumes that some
+	stdlib.h symbols (free, malloc, exit) are in the global namespace,
+	even when compiling for C++.  So when we include <cstdlib> but not
+	<stdlib.h>, we might not get the symbols in the global namespace.
+
+	We can workaround this by including stdlib.h in these tests without
+	invalidating the point of the tests in general.
+
+	* t/yacc-cxx.sh: Include stdlib.h.
+	* t/yacc-d-cxx.sh: Likewise.
+	* t/yacc-mix-c-cxx.sh: Likewise.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: log autoconf & libtool version
+
+	Having these in the sysconf log can be helpful when triaging test
+	failures from users.
+
+	* t/get-sysconf.sh: Log autoconf & libtoolize version.
+
+2022-02-23  Mike Frysinger  <vapier@gentoo.org>
+
+	automake: support embedded \# in variable appends
+
+	Fixes automake bug https://bugs.gnu.org/7610.
+
+	Use of \# is not portable.  POSIX does not provide any way of retaining
+	the # marker in variables.  There is wide spread support for \# though
+	in GNU & BSD Make implementations.
+
+	Today, with plain variable assignments, Automake leaves the line alone:
+	  foo = blah\#blah
+	This will leave it to the implementation to decide what to do.  But if
+	you try to append to it, Automake follows POSIX and strips it:
+	  foo = blah\#blah
+	  foo += what
+	  -> foo = blah\ what
+
+	Instead, let's issue a portability warning whenever \# is used, even if
+	it isn't being appended, and do not strip the \# when appending.  Now:
+	  foo = blah\#blah
+	  foo += what
+	  -> warning: escaping \# comment markers is not portable
+	  -> foo = blah\#blah what
+
+	* NEWS: Mention change in \# handling.
+	* lib/Automake/VarDef.pm: Do not strip # if escaped.
+	* lib/Automake/Variable.pm: Warn if \# is used.
+	* t/comment12.sh: New test.
+	* t/comments-escaped-in-var.sh: New test.
+	* t/list-of-tests.mk: Add comment12.sh & comments-escaped-in-var.sh.
+
+2022-02-20  Mike Frysinger  <vapier@gentoo.org>
+
+	python: use xargs -n when uninstalling files
+
+	Fixes automake bug https://bugs.gnu.org/53340.
+
+	If the system has xargs, then utilize it to uninstall files to stay
+	within long command line limits.  If the system doesn't have xargs,
+	fall back to running the remove command one at a time.  Since every
+	reasonable system should have `xargs -n`, and POSIX requires it, the
+	fallback probably rarely gets used, so don't bother optimizing.
+
+	* lib/am/inst-vars.am: Use am__xargs_n to call rm -f on the files.
+	* lib/am/python.am: Drop am__base_list and for loop and let the
+	am__uninstall_files_from_dir break up the long command lines.
+	* m4/init.m4: Call _AM_PROG_XARGS_N.
+	* m4/xargsn.m4: New test for `xargs -n`.
+
+2022-02-20  Mike Frysinger  <vapier@gentoo.org>
+
+	rm: handle -f w/no arguments gracefully
+
+	Fixes automake bug https://bugs.gnu.org/10828.
+
+	Delete the configure check that would abort if `rm -f` does not work,
+	and delete the plans to make this a hard requirement in the future.
+
+	Instead, test to see if `rm -f` fails w/out arguments.  If it does,
+	define am__rm_f such that it always passes at least the "" argument
+	when deleting files.  If it doesn't fail, then we can omit the "".
+
+	Then go through lib/am/ and update places where we use the pattern
+	`test -z ... || rm -f ...` and replace with $(am__rm_f).
+
+	* NEWS: Mention support for `rm -f` w/out arguments.
+	* PLANS/rm-f-without-args.txt: Remove.
+	* lib/am/check.am: Use new $(am__rm_f) helper.
+	* lib/am/clean.am: Likewise.
+	* lib/am/header-vars.am: Likewise.
+	* lib/am/inst-vars.am: Likewise.
+	* lib/am/libs.am: Likewise.
+	* lib/am/ltlib.am: Likewise.
+	* lib/am/progs.am: Likewise.
+	* lib/am/texinfos.am: Likewise.
+	* m4/init.m4: Delete `rm -f` checks and call _AM_PROG_RM_F.
+	* m4/rmf.m4: Define new _AM_PROG_RM_F macro.
+	* t/rm-f-probe.sh: Update test.
+
+2022-02-20  Mike Frysinger  <vapier@gentoo.org>
+
+	NEWS: fix typo in fix-timestamp.sh script name
+
+	As pointed out by Eric Blake.
+
+	* NEWS: Fix typo.
+
+2022-02-15  Mike Frysinger  <vapier@gentoo.org>
+
+	python: fix exit status handling with uninstall
+
+	The st variable is set at the top of this shell script, and then here
+	is a pipeline where it tries to update it in the subshell.  But since
+	setting variables in a subshell doesn't propagate back up, it doesn't
+	actually work.  Have the final subshell in the pipeline manage its own
+	exit status and exit with that so that the final status of the pipeline
+	is the right value.
+
+	* lib/am/python.am: Fix final subshell exit status passing.
+
+2022-02-12  Mike Frysinger  <vapier@gentoo.org>
+
+	m4: speed up filesystem modification checks
+
+	The current code sleeps at least 1 second to make sure the generated
+	files are strictly newer than the source files.  It does this for a
+	few reasons: POSIX only guarantees that `sleep` accept integers, and
+	filesystems have a history (c.f. Windows) of bad timestamp resolution.
+
+	For the first part, we can easily probe sleep to see if it accepts a
+	decimal number with a fractional part -- just run `sleep 0.001`.
+
+	For the second part, we can create two files and then run sleep in a
+	loop to see when one is considered newer than the other.
+
+	For many projects, this 1 second delay is largely amortized by the
+	rest of the configure script.  Autoconf lends itself to being both
+	large & slow.  But in projects with many smallish configure scripts
+	with many cached vars, the time to rerun is dominated by this single
+	sleep call.  For example, building libgloss against a compiler with
+	many (60+) multilib configurations, we see:
+	[Using sleep 1]
+	$ time ./config.status
+	real    2m28.164s
+	user    0m33.651s
+	sys     0m9.083s
+	[Using sleep 0.1]
+	$ time ./config.status
+	real    0m39.569s
+	user    0m33.517s
+	sys     0m8.969s
+
+	And in case anyone wonders, going below 0.1s doesn't seem to make a
+	statistically significant difference, at least in this configuration.
+	It appears to be within "noise" limits.
+	[Using sleep 0.001]
+	$ time ./config.status
+	real    0m39.760s
+	user    0m33.342s
+	sys     0m9.080s
+
+	* NEWS: Mention updated timestamp checking.
+	* m4/sanity.m4: Determine whether `sleep` accepts fractional seconds.
+	Determine (roughly) the filesystem timestamp resolution.  Use this to
+	sleep less when waiting for generated file timestamps to update.
+
+2022-02-12  Mike Frysinger  <vapier@gentoo.org>
+
+	m4: cache build env sanity checks
+
+	When rerunning configure in an existing build dir, cache the previous
+	results about environment settings.  There should be no need to retest
+	these in a dir that has already been configured.
+
+	* m4/sanity.m4: Cache sanity results.
+
+2022-02-08  Mike Frysinger  <vapier@gentoo.org>
+
+	elisp: run emacs with --no-site-file
+
+	Fixes automake bug https://bugs.gnu.org/21547.
+
+	If users have interactive site file logic, the lispdir probing can
+	hang, as can the compilation of elisp files.  Use --no-site-file to
+	disable loading any of that possible user logic.
+
+	* NEWS: Note emacs --no-site-file change.
+	* doc/automake.texi: Run emacs with --no-site-file.
+	* lib/am/lisp.am: Likewise.
+	* m4/lispdir.m4: Likewise.
+
+2022-02-08  Mike Frysinger  <vapier@gentoo.org>
+
+	ar-lib: ignore -nologo option
+
+	We already invoke $AR with -NOLOGO all the time, so we can ignore the
+	option entirely if the user specifies it.
+
+	* lib/ar-lib: Ignore -NOLOGO.
+
+2022-02-08  Mathieu Lirzin  <mthl@gnu.org>
+
+	tests: do not assume AM_MAKEINFOHTMLFLAGS is used in non-html targets
+
+	Fixes automake bug https://bugs.gnu.org/30172.
+
+	Since AM_MAKEINFOHTMLFLAGS overrides AM_MAKEINFOFLAGS only for html
+	targets, make sure we restore the hacked up makefile before testing
+	the non-html formats.  This normally doesn't cause a problem for most
+	people, but if their tex install doesn't work correctly, texi2dvi will
+	fallback to running $MAKEINFO and using invalid flags in the process.
+
+	* THANKS: Add Mathieu Lirzin.
+	* t/txinfo-many-output-formats.sh: Restore Makefile.am after testing
+	html targets.
+	* t/txinfo-many-output-formats-vpath.sh: Likewise.
+
+2022-02-05  Mike Frysinger  <vapier@gentoo.org>
+
+	py-compile: fix display when compiling multiple files
+
+	The compilation steps print the filename as it runs, but forgets to add
+	a space after it, so they all get squashed together:
+	$ ./py-compile 1.py 2.py 3.py
+	Byte-compiling python modules...
+	1.py2.py.3.py
+
+	* lib/py-compile: Add missing write.
+
+2022-02-05  Mike Frysinger  <vapier@gentoo.org>
+
+	manual: document Python version support status
+
+	Clarify to users what versions of Python are supported and until when.
+	This will make it easier for us to decide what versions to support.
+
+	* doc/automake.texi: Add Supported Python versions section.
+
+2022-02-05  Mike Frysinger  <vapier@gentoo.org>
+
+	py-compile: drop support for Python 0.x & 1.x
+
+	Python 2.0 was released in 2000.  There's really no way for us to check
+	those old versions, so let's just drop them.  No one will miss them.
+
+	* NEWS: Note Python version support removal.
+	* lib/py-compile: Abort if major version 0 or 1 is found.
+	* t/py-compile-env.sh: Rework slightly to handle new version probing.
+
+2022-02-05  Mike Frysinger  <vapier@gentoo.org>
+
+	py-compile: handle filenames with whitespace
+
+	The list of files is put into a string and then split on whitespace.
+	Fix the way the list of files are passed to the compile script.
+
+	* lib/py-compile: Pass files as arguments, not as a string.
+	* t/py-compile-files.sh: New test.
+
+2022-02-05  Mike Frysinger  <vapier@gentoo.org>
+
+	py-compile: clean up usage info
+
+	Include the full summary of options in the output.
+
+	* lib/py-compile: Update usage output.
+	* t/py-compile-usage.sh: Update test to match new output.
+
+2022-01-31  Mike Frysinger  <vapier@gentoo.org>
+
+	maint: include versioned manual in update
+
+	When publishing the updated manual, include the versioned copy too,
+	and have their index.html link to the full version index.
+
+	* maintainer/maint.mk: Copy manual to manual/$(VERSION)/, and insert
+	index-full.html link into index.html.
+
+2022-01-31  Mike Frysinger  <vapier@gentoo.org>
+
+	AM_PROG_AR: require before AC_PROG_AR
+
+	The new autoconf AC_PROG_AR macro has similar logic to what we have in
+	AM_PROG_AR, but less than what we need (since autoconf doesn't support
+	the MS archiver), so make sure we are run before AC_PROG_AR.
+
+	* m4/ar-lib.m4: Call AC_BEFORE for AC_PROG_AR.
+
+2022-01-30  Mike Frysinger  <vapier@gentoo.org>
+
+	maint: Update files from upstream with 'make fetch'
+
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gendocs.sh: Likewise.
+	* lib/gendocs_template: Likewise.
+	* lib/gitlog-to-changelog: Likewise.
+	* lib/gnupload: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+
+2022-01-28  Mike Frysinger  <vapier@gentoo.org>
+
+	maint: only sync the manual subdir
+
+	This code only updates files under manual/, so no need to checkout the
+	entire site first.
+
+	* maintainer/maint.mk: Only checkout $(PACKAGE)/manual tree.
+
+2022-01-27  Mike Frysinger  <vapier@gentoo.org>
+
+	texi: define new AM_TEXI2FLAGS variable
+
+	To provide a bit more flexibility when invoking TEXI2DVI & TEXI2PDF,
+	and provide a bit of symmetry with .info & .html generation, provide
+	a AM_TEXI2FLAGS setting that is passed to all TEXI2xxx invocations.
+
+	* doc/automake.texi: Mention new AM_TEXI2FLAGS setting.
+	* lib/am/texibuild.am: Pass $(AM_TEXI2FLAGS) to TEXI2DVI & TEXI2PDF.
+	* NEWS: Mention AM_TEXI2FLAGS.
+	* t/txinfo-many-output-formats.sh: Check for AM_TEXI2FLAGS.
+
+2022-01-27  Mike Frysinger  <vapier@gentoo.org>
+
+	texi: pass automatic -I to dvi & pdf generation
+
+	Fixes automake bug https://bugs.gnu.org/23599.
+
+	When generating info/html pages, automake adds -I flags to source
+	dirs that contain the texi files, but it doesn't do this for dvi or
+	pdf formats.  Instead, automake has been relying on texi2dvi to use
+	makeinfo for expanding macros, and it hasn't done that by default in
+	a long time.
+
+	Since adding --expand to the texi2dvi call is undesirable (due to bad
+	and unpredictable BEHAVIOR), pass those automatic -I flags directly
+	to TEXI2DVI & TEXI2PDF so they work regardless of --expand behavior.
+
+	We have to keep the MAKEINFO= setting around as texi2dvi might itself
+	fall back to it if the version of tex is old or broken.
+
+	* bin/automake.in: Add comment about $makeinfoflags usage.
+	* doc/automake.texi: Mention automatic -I subdir flags.
+	* lib/am/texibuild.am: Pass %MAKEINFOFLAGS% to TEXI2DVI & TEXI2PDF.
+	* t/txinfo-subdir-pr343.sh: Check for -I subdir usage.
+
+2022-01-27  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: remove spurious +x bits
+
+	None of these files are (or can be) executed directly, so drop the
+	spurious +x permission bit.  None of the other tests do this either.
+
+	* t/built-sources-install-exec.sh: Remove +x bit.
+	* t/ccnoco-deps.sh: Likewise.
+	* t/ccnoco-lib.sh: Likewise.
+	* t/ccnoco-lt.sh: Likewise.
+	* t/perf/cond.sh: Likewise.
+	* t/perf/testsuite-recheck.sh: Likewise.
+	* t/perf/testsuite-summary.sh: Likewise.
+	* t/python-prefix.sh: Likewise.
+	* t/tags-lisp-space.sh: Likewise.
+	* t/test-extensions-empty.sh: Likewise.
+
+2022-01-27  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: add coverage for nobase_ and dist_ prefixes
+
+	From automake bug https://bugs.gnu.org/14245.
+
+	We have tests that check nobase_ and nodist_ interaction, but not
+	nobase_ and dist_.  We had a report against automake 1.12 that this
+	combo did not work.  It seems to work now, but lets include a test
+	to make sure we don't regress.
+
+	Based on Daiki Ueno's example, but fixed up to pass against master.
+
+	* t/list-of-tests.mk: Add t/nobase-dist.sh.
+	* t/nobase-dist.sh: New test.
+
+2022-01-26  Mike Frysinger  <vapier@gentoo.org>
+
+	python: add 3.10 - 3.15 to the version search list
+
+	Fixes automake bug https://bugs.gnu.org/53530.
+
+	Based on the cadence of Automake releases, add the current Python
+	release (3.10), the current Python development (3.11), and then 4
+	more versions on top of that.  It doesn't hurt to check for a few
+	extra versions here since this is the fallback logic when the main
+	`python` and `python3` programs aren't found.
+
+	* m4/python.m4: Add python3.10 - python3.15.
+	* NEWS: Mention new Python versions.
+
+2022-01-24  Mike Frysinger  <vapier@gentoo.org>
+
+	progs, libs: support _RANLIB overrides
+
+	Much like we have per-target support for _AR and _LINK, add an _RANLIB
+	override too.  This allows selection of specific ranlib tools in case
+	a non-standard archiver tool was forced.
+
+	* bin/automake.in: Check for _RANLIB per-target settings.
+	* doc/automake.texi: Document _RANLIB override.
+	* lib/am/library.am: Change $(RANLIB) to $(%XLIBRARY%_RANLIB).
+	* t/list-of-tests.mk: Add ranlib_override.sh.
+	* t/ranlib_override.sh: New test.
+	* NEWS: Mention new feature.
+
+2022-01-24  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: add _AR override coverage
+
+	There were no tests for per-target _AR settings, so add some.
+
+	* t/ar_override.sh: New test.
+	* t/list-of-tests.mk: Add ar_override.sh.
+
+2022-01-24  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: clear autotools env vars
+
+	Fixes automake bug https://bugs.gnu.org/16714.
+
+	The testsuite will try and retain these env vars when recursively
+	running itself, but doesn't distinguish between vars coming from
+	the env where the tests were launched.  This breaks if the user
+	happens to `export ACLOCAL=alocal` before `make check`.
+
+	This gets a little more confusing in that the Makefile appears to
+	export these already:
+	ACLOCAL = ".../automake/pre-inst-env" aclocal-1.16
+
+	In reality, while those are set in the make execution environment,
+	they aren't exported into the process environment, so children
+	(i.e. shell processes in make rules) don't have them set.  That's
+	why tests work for most people today.
+
+	However, if the user has first exported "ACLOCAL" in the parent
+	make environment (regardless of value), then make's value will
+	reset the process environment, and then that will leak into the
+	children.  That's why we see errors that look like the makefile
+	env vars are leaking for these people.
+
+	At any rate, the fix is to update the test harness to clear these
+	vars that the test suite relies upon, especially the ones that are
+	also set in the Makefiles.  That includes AUTOUPDATE even though
+	it currently isn't used inside any of the tests.
+
+	* t/local.mk: Add ACLOCAL, AUTOCONF, AUTOHEADER, AUTOMAKE, and
+	AUTOUPDATE to the env unset list.
+	* t/ax/runtest.in: Likewise.
+
+2022-01-23  Mike Frysinger  <vapier@gentoo.org>
+
+	aclocal: add m4 search path info to --help
+
+	Add a short summary to --help of the current paths that will be
+	searched.  Make sure to omit this from the man page when running
+	help2man since pre-inst-env specifically clears some and others
+	to the current build directory.
+
+	* bin/aclocal.in: Include m4 search paths in usage.
+	* doc/local.mk: Run help2man with AUTOMAKE_HELP2MAN=true.
+
+2022-01-23  Mike Frysinger  <vapier@gentoo.org>
+
+	tests: fix quoting in eval
+
+	We need to escape the quotes so eval sees them when expanding the
+	variable value, not when quoting the variable name itself.
+
+	* t/local.mk: Escape quotes to eval.
+
+2022-01-23  Karl Berry  <karl@freefriends.org>
+
+	doc: singular/plural agreement, since it's easy.
+
+	* HACKING: singular/plural agreement.
+	* t/README: likewise.
+
+2022-01-22  Mike Frysinger  <vapier@gentoo.org>
+
+	THANKS: fix sorting
+
+	* THANKS: Sort a bunch of names.
+
+2022-01-21  Zack Weinberg  <zackw@panix.com>
+
+	build: fix ChangeLog generation in external build directory
+
+	When gitlog-to-changelog is run in a build directory that is neither the same
+	as, nor a subdirectory of, the source directory, it needs a --srcdir option or
+	it will fail to generate the changelog.  For instance
+
+	$ git clone https://git.savannah.gnu.org/git/automake.git
+	…
+	$ (cd automake && ./bootstrap)
+	$ mkdir b-automake
+	$ cd b-automake
+	$ ../automake/configure
+	…
+	$ make dist
+	…
+	  GEN      ChangeLog
+	gitlog-to-changelog:../s-automake/.git-log-fix: unused entry: 22729165f6bb902daeb8a4d8e7cb06982390f327
+	gitlog-to-changelog:../s-automake/.git-log-fix: unused entry: 3b369e6bbe0fb6d7359398935706c87dd9375cb6
+	make[2]: *** [../automake/maintainer/maint.mk:48: ChangeLog] Error 1
+
+	 * maintainer/maint.mk (gitlog_to_changelog_options): Add --srcdir option.
+
+2022-01-18  Mike Frysinger  <vapier@gentoo.org>
+
+	build: fix race in parallel builds
+
+	As reported by Hongxu Jia:
+	> The automake-$(APIVERSION) is a hardlink of automake, if it is
+	> created later than update_mans executing, there is a failure
+	> [snip]
+	> |: && mkdir -p doc && ./pre-inst-env /usr/bin/env perl ../automake-1.16.1/doc/help2man --output=doc/aclocal-1.16.1 aclocal-1.16
+	> |help2man: can't get `--help' info from aclocal-1.16
+	> |Try `--no-discard-stderr' if option outputs to stderr
+	> Makefile:3693: recipe for target 'doc/aclocal-1.16.1' failed
+	> [snip]
+	>
+	> The automake_script is required by update_mans and update_mans
+	> invokes automake-$(APIVERSION) rather than automake to generate
+	> doc, so we should assign `automake-$(APIVERSION)' to automake_script.
+	>
+	> The same reason to tweak aclocal_script.
+
+	However, rather than update the _script variables to point to the
+	hardlinked copies of the programs, we can have the help2man steps
+	run the existing scripts directly.  This makes the relationship a
+	bit more explicit and avoids implicit dependencies on names.
+
+	* doc/local.mk: Pass $(aclocal_script) and $(automake_script) to $(update_mans).
+	* THANKS: Add Hongxu Jia.
+
+2022-01-18  Pavel Raiskup  <praiskup@redhat.com>
+
+	lib: drop unused shell variables
+
+	Detected by ShellCheck.
+
+	* lib/depcomp: Drop never used $digits.
+	* lib/ylwrap: Drop --basedir and $basedir, seems like that was old
+	C&P error from 210797967a.
+
+2022-01-18  Mike Frysinger  <vapier@gentoo.org>
+
+	gitignore: drop redundant config.h.in~ rule
+
+	Since we're ignoring all *~ files, we don't need this explicit one.
+
+	* .gitignore: Delete config.h.in~ rule.
+
+2022-01-18  Matthew Leeds  <matthew.leeds@endlessm.com>
+
+	doc: use gender-neutral pronouns in t/README
+
+	* t/README: s/him/them/
+
+2022-01-18  Jim Meyering  <meyering@fb.com>
+
+	tests: fix py-compile-basedir.sh: missing "test"
+
+	Prompted by a patch from Thomas Deutschmann <whissi@gentoo.org>,
+	via https://lists.gnu.org/r/automake-patches/2022-01/msg00001.html:
+	commit v1.16.1-26-gb279a0d46 ("tests: in python tests, do not
+	require .pyo files (for python3)") was missing a `test` call.
+	Reported to Gentoo at https://bugs.gentoo.org/715040.
+	* t/py-compile-basedir.sh: Rather than just adding the missing
+	"test", rewrite using a case statement, to avoid some duplication.
+
+2022-01-12  Jim Meyering  <meyering@fb.com>
+
+	maint: make update-copyright
+
+2021-12-18  Bruno Haible  <bruno@clisp.org>
+
+	doc: %reldir% and %canon_reldir% do not expand to the empty string.
+
+	This change fixes https://bugs.gnu.org/52500.
+
+	* doc/automake.texi (Include): correct wrong text.
+	(Along the way, correct plain-text "Makefile" to "@file{Makefile}".)
+
+2021-12-12  Mike Frysinger  <vapier@gentoo.org>
+
+	configure: skip kcc on case-insensitive filesystems; add clang++.
+
+	This change fixes https://bugs.gnu.org/21336.
+
+	* configure.ac: Skip KCC check on case-insensitive filesystems; on
+	macOS 10.10 and later, a kerberos tool named "kcc" is installed.
+	Add clang++ to the C++ search list, as with current autoconf.
+
+2021-12-12  Mike Frysinger  <vapier@gentoo.org>
+
+	maint: update .gitignore.
+
+	* .gitignore: ignore *~ .# and (from Zack Weinberg, autosave files)
+	.*.sw[op] \#*#, closer to matching Autoconf.
+	https://lists.gnu.org/archive/html/automake-patches/2021-12/msg00005.html
+	https://lists.gnu.org/archive/html/automake-patches/2021-12/msg00010.html
+
+2021-12-12  Mike Frysinger  <vapier@gentoo.org>
+
+	m4: replace AC_DIAGNOSE with m4_warn
+
+	AC_DIAGNOSE was marked obsolete with autoconf-2.62 in 2008.
+
+	* m4/obsolete.m4: Change AC_DIAGNOSE to m4_warn.
+
+2021-11-27  Mike Frysinger  <vapier@gentoo.org>
+
+	dejagnu: add support for silent builds with site.exp.
+
+	* lib/am/dejagnu.am (site.exp): Use $(AM_V_GEN) and merge all
+	independent shell calls into one.
+
+2021-11-04  Karl Berry  <karl@freefriends.org>
+
+	doc: rearrange Multiple Outputs node.
+
+	This change fixes https://bugs.gnu.org/48188.
+
+	* doc/automake.texi (Multiple Outputs): move GNU pattern rule
+	approach to the front, since it is probably best if GNU make
+	can be assumed.  Suggestion from Frank Heckenbach.
+	Also, remove one of the examples that did not work, per Paul Smith.
+
+2021-11-02  Mike Frysinger  <vapier@gentoo.org>
+
+	config headers: add support for silent builds
+
+	* lib/am/remake-hdr.am (%STAMP%): Use $(AM_V_at) and $(AM_V_GEN).
+	(%CONFIG_HIN%): Likewise.
+
+2021-11-01  Karl Berry  <karl@freefriends.org>
+
+	doc: correct @node placement for new subsubsection.
+
+	This change addresses https://bugs.gnu.org/51532.
+
+	* doc/automake.texi (Linking Multiple Yacc Parsers): unfortunately
+	I misplaced the @node after the @subsection; correct that.
+
+2021-10-03  Jim Meyering  <meyering@fb.com>
+
+	maint: Post-release administrivia
+
+	* configure.ac (AC_INIT): Bump version number to 1.16i.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
 2021-10-03  Jim Meyering  <meyering@fb.com>
 
 	version 1.16.5

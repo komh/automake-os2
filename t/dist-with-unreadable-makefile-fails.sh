@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1999-2021 Free Software Foundation, Inc.
+# Copyright (C) 1999-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,8 +45,9 @@ test ! -r Makefile.am || skip_ "cannot drop file read permissions"
 ./configure
 
 # 'dist' should fail because we can't copy Makefile.am.
-if $MAKE dist; then
-  exit 1
-else
-  exit 0
-fi
+! $MAKE dist
+
+# restore sane permissions for future greps and finds.
+chmod u+rw Makefile.am
+
+:

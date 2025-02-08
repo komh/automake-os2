@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ END
 
 cat > Makefile.am << 'END'
 TEST_LOG_DRIVER = $(srcdir)/tap-driver
-## Defining LOG_COMPILER should work and not intefere with the
+## Defining LOG_COMPILER should work and not interfere with the
 ## tap-driver script.
 TEST_LOG_COMPILER = cat
 TESTS = success.test

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2009-2021 Free Software Foundation, Inc.
+# Copyright (C) 2009-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +15,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # If $(libdir) or $(pyexecdir) is the empty string, then nothing should
-# be installed there.
-# This test exercises the libtool code paths.
+# be installed there, and in fact libtool will refuse to link due to the
+# missing argument for -rpath:
+#   /bin/sh ./libtool [...] -rpath  libfoo.lo  
+#   libtool:   error: only absolute run-paths are allowed
+# (Hopefully the error message will be improved.)
+# Thus this test is expected to fail.
+# 
+# This test exercises some of the libtool code paths.
 
 required='cc libtoolize'
 . test-init.sh
 
+# Although LT_INIT is preferred nowadays, keep using AC_PROG_LIBTOOL
+# to help make sure it's still supported.
 cat >>configure.ac <<'END'
 AC_PROG_CC
 AM_PROG_AR
@@ -35,9 +43,9 @@ cat >Makefile.am <<'END'
 AUTOMAKE_OPTIONS = subdir-objects
 bin_PROGRAMS = p
 nobase_bin_PROGRAMS = np sub/np
-lib_LTIBRARIES = libfoo.la
+lib_LTLIBRARIES = libfoo.la
 nobase_lib_LTLIBRARIES = libnfoo.la sub/libnfoo.la
-pyexec_LTIBRARIES = libpy.la
+pyexec_LTLIBRARIES = libpy.la
 nobase_pyexec_LTLIBRARIES = libnpy.la sub/libnpy.la
 END
 

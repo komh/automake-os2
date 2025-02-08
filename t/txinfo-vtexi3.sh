@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ END
 
 cat > zardoz.texi << 'END'
 @setfilename zardoz.info
-some randome text
+some random text
 @include vers1a_2b.texi
 more random text
 END

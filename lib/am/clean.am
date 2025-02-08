@@ -1,5 +1,5 @@
 ## automake - create Makefile.in from Makefile.am
-## Copyright (C) 1994-2021 Free Software Foundation, Inc.
+## Copyright (C) 1994-2024 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ clean-generic:
 
 distclean-am: distclean-generic clean-am
 distclean-generic:
-	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
-	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-$(am__rm_f) $(CONFIG_CLEAN_FILES)
+	-test . = "$(srcdir)" || $(am__rm_f) $(CONFIG_CLEAN_VPATH_FILES)
 %DISTCLEAN_RMS%
 
 ## Makefiles and their dependencies cannot be cleaned by

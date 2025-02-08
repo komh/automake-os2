@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1995-2021 Free Software Foundation, Inc.
+# Copyright (C) 1995-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.69])
-AC_INIT([GNU Automake], [1.16.5], [bug-automake@gnu.org])
+AC_INIT([GNU Automake], [1.17], [bug-automake@gnu.org])
 
 AC_CONFIG_SRCDIR([bin/automake.in])
 AC_CONFIG_AUX_DIR([lib])
@@ -44,12 +44,12 @@ AM_INIT_AUTOMAKE([-Wall -Werror dist-xz filename-length-max=99
 
 # Keep this on a line of its own, since it must be found and processed
 # by the 'update-copyright' rule in our Makefile.
-RELEASE_YEAR=2021
+RELEASE_YEAR=2024
 AC_SUBST([RELEASE_YEAR])
 
 # The API version is the base version.  We must guarantee
 # compatibility for all releases with the same API version.
-APIVERSION=1.16
+APIVERSION=1.17
 AC_SUBST([APIVERSION])
 
 AC_SUBST([pkgvdatadir], ["\${datadir}/$PACKAGE-$APIVERSION"])
@@ -68,14 +68,22 @@ AUTOMAKE="\"`pwd`/pre-inst-env\" automake-$APIVERSION"
 AC_PROG_LN_S
 
 AC_PATH_PROG([PERL], [perl])
-if test -z "$PERL"; then
+case $PERL in
+ '')
    AC_MSG_ERROR([perl not found])
-fi
+   ;;
+ *' '* | *'	'*)
+  AC_MSG_ERROR([The path to your Perl contains spaces or tabs.
+This would cause build failures later or unusable programs.
+Please use a path without spaces and try again.])
+  ;;
+esac
+
 # Save details about the selected perl interpreter in config.log.
 AM_RUN_LOG([$PERL --version])
 $PERL -e 'require 5.006;' || {
    AC_MSG_ERROR(
-[perl 5.6 or better is required; perl 5.8.2 or better
+[perl 5.6 or better is required; perl 5.10 or better
 is recommended.  If you have several perl versions
 installed, select the one Automake should use using
   ./configure PERL=/path/to/perl])
@@ -172,23 +180,22 @@ result=no
 test "x$am_cv_prog_ln" = xln && result=yes
 AC_MSG_RESULT([$result])
 
-# The amount we should wait after modifying files depends on the platform.
-# On Windows '95, '98 and ME, files modifications have 2-seconds
-# granularity and can be up to 3 seconds in the future w.r.t. the
-# system clock.  When it is important to ensure one file is older
-# than another we wait at least 5 seconds between creations.
-case $build in
-  *-pc-msdosdjgpp) MODIFICATION_DELAY=5;;
-  *)               MODIFICATION_DELAY=2;;
-esac
-AC_SUBST([MODIFICATION_DELAY])
-
 ## ------------------------------------------- ##
 ##  Test for things needed by the test suite.  ##
 ## ------------------------------------------- ##
 
 AC_PROG_EGREP
 AC_PROG_FGREP
+
+# The test suite needs to know the resolution of timestamps
+# supported by the filesystem hosting the build.  The value
+# will be acceptable to 'sleep' on this system.
+MTIME_RESOLUTION=$am_cv_filesystem_timestamp_resolution
+if test -z "$MTIME_RESOLUTION"; then
+  AC_MSG_NOTICE(am_cv_filesystem_timestamp_resolution strangely not set; using 1)
+  MTIME_RESOLUTION=1
+fi
+AC_SUBST([MTIME_RESOLUTION])
 
 dnl FIXME: could we extract this in a simpler way through autoconf
 dnl FIXME: idioms or internals?
@@ -388,7 +395,7 @@ dnl We don't want to abort our configuration script if no C compiler is
 dnl available, as such a compiler is only required to run part of the
 dnl testsuite, not to build or install Automake.  Ditto for C++, Fortran
 dnl and Fortran 77 compilers.  Unfortunately, autoconf does not offer an
-dnl easy way to obtain this behaviour, so we'll need a few hacks.
+dnl easy way to obtain this behavior, so we'll need a few hacks.
 
 dnl We want the body of this macro to expand as a single shell statement,
 dnl thus we wrap it into { ... } brackets.
@@ -444,11 +451,13 @@ AS_IF([test x"$GCC" = x"yes"], [am_CC_is_GNU=yes], [am_CC_is_GNU=no])
 # to a C++ compiler as expected (see automake bugs #11893 and #10766).
 # Similarly, we must avoid looking for 'RCC', as that can point to the
 # Qt4 "Resource Compiler": <http://doc.qt.digia.com/4.2/rcc.html>
+# And we avoid looking for 'KCC' as that can be a kerberos tool under
+# macOS systems.
 if test -f /bIn/rMdIr || test -f /uSr/bIn/rMdIr; then
   # Case-insensitive file system, don't look for CC.
-  am_CC= am_RCC=
+  am_CC= am_RCC= am_KCC=
 else
-  am_CC=CC am_RCC=RCC
+  am_CC=CC am_RCC=RCC am_KCC=KCC
 fi
 
 # The list of C++ compilers here has been copied, pasted and edited
@@ -456,7 +465,7 @@ fi
 # Keep it in sync, or better again, find out a way to avoid this code
 # duplication.
 _AM_COMPILER_CAN_FAIL([AC_PROG_CXX(dnl
-  [aCC $am_CC FCC KCC $am_RCC xlC_r xlC c++ cxx cc++ gpp g++])],
+  [aCC $am_CC FCC $am_KCC $am_RCC xlC_r xlC c++ cxx cc++ gpp g++ clang++])],
   [CXX=false; _AM_SKIP_COMP_TESTS([C++])])
 
 AS_IF([test x"$GXX" = x"yes"], [am_CXX_is_GNU=yes], [am_CXX_is_GNU=no])
@@ -583,13 +592,17 @@ AC_CONFIG_FILES([pre-inst-env], [chmod +x pre-inst-env])
 AC_OUTPUT
 
 # Inform the user if this version of automake is a beta release or
-# a development snapshot.
-# According to HACKING, the version of a development snapshot should
-# end with an "odd" letter (a, c, ...), the version of a test release
-# should end wit an "even" letter (b, d, ...).
-
+# a development snapshot. Except, as of 1.17 (January 2024), don't bother.
+# Just call all pretests development snapshots.
+#
 am_stable_version_rx='[[1-9]\.[0-9]+(\.[0-9]+)?]'
-am_beta_version_rx="[$am_stable_version_rx[bdfhjlnprtvxz]]"
+
+# This won't match anything as of 1.17, since we switched to
+# .90-numbered test releases. But if we wanted to, according to HACKING,
+# the version of a development snapshot should end with an odd number
+# (91, 93, ...) and a beta release should end with an even number (90,
+# 92, ...).
+am_beta_version_rx="[$am_stable_version_rx[bdfhjlnprtvxz]]" # no match
 
 am_release_type=`AS_ECHO(["$PACKAGE_VERSION"]) | LC_ALL=C awk ["
   /^$am_stable_version_rx$/ { print \"stable\"; exit(0); }
@@ -600,10 +613,11 @@ am_release_type=`AS_ECHO(["$PACKAGE_VERSION"]) | LC_ALL=C awk ["
 test "$am_release_type" = stable || test "$silent" = yes || cat <<EOF
 
 WARNING: You are about to use a $am_release_type of automake.
-WARNING: It might easily suffer from new bugs or regressions.
+WARNING: It could well suffer from new bugs or regressions.
 WARNING: You are strongly advised not to use it in production code.
 
-Please report bugs, problems and feedback to <AC_PACKAGE_BUGREPORT>.
+Please report bugs, problems and feedback to <AC_PACKAGE_BUGREPORT>,
+since that is the whole point of a test release.
 EOF
 
 AS_EXIT([0])
