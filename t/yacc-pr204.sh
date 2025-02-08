@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2002-2021 Free Software Foundation, Inc.
+# Copyright (C) 2002-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ EOF
 # sure Automake match 'nodist_' against the right
 # variable name...
 cat > Makefile.am << 'EOF'
+AM_LFLAGS = --never-interactive
+
 AM_YFLAGS = -d
 EXTRA_PROGRAMS = foo
 PARSE2 = parse2.y

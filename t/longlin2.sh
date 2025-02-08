@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2005-2021 Free Software Foundation, Inc.
+# Copyright (C) 2005-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ FOO = $files $files2 \
 EOF
 
 # The 'FOO = ...' line is 2293-byte long.  More than what a POSIX
-# conformant system is expected to support.  So do not use grep
+# conforming system is expected to support.  So do not use grep
 # on the non-text file.
 
 # grep $match Makefile.am

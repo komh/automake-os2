@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2009-2021 Free Software Foundation, Inc.
+# Copyright (C) 2009-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -151,6 +151,7 @@ ba2_YFLAGS = -v
 ba2_LFLAGS = -n
 ba2_LDADD = $(LEXLIB)
 AM_YFLAGS = -d
+AM_LFLAGS = --never-interactive
 BUILT_SOURCES = baz6.h
 EOF
 

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2007-2021 Free Software Foundation, Inc.
+# Copyright (C) 2007-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,13 +42,12 @@ EOF
 $ACLOCAL -I .
 $AUTOMAKE
 $AUTOCONF
-
 ./configure
-
 $MAKE
 grep GREPFOO Makefile
 grep GREPBAR Makefile && exit 1
 
+$sleep
 sed 's/FOO/BAR/' < configure.ac > t
 mv -f t configure.ac
 rm -f foo.m4

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ have_rst_section ()
 
 # Passed test scripts shouldn't be mentioned in the global log.
 $EGREP ':.*[^x]pass' my.log && exit 1
-# But failing (expectedly or not) and skipped ones should.
+# But failing (unexpectedly or not) and skipped ones should.
 have_rst_section 'SKIP: skip'   my.log
 have_rst_section 'FAIL: fail'   my.log
 have_rst_section 'XFAIL: xfail' my.log

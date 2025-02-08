@@ -1,6 +1,6 @@
 ## -*- Automake -*-
 ##
-## Copyright (C) 2011-2021 Free Software Foundation, Inc.
+## Copyright (C) 2011-2024 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -49,17 +49,17 @@ maintainer-check-list-of-tests:
 	       ($(am__cd) $(srcdir) && ls $$dir/*$$ext 2>/dev/null); \
 	     fi; \
 	   done; \
-	 done | sed 's,^\./,,' | sort | uniq >$(am__tfs); \
+	 done | sed 's,^\./,,' | sort -u >$(am__tfs); \
 ## Compare the two lists, complain if they differ.
 	 if $$diff $(am__tmk) $(am__tfs) >$(am__tdf); then \
 	    result=0; \
+	    rm -f $(am__tmk) $(am__tfs) $(am__tdf); \
 	 else \
 	    echo '$@: list of tests in Makefile and on filesystem differ' >&2; \
 	    echo "+ $$diff in-makefile on-filesystem" >&2; \
 	    cat $(am__tdf) >&2; \
 	    result=1; \
 	 fi; \
-	 rm -f $(am__tmk) $(am__tfs) $(am__tdf); \
 	 exit $$result;
 
 .PHONY: clean-maintcheck-testslist-tmp

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@ required=native
 cat >> configure.ac << 'END'
 AC_PROG_OBJCXX
 AC_CONFIG_HEADERS([config.h])
+AC_CHECK_LIB([objc],[__objc_exec_class])
+AC_CHECK_LIB([objc],[objc_getProperty])
+AC_CHECK_LIB([objc],[objc_msg_lookup_sender])
+AC_CHECK_LIB([objc],[objc_msg_lookup])
 AC_OUTPUT
 END
 

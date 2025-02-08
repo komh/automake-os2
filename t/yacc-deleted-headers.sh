@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am <<'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = p1 p2 p3 p4
 # The order in which files are listed in the p*_SOURCES variables
 # below is significant, since it causes make failures whenever
@@ -66,6 +68,7 @@ END
 
 cat > main1.c << 'END'
 #include "parse1.h"
+extern int yyparse (void);
 int main (void)
 {
   return ZARDOZ + yyparse ();

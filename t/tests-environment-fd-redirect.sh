@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Test for a behaviour of 'TESTS_ENVIRONMENT' and 'AM_TESTS_ENVIRONMENT'
+# Test for a behavior of 'TESTS_ENVIRONMENT' and 'AM_TESTS_ENVIRONMENT'
 # w.r.t. file descriptor redirections which, although undocumented,
 # is nonetheless required by Gnulib's 'tests/init.sh' and by coreutils'
 # testsuite.
-# The checked behaviour is that we can portably do file descriptor
+# The checked behavior is that we can portably do file descriptor
 # redirections by placing them at the end of a {AM_,}TESTS_ENVIRONMENT
 # definition without a following semicolon.  The need to support this
-# is detailedly motivated by coreutils bug#8846:
+# is motivated in detail by coreutils bug#8846:
 #   <https://debbugs.gnu.org/cgi/bugreport.cgi?bug=8846>
 # and the following CC:ed thread on bug-autoconf list:
 #   <https://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00002.html>

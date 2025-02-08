@@ -1,5 +1,5 @@
 ## -*- makefile-automake -*-
-## Copyright (C) 1995-2021 Free Software Foundation, Inc.
+## Copyright (C) 1995-2024 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -42,6 +42,11 @@ TESTS =
 # Keep this in sync with the similar list in ax/runtest.in.
 AM_TESTS_ENVIRONMENT = \
   for v in \
+    ACLOCAL \
+    AUTOCONF \
+    AUTOHEADER \
+    AUTOMAKE \
+    AUTOUPDATE \
     required \
     am_test_protocol \
     am_serial_tests \
@@ -51,7 +56,7 @@ AM_TESTS_ENVIRONMENT = \
     am_test_lib_sourced \
     test_lib_sourced \
   ; do \
-    eval test x"\$${$$v}" = x || unset $$v; \
+    eval test x\"\$${$$v}\" = x || unset $$v; \
   done;
 # We want warning messages and explanations for skipped tests to go to
 # the console if possible, so set up 'stderr_fileno_' properly.
@@ -166,7 +171,7 @@ nodist_noinst_SCRIPTS += runtest
 
 # If two test scripts have the same basename, they will end up sharing
 # the same log file, leading to all sort of undefined and undesired
-# behaviours.
+# behaviors.
 check-no-repeated-test-name:
 	@LC_ALL=C; export LC_ALL; \
 	 lst='$(TEST_LOGS)'; for log in $$lst; do echo $$log; done \
@@ -273,6 +278,7 @@ EXTRA_DIST += $(perf_TESTS)
 clean-local: clean-local-check
 .PHONY: clean-local-check
 clean-local-check:
+	find . -type d ! -perm -700 -exec chmod u+rwx {} ';'
 	$(AM_V_GEN)$(PERL) $(srcdir)/t/ax/deltree.pl t/*.dir t/*/*.dir */t/*.dir
 
 # vim: ft=automake noet

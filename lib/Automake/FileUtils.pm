@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,10 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-###############################################################
-# The main copy of this file is in Automake's git repository. #
-# Updates should be sent to automake-patches@gnu.org.         #
-###############################################################
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
 
 package Automake::FileUtils;
 
@@ -38,20 +38,44 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Exporter;
-use File::stat;
-use IO::File;
+BEGIN
+{
+  require Exporter;
+  our @ISA = qw (Exporter);
+  our @EXPORT = qw (&contents
+		    &find_file &mtime
+		    &update_file
+		    &xsystem &xsystem_hint &xqx
+		    &dir_has_case_matching_file &reset_dir_cache
+		    &set_dir_cache_file);
+}
 
+# Use sub-second resolution file timestamps if available, carry on
+# with one-second resolution timestamps if Time::HiRes is not available.
+#
+# Unfortunately, even if Time::HiRes is available, we don't get
+# timestamps to the full precision recorded by the operating system,
+# because Time::HiRes converts timestamps to floating-point, and the
+# rounding error is hundreds of nanoseconds for circa-2023 timestamps
+# in IEEE double precision.  But this is the best we can do without
+# dropping down to C.
+#
+# $subsecond_mtime is not exported, but is intended for external
+# consumption, as $Automake::FileUtils::subsecond_mtime.
+BEGIN
+{
+  our $subsecond_mtime = 0;
+  eval
+    {
+      require Time::HiRes;
+      import Time::HiRes qw(stat);
+      $subsecond_mtime = 1;
+    }
+}
+
+use IO::File;
 use Automake::Channels;
 use Automake::ChannelDefs;
-
-our @ISA = qw (Exporter);
-our @EXPORT = qw (&contents
-		  &find_file &mtime
-		  &update_file
-		  &xsystem &xsystem_hint &xqx
-		  &dir_has_case_matching_file &reset_dir_cache
-		  &set_dir_cache_file);
 
 =over 4
 
@@ -115,10 +139,11 @@ sub mtime ($)
   return 0
     if $file eq '-' || ! -f $file;
 
-  my $stat = stat ($file)
+  my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+    $atime,$mtime,$ctime,$blksize,$blocks) = stat ($file)
     or fatal "cannot stat $file: $!";
 
-  return $stat->mtime;
+  return $mtime;
 }
 
 
@@ -385,3 +410,20 @@ sub set_dir_cache_file ($$)
 =cut
 
 1; # for require
+
+### Setup "GNU" style for perl-mode and cperl-mode.
+## Local Variables:
+## perl-indent-level: 2
+## perl-continued-statement-offset: 2
+## perl-continued-brace-offset: 0
+## perl-brace-offset: 0
+## perl-brace-imaginary-offset: 0
+## perl-label-offset: -2
+## cperl-indent-level: 2
+## cperl-brace-offset: 0
+## cperl-continued-brace-offset: 0
+## cperl-label-offset: -2
+## cperl-extra-newline-before-brace: t
+## cperl-merge-trailing-else: nil
+## cperl-continued-statement-offset: 2
+## End:

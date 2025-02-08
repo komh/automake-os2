@@ -1,7 +1,7 @@
 #!@PERL@
 # automake - create Makefile.in from Makefile.am            -*- perl -*-
 # @configure_input@
-# Copyright (C) 1994-2021 Free Software Foundation, Inc.
+# Copyright (C) 1994-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -739,6 +739,7 @@ register_language ('name' => 'objc',
 		   'compiler' => 'OBJCCOMPILE',
 		   'compile_flag' => '-c',
 		   'output_flag' => '-o',
+		   'libtool_flag' => 'OBJC',
 		   'lder' => 'OBJCLD',
 		   'ld' => '$(OBJC)',
 		   'pure' => 1,
@@ -757,6 +758,7 @@ register_language ('name' => 'objcxx',
 		   'compiler' => 'OBJCXXCOMPILE',
 		   'compile_flag' => '-c',
 		   'output_flag' => '-o',
+		   'libtool_flag' => 'OBJCXX',
 		   'lder' => 'OBJCXXLD',
 		   'ld' => '$(OBJCXX)',
 		   'pure' => 1,
@@ -1556,7 +1558,7 @@ sub handle_languages ()
     # suffix rule was learned), don't bother with the C stuff.  But if
     # anything else creeps in, then use it.
     my @languages_seen = map { $languages{$extension_map{$_}}->name }
-                             (keys %extension_seen);
+                             (sort keys %extension_seen);
     @languages_seen = uniq (@languages_seen);
     $needs_c = 1 if @languages_seen > 1;
     if ($need_link || $needs_c)
@@ -1841,7 +1843,7 @@ sub handle_single_transform
               else
                 {
                   # Since the next major version of automake (2.0) will
-                  # make the behaviour so far only activated with the
+                  # make the behavior so far only activated with the
                   # 'subdir-objects' option mandatory, it's better if we
                   # start warning users not using that option.
                   # As suggested by Peter Johansson, we strive to avoid
@@ -1864,7 +1866,7 @@ object file(s) will be placed in the top-level directory.  However, this
 behavior may change in a future Automake major version, with object
 files being placed in the same subdirectory as the corresponding sources.
 You are advised to start using 'subdir-objects' option throughout your
-project, to avoid future incompatibilities.
+project, to avoid future incompatibility.
 EOF
                 }
 	    }
@@ -2062,7 +2064,7 @@ EOF
 	# dependency code).
         # Properly flatten multiple adjacent slashes, as Solaris 10 make
         # might fail over them in an include statement.
-        # Leading double slashes may be special, as per Posix, so deal
+        # Leading double slashes may be special, as per POSIX, so deal
         # with them carefully.
         if ($lang && $lang->autodep ne 'no')
         {
@@ -2289,7 +2291,7 @@ sub handle_lib_objects
 	       # Skip -dlopen and -dlpreopen; these are explicitly allowed
 	       # for Libtool libraries or programs.  (Actually we are a bit
 	       # lax here since this code also applies to non-libtool
-	       # libraries or programs, for which -dlopen and -dlopreopen
+	       # libraries or programs, for which -dlopen and -dlpreopen
 	       # are pure nonsense.  Diagnosing this doesn't seem very
 	       # important: the developer will quickly get complaints from
 	       # the linker.)
@@ -2561,7 +2563,7 @@ sub handle_targets ()
   @ltliblist = am_install_var ('ltlib', 'LTLIBRARIES',
 			       'noinst', 'lib', 'pkglib', 'check');
 
-  # Record duplications that may arise after canonicalization of the
+  # Record duplicates that may arise after canonicalization of the
   # base names, in order to prevent object file clashes in the presence
   # of target-specific *FLAGS
   my @targetlist = (@proglist, @liblist, @ltliblist);
@@ -2674,7 +2676,7 @@ sub handle_libraries ()
     }
 
   define_variable ('AR', 'ar', INTERNAL);
-  define_variable ('ARFLAGS', 'cru', INTERNAL);
+  define_variable ('ARFLAGS', 'cr', INTERNAL);
   define_verbose_tagvar ('AR');
 
   foreach my $pair (@liblist)
@@ -2704,11 +2706,15 @@ sub handle_libraries ()
       # Canonicalize names and check for misspellings.
       my $xlib = check_canonical_spelling ($onelib, '_LIBADD', '_SOURCES',
                                            '_OBJECTS', '_DEPENDENCIES',
-                                           '_AR');
+                                           '_AR', '_RANLIB');
 
       if (! var ($xlib . '_AR'))
 	{
 	  define_variable ($xlib . '_AR', '$(AR) $(ARFLAGS)', $where);
+	}
+      if (! var ($xlib . '_RANLIB'))
+	{
+	  define_variable ($xlib . '_RANLIB', '$(RANLIB)', $where);
 	}
 
       # Generate support for conditional object inclusion in
@@ -3057,9 +3063,24 @@ sub handle_scripts ()
 sub scan_texinfo_file
 {
   my ($filename) = @_;
+  my $orig_filename = $filename;
 
+  # If the source file doesn't exist, we'll fall back below.
+  if (! -e $filename)
+    {
+      if (-e ($filename . '.in'))
+        {
+          # $filename.texi.in exists: assume $filename.texi is generated
+          # and parse $filename.texi.in as the real input.
+          $filename .= '.in';
+        }
+      else
+        {
+          $filename = '/dev/null';
+        }
+    }
   my $texi = new Automake::XFile "< $filename";
-  verb "reading $filename";
+  verb "reading texinfo_file $filename";
 
   my ($outfile, $vfile);
   while ($_ = $texi->getline)
@@ -3070,6 +3091,18 @@ sub scan_texinfo_file
 	  # more occurrences later if the manual shows examples of how
 	  # to use @setfilename...)
 	  next if $outfile;
+
+	  # Although we notice the @setfilename, and the rules are
+	  # adjusted to sort of use it, they don't actually work.
+	  # Specifically, if foo.texi contains @setfilename bar.info,
+	  # the generated .texi.info suffix rule will not run.
+	  #
+	  # Also, although we change the .info target to be bar.info,
+	  # the HTML(S) variable/etc. is not changed.
+	  #
+	  # Since @setfilename is optional nowadays, doesn't seem worth
+	  # the trouble to handle (which looks to be nontrivial).
+	  # https://bugs.gnu.org/54063
 
 	  $outfile = $1;
 	  if (index ($outfile, '.') < 0)
@@ -3094,8 +3127,10 @@ sub scan_texinfo_file
 
   if (! $outfile)
     {
-      # Replace a .texi extension with .info
-      $outfile = basename($filename);
+      # If no explicit @setfilename, use the original filename as passed
+      # (not foo.texi.in or /dev/null) in the generated rules, while
+      # replacing any extension (presumably .texi) with .info.
+      $outfile = basename ($orig_filename);
       $outfile =~ s/\.[^.]+$//;
       $outfile .= '.info';
     }
@@ -3131,6 +3166,10 @@ sub output_texinfo_build_rules
   # but just remember that some logic deeper in Automake will not
   # output the same rule twice); while the later need to be output for
   # each Texinfo source.
+  #
+  # NB: The makeinfoflags is currently passed to makeinfo and texi2dvi, so
+  # make sure that it only utilizes compatible flags.  Best to stick to -I.
+  # Changing this requires updating lib/am/texibuild.am.
   my $generic;
   my $makeinfoflags;
   my $sdir = dirname $source;
@@ -3344,8 +3383,8 @@ sub handle_texinfo_helper
       #     in the source-tree (when they are distributed, that is).
       #   * Keeping a fresher copy of distributed files in the
       #     build tree can be annoying during development because
-      #     - if the files is kept under CVS, you really want it
-      #       to be updated in the source tree
+      #     - if the files are kept under version control, you really
+      #        want them to be updated in the source tree, and
       #     - it is confusing that 'make distclean' does not erase
       #       all files in the build tree.
       #
@@ -3648,14 +3687,14 @@ sub handle_man_pages ()
       my $trans_mans = $have_trans || exists $trans_sections{$section};
       my (%notrans_this_sect, %trans_this_sect);
       my $expr = 'man' . $section . '_MANS';
-      foreach my $varname (keys %notrans_sect_vars)
+      foreach my $varname (keys %notrans_sect_vars) # sort keys not needed
 	{
 	  if ($varname =~ /$expr/)
 	    {
 	      $notrans_this_sect{$varname} = 1;
 	    }
 	}
-      foreach my $varname (keys %trans_sect_vars)
+      foreach my $varname (keys %trans_sect_vars) # sort keys not needed
 	{
 	  if ($varname =~ /$expr/)
 	    {
@@ -4723,12 +4762,7 @@ sub handle_clean
       prog_error 'invalid entry in %clean_files'
 	unless exists $rms{$when};
 
-      my $rm = "rm -f $file";
-      # If file is a variable, make sure when don't call 'rm -f' without args.
-      $rm ="test -z \"$file\" || $rm"
-	if ($file =~ /^\s*\$(\(.*\)|\{.*\})\s*$/);
-
-      push @{$rms{$when}}, "\t-$rm\n";
+      push @{$rms{$when}}, "\t-\$(am__rm_f) $file\n";
     }
 
   $output_rules .= file_contents
@@ -4876,7 +4910,7 @@ sub handle_per_suffix_test
     }
   # The "test driver" program, deputed to handle tests protocol used by
   # test scripts.  By default, it's assumed that no protocol is used, so
-  # we fall back to the old behaviour, implemented by the 'test-driver'
+  # we fall back to the old behavior, implemented by the 'test-driver'
   # auxiliary script.
   if (! var "${pfx}LOG_DRIVER")
     {
@@ -5408,8 +5442,9 @@ sub scan_autoconf_traces
 	  error ($where,
 		 "version mismatch.  This is Automake $VERSION,\n" .
 		 "but the definition used by this AM_INIT_AUTOMAKE\n" .
-		 "comes from Automake $args[1].  You should recreate\n" .
-		 "aclocal.m4 with aclocal and run automake again.\n",
+		 "comes from Automake $args[1].  You should run\n" .
+		 "autoreconf -f (or otherwise erase all old files, run\n" .
+		 "aclocal to recreate aclocal.m4, and rerun automake).",
 		 # $? = 63 is used to indicate version mismatch to missing.
 		 exit_code => 63)
 	    if $VERSION ne $args[1];
@@ -5587,9 +5622,10 @@ sub scan_autoconf_files ()
 	  if (-f 'aclocal.m4')
 	    {
 	      error ($seen_init_automake,
-		     "your implementation of AM_INIT_AUTOMAKE comes from " .
-		     "an\nold Automake version.  You should recreate " .
-		     "aclocal.m4\nwith aclocal and run automake again",
+                     "your implementation of AM_INIT_AUTOMAKE comes from\n" .
+                     "an old Automake version.  You should run\n" .
+                     "autoreconf -f (or otherwise erase all old files, run\n" .
+                     "aclocal to recreate aclocal.m4, and rerun automake).",
 		     # $? = 63 is used to indicate version mismatch to missing.
 		     exit_code => 63);
 	    }
@@ -5598,8 +5634,8 @@ sub scan_autoconf_files ()
 	      error ($seen_init_automake,
 		     "no proper implementation of AM_INIT_AUTOMAKE was " .
 		     "found,\nprobably because aclocal.m4 is missing.\n" .
-		     "You should run aclocal to create this file, then\n" .
-		     "run automake again");
+		     "You should run autoreconf -f (or aclocal to create\n" .
+		     "this file, then rerun automake).");
 	    }
 	}
     }
@@ -5772,7 +5808,7 @@ sub lang_vala_finish_target
           my $base_c_file = basename $c_file;
           #
           # The -newer test here is checking "C file not older than Vala
-          # file" (not "C file newer than Vala file"; see
+          # file", rather than "C file newer than Vala file"; see
           # https://bugs.gnu.org/44772. The log message on the commit
           # misleadingly says "reversed".
           #
@@ -6431,7 +6467,7 @@ sub check_trailing_slash ($\$)
 # read_am_file ($AMFILE, $WHERE, $RELDIR)
 # ---------------------------------------
 # Read $AMFILE file name which is located in $RELDIR, and set up
-# global variables resetted by '&generate_makefile'.  Simultaneously
+# global variables reset by '&generate_makefile'.  Simultaneously
 # copy lines from $AMFILE into '$output_trailer', or define variables
 # as appropriate.
 #
@@ -7543,7 +7579,7 @@ sub push_required_file
     {
       push_dist_common ("$am_config_aux_dir/$file");
     }
-  # FIXME: another spacial case, for AC_LIBOBJ/AC_LIBSOURCE support.
+  # FIXME: another special case, for AC_LIBOBJ/AC_LIBSOURCE support.
   # We probably need some refactoring of this function and its callers,
   # to have a more explicit and systematic handling of all the special
   # cases; but, since there are only two of them, this is low-priority
@@ -7615,6 +7651,13 @@ sub required_file_check_or_copy
   my ($where, $dir, $file) = @_;
 
   my $fullfile = "$dir/$file";
+  # In cases where $file is actually a subdir/filename, split the full path back
+  # into dir & file names.  The FileUtils (e.g. dir_has_case_matching_file) do
+  # not handle this scenario at all and expect $file to only be a filename.
+  # https://bugs.gnu.org/20300
+  $dir = dirname ($fullfile);
+  $file = basename ($fullfile);
+
   my $found_it = 0;
   my $dangling_sym = 0;
 
@@ -7890,7 +7933,7 @@ sub require_build_directory
 
   $output_rules .= ("$dirstamp:\n"
 		    . "\t\@\$(MKDIR_P) $directory\n"
-		    . "\t\@: > $dirstamp\n");
+		    . "\t\@: >>$dirstamp\n");
 
   return $dirstamp;
 }
@@ -8087,6 +8130,13 @@ sub generate_makefile
   my $output =
     "$output_vars$output_all$output_header$output_rules$output_trailer";
 
+  # The .POSIX special target must be the first non-comment line;
+  # otherwise, the behavior of "make" is unspecified by POSIX.
+  if (option 'posix')
+    {
+      $output =~ s/^((#.*)?\n)*/.POSIX:\n\n/;
+    }
+
   # Decide whether we must update the output file or not.
   # We have to update in the following situations.
   #  * $force_generation is set.
@@ -8225,16 +8275,20 @@ General help using GNU software: <https://www.gnu.org/gethelp/>.
 
 sub version ()
 {
-  print <<EOF;
-automake (GNU $PACKAGE) $VERSION
-Copyright (C) $RELEASE_YEAR Free Software Foundation, Inc.
-License GPLv2+: GNU GPL version 2 or later <https://gnu.org/licenses/gpl-2.0.html>
+  print "automake (GNU $PACKAGE) $VERSION\n";
+  print "Features: subsecond-mtime\n"
+      if $Automake::FileUtils::subsecond_mtime
+         && $Automake::FileUtils::subsecond_mtime; # avoid "once" warning
+  print "\nCopyright (C) $RELEASE_YEAR Free Software Foundation, Inc.";
+  print '
+License GPLv2+: GNU GPL version 2 or later
+  <https://gnu.org/licenses/gpl-2.0.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-Written by Tom Tromey <tromey\@redhat.com>
-       and Alexandre Duret-Lutz <adl\@gnu.org>.
-EOF
+Written by Tom Tromey <tromey@redhat.com>
+       and Alexandre Duret-Lutz <adl@gnu.org>.
+';
   # --version always returns 0 per GNU standards.
   exit 0;
 }

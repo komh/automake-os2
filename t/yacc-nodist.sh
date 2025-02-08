@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ AC_OUTPUT
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 SUBDIRS = sub1 sub2
 .PHONY: test-build test-dist
 test-build: all
@@ -78,6 +80,8 @@ BUILT_SOURCES = parse.h
 END
 
 cat > sub1/main.c << 'END'
+extern int yyparse(void);
+
 int main ()
 {
   return yyparse ();

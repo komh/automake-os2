@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ do_check ()
     AC_CONFIG_AUX_DIR([$auxdir])
     AM_INIT_AUTOMAKE
     AC_PROG_CC
-    # We don't want to require python or emcas in this test, so
+    # We don't want to require python or emacs in this test, so
     # the tricks below.
     AM_PATH_PYTHON([2.2], [], [:])
     EMACS=no; AM_PATH_LISPDIR

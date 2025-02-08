@@ -1,7 +1,7 @@
 #!@PERL@
 # aclocal - create aclocal.m4 by scanning configure.ac      -*- perl -*-
 # @configure_input@
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,11 +62,12 @@ $perl_threads = 0;
 # @user_includes can be augmented with -I or AC_CONFIG_MACRO_DIRS.
 # @automake_includes can be reset with the '--automake-acdir' option.
 # @system_includes can be augmented with the 'dirlist' file or the
-# ACLOCAL_PATH environment variable, and reset with the '--system-acdir'
-# option.
+# --aclocal-path option/ACLOCAL_PATH environment variable, and reset
+# with the '--system-acdir' option.
 my @user_includes = ();
 my @automake_includes = ('@datadir@/aclocal-' . $APIVERSION);
 my @system_includes = ('@datadir@/aclocal');
+my $aclocal_path = '';
 
 # Whether we should copy M4 file in $user_includes[0].
 my $install = 0;
@@ -233,7 +234,7 @@ sub xmkdir_p ($)
 # Check macros in acinclude.m4.  If one is not used, warn.
 sub check_acinclude ()
 {
-  foreach my $key (keys %map)
+  foreach my $key (sort keys %map)
     {
       # FIXME: should print line number of acinclude.m4.
       msg ('syntax', "macro '$key' defined in acinclude.m4 but never used")
@@ -802,7 +803,7 @@ sub trace_used_macros ()
 		   # Do not trace $1 for all other macros as we do
 		   # not need it and it might contains harmful
 		   # characters (like newlines).
-		   (map { "--trace='$_:\$f::\$n'" } (keys %macro_seen)));
+		   (map { "--trace='$_:\$f::\$n'" } (sort keys %macro_seen)));
 
   verb "running WARNINGS=$ENV{WARNINGS} $traces $configure_ac";
 
@@ -1031,6 +1032,8 @@ Generate 'aclocal.m4' by scanning 'configure.ac' or 'configure.in'
 
 Options:
       --automake-acdir=DIR  directory holding automake-provided m4 files
+      --aclocal-path=PATH   colon-separated list of directories to
+                              search for third-party local files
       --system-acdir=DIR    directory holding third-party system-wide files
       --diff[=COMMAND]      run COMMAND [diff -u] on M4 files that would be
                             changed (implies --install and --dry-run)
@@ -1044,12 +1047,41 @@ Options:
                               third-party m4 files, then exit
       --verbose             don't be silent
       --version             print version number, then exit
-  -W, --warnings=CATEGORY   report the warnings falling in CATEGORY
+  -W, --warnings=CATEGORY   report the warnings falling in CATEGORY,
+                              defaults to $WARNINGS
+
 EOF
 
   print Automake::ChannelDefs::usage (), "\n";
 
+  # This output depends on the current environment, and when generating the man
+  # pages during Automake compilation, the environment is set to local values.
+  # So don't include it in the installed man page.
+  if (!$ENV{AUTOMAKE_HELP2MAN}) {
+    my $aclocal_automake_dir_env = $ENV{"ACLOCAL_AUTOMAKE_DIR"} || "";
+    my $aclocal_path_env = $ENV{"ACLOCAL_PATH"} || "";
+    print <<"EOF";
+
+m4 search paths (in order):
+      user includes: @user_includes
+  automake includes: @automake_includes
+    system includes: @system_includes
+       aclocal path: $aclocal_path
+
+Environment variable settings, for reference:
+  \$ACLOCAL_AUTOMAKE_DIR:    $aclocal_automake_dir_env
+  \$ACLOCAL_PATH:            $aclocal_path_env
+EOF
+  }
+  # The above listing of paths is rather a mess.  Because we don't
+  # compute all paths before outputting the help, the aclocal paths and
+  # ac_config_macro_dirs are not added to the system includes.  And
+  # because we don't keep track separately of command line values given
+  # to -I and the other options, we can't report them separately from
+  # the environment variables.
+
   print <<'EOF';
+
 Report bugs to <@PACKAGE_BUGREPORT@>.
 GNU Automake home page: <@PACKAGE_URL@>.
 General help using GNU software: <https://www.gnu.org/gethelp/>.
@@ -1086,6 +1118,7 @@ sub parse_arguments ()
      'version'		=> \&version,
      'system-acdir=s'	=> sub { shift; @system_includes = @_; },
      'automake-acdir=s'	=> sub { shift; @automake_includes = @_; },
+     'aclocal-path=s'   => sub { shift; $aclocal_path = $_[0]; },
      'diff:s'		=> \$diff_command,
      'dry-run'		=> \$dry_run,
      'force'		=> \$force_output,
@@ -1140,16 +1173,23 @@ sub parse_arguments ()
     }
 }
 
-# Add any directory listed in the 'ACLOCAL_PATH' environment variable
-# to the list of system include directories.
+# Add any directory listed in $aclocal_path to the list of system
+# include directories.
 sub parse_ACLOCAL_PATH ()
 {
-  return if not defined $ENV{"ACLOCAL_PATH"};
+  return if not $aclocal_path;
+  
   # Directories in ACLOCAL_PATH should take precedence over system
   # directories, so we use unshift.  However, directories that
   # come first in ACLOCAL_PATH take precedence over directories
   # coming later, which is why the result of split is reversed.
-  foreach my $dir (reverse split /:/, $ENV{"ACLOCAL_PATH"})
+  
+  # OS/2 and Windows (but not Cygwin, etc.) use ; for the path separator.
+  # Possibly it would be cleaner to use path_sep from Config,
+  # but this seems simpler.
+  my $path_sep = $^O =~ /^(os2|mswin)/i ? ';' : ':';
+  
+  foreach my $dir (reverse split $path_sep, $aclocal_path)
     {
       unshift (@system_includes, $dir) if $dir ne '' && -d $dir;
     }
@@ -1166,10 +1206,12 @@ if (exists $ENV{"AUTOMAKE_UNINSTALLED"})
 
 @automake_includes = ($ENV{"ACLOCAL_AUTOMAKE_DIR"})
   if (exists $ENV{"ACLOCAL_AUTOMAKE_DIR"});
+$aclocal_path = ($ENV{"ACLOCAL_PATH"})
+  if (exists $ENV{"ACLOCAL_PATH"});
 
 parse_WARNINGS;		    # Parse the WARNINGS environment variable.
 parse_arguments;
-parse_ACLOCAL_PATH;
+parse_ACLOCAL_PATH;	    # Should come after parse arguments.
 $configure_ac = require_configure_ac;
 
 # We may have to rerun aclocal if some file have been installed, but
@@ -1209,7 +1251,7 @@ while (1)
               "-I options nor AC_CONFIG_MACRO_DIR{,S} m4 macro(s)";
       }
 
-    last if write_aclocal ($output_file, keys %macro_traced);
+    last if write_aclocal ($output_file, sort keys %macro_traced);
     last if $dry_run;
   }
 check_acinclude;

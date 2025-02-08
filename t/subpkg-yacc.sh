@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2002-2021 Free Software Foundation, Inc.
+# Copyright (C) 2002-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,6 +61,8 @@ AC_OUTPUT
 EOF
 
 cat >lib/Makefile.am <<'EOF'
+AM_LFLAGS = --never-interactive
+
 noinst_LIBRARIES = liblib.a
 liblib_a_SOURCES = src/x.c foo.y
 EXTRA_liblib_a_SOURCES = bar.y

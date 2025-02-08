@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ AC_PROG_YACC
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = maude
 maude_SOURCES = sub/maude.y
 END
@@ -61,7 +63,7 @@ grep '^sub/maude\.c:.*maude\.y' Makefile.in && exit 1
 cat > Makefile.am << 'END'
 bin_PROGRAMS = maude
 maude_SOURCES = sub/maude.y
-## A particularly trickey case.
+## A particularly tricky case.
 maude_YFLAGS = -d
 END
 

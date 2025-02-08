@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -290,6 +290,7 @@ sub _is_valid_easy_option ($)
     no-installman
     no-texinfo.tex
     nostdinc
+    posix
     readme-alpha
     serial-tests
     parallel-tests

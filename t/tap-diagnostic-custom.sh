@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ for string in \
 '## A string with more whitespace' \
     "  ${tab}a b${tab} c" \
 '## Note the we do not have the empty string here.  We prefer to' \
-'## leave its behaviour in this context undefined for the moment.'
+'## leave its behavior in this context undefined for the moment.'
 do
   case $string in '##'*) continue;; esac
   i=$(($i + 1))

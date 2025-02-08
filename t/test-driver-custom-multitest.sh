@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ END
 cat > pass-fail.t << 'END'
 echo %% pass-fail %%
 echo 'FAIL: this fails :-('
-echo 'some randome message'
-echo 'some randome warning' >&2
+echo 'some random message'
+echo 'some random warning' >&2
 echo 'PASS: this passes :-)'
 echo 'INFO: blah'
 echo 'WARNING: blah blah' >&2
@@ -148,7 +148,7 @@ for vpath in : false; do
   # Check that the content of, and only of, the test logs with at least
   # one failing test case has been copied into 'test-suite.log'.  Note
   # that test logs containing skipped or xfailed test cases are *not*
-  # copied into 'test-suite.log' -- a behaviour that deliberately differs
+  # copied into 'test-suite.log' -- a behavior that deliberately differs
   # from the one of the built-in Automake test drivers.
   grep '%%' test-suite.log # For debugging.
   grep '%% fail %%' test-suite.log

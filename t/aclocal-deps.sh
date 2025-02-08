@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ $MAKE check-not-foo
 
 # Update one of the macros.  This should cause ./configure, Makefile.in,
 # Makefile, lib/Makefile.in, and lib/Makefile to be updated.
-
+$sleep
 cat >m4/mymacro.m4 <<'EOF'
 AC_DEFUN([MY_MACRO], [AC_LIBOBJ([foo])])
 EOF

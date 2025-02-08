@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ cat exp
 cat got
 diff exp got
 
-grep '^Please report to bug-automake@gnu\.org$' stdout
+grep 'Please report this to bug-automake@gnu\.org' stdout
 
 run_make -O check \
   TESTS='foo.test baz.test' \

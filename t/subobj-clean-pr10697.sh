@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1998-2021 Free Software Foundation, Inc.
+# Copyright (C) 1998-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,7 +81,15 @@ foo_SOURCES = \
 END
 
 mkdir sub1 sub2
-echo 'int main (void)' > main.c
+
+echo "/* Subobj clean: generic case*/" > main.c
+for i in 1 2; do
+  for j in a b c d e f; do
+    echo "extern void $j$i (void);" >> main.c
+  done
+done
+
+echo 'int main (void)' >> main.c
 echo '{' >> main.c
 for i in 1 2; do
   for j in a b c d e f; do

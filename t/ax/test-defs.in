@@ -1,7 +1,7 @@
 # -*- shell-script -*-
 # @configure_input@
 #
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@
 #   - This code has to be 'set -e' clean.
 
 # See whether the current test script is expected to use TAP or not.
-# Use a sensible default, while allowing the scripts to override this
-# check.
+# Use a sensible default, while allowing the scripts to override this check.
 if test -z "$am_test_protocol"; then
   case $argv0 in
     *.tap) am_test_protocol=tap;;
@@ -64,7 +63,7 @@ case ${am_running_installcheck:=no} in
     am_system_acdir=""
     ;;
   *)
-    echo "$me: variable 'am_running_installcheck' has invalid"
+    echo "$me: variable 'am_running_installcheck' has invalid" \
          "value '$am_running_installcheck'" >&2
     exit 99
     ;;
@@ -172,17 +171,82 @@ GNU_CFLAGS=${AM_TESTSUITE_GNU_CFLAGS-${GNU_CFLAGS-'@GNU_CFLAGS@'}}
 GNU_GCJ=${AM_TESTSUITE_GNU_GCJ-${GNU_GCJ-'@GNU_GCJ@'}}
 GNU_GCJFLAGS=${AM_TESTSUITE_GNU_GCJFLAGS-${GNU_GCJFLAGS-'@GNU_GCJFLAGS@'}}
 
-# No all versions of Tex support '--version', so we use a configure
+# Not all versions of Tex support '--version', so we use a configure
 # check to decide if tex is available.  This decision is embodied in
 # this variable.
 TEX=${AM_TESTSUITE_TEX-'@TEX@'}
 
-# The amount we should wait after modifying files depends on the platform.
-# For instance, Windows '95, '98 and ME have 2-second granularity
-# and can be up to 3 seconds in the future w.r.t. the system clock.
-# The creative quoting is to avoid spuriously triggering a failure in
-# the maintainer checks,
-sleep='sleep ''@MODIFICATION_DELAY@'
+# The time we should wait after modifying files depends on the platform, and
+# also the capabilities of the 'automake' and 'autom4te' programs, which in
+# turn depend on the capabilities of the Perl interpreter.  configure has
+# detected the platform's resolution for file modification times; we still
+# need to check automake and autom4te.
+MTIME_RESOLUTION='@MTIME_RESOLUTION@'
+case $MTIME_RESOLUTION in
+  1 | 2) ;; # Can assume these values are usable as is.
+  *)
+    if $AUTOMAKE --version 2>&1 |
+         grep 'Features:.*subsecond-mtime' > /dev/null 2>&1 &&
+       $AUTOM4TE --version 2>&1 |
+         grep 'Features:.*subsecond-mtime' > /dev/null 2>&1; then
+      # subsecond-mtime should be supported; use the timestamp
+      # resolution that we determined.
+      if test -n "$am_cv_filesystem_timestamp_resolution"; then
+        #echo "$BASH_SOURCE: amftr=$am_cv_filesystem_timestamp_resolution" >&2
+        MTIME_RESOLUTION=$am_cv_filesystem_timestamp_resolution
+        
+      elif test -n "$MTIME_RESOLUTION"; then
+        #echo "$BASH_SOURCE: M_R=$MTIME_RESOLUTION" >&2
+        # This is normal when running tests: the cache variable is
+        # not set, but MTIME_RESOLUTION is, because config.status is sourced.
+        # Its value should be usable, but because this was discovered
+        # just before the 1.17 release, for safety, let's set it to 1,
+        # and try it after the release.
+        MTIME_RESOLUTION=1
+
+      # If MTIME_RESOLUTION is empty too, that's weird.
+      else
+        # This message ends up in test-suite.log.
+        echo "$me: subsecond-mtime supported per automake and auto4mte" \
+             "--version, but neither am_cv_filesystem_timestamp_resolution;" \
+             "nor MTIME_RESOLUTION are set; that's an error somewhere." \
+             "Proceeding with value 1." >&2
+        MTIME_RESOLUTION=1
+      fi
+    else
+      #echo "$BASH_SOURCE: some --version doesn't support subsecond-mtime" >&2
+      #$AUTOMAKE --version >&2
+      #$AUTOM4TE --version >&2
+      #
+      MTIME_RESOLUTION=1
+      #
+      # we must not sleep for fractional seconds when autom4te does not
+      # support subsecond-mtimes, even when sleep supports it. See bug#67670.
+      am_cv_sleep_fractional_seconds=no
+      export am_cv_sleep_fractional_seconds
+    fi
+  ;;
+esac
+
+# This sleep variable is used explicitly in tests when AC_OUTPUT is not
+# used, hence config.status is not created, hence AC_CONFIG_COMMANDS_*
+# is not evaluated. Originally set up here:
+#   https://lists.gnu.org/archive/html/bug-automake/2010-10/msg00000.html
+# Discovered again in this review of the "sleep" history:
+#   https://lists.gnu.org/archive/html/automake/2024-06/msg00054.html
+# It seems a better fix would be to have Automake (in sanity.m4) figure
+# out the need for sleep even when AC_OUTPUT is not used.
+# 
+# In general, the problem is when the mtime resolution is 1 second (or
+# more) and the configure file is created less than 1 second ago, which
+# happens routinely in the tests, and for many fast-enough configure
+# scripts in other packages, too.
+# 
+# At any rate, with this set to "sleep 1", there were still random
+# parallelization failures; setting am_cv_sleep_fractional_seconds=no
+# as above was still needed.
+#
+sleep="sleep $MTIME_RESOLUTION"
 
 # An old timestamp that can be given to a file, in "touch -t" format.
 # The time stamp should be portable to all file systems of interest.
@@ -190,9 +254,23 @@ sleep='sleep ''@MODIFICATION_DELAY@'
 # in UTC; see <https://www.gnu.org/gnu/initial-announcement.html>.
 old_timestamp=198309271735.59
 
+# We need this in multiple tests and the wording is subject to change.
+# Don't include the ${br} lines since br is not defined at this point.
+#
+failure_footer_text="\
+See ./test-suite.log for debugging.
+Some test(s) failed.  Please report this to bug-automake@gnu.org,
+together with the test-suite.log file (gzipped) and your system
+information.  Thanks."
+#
+# And with color.
+red='[0;31m'
+std='[m';
+failure_footer_text_colorized="`echo \"$failure_footer_text\" | sed -e "s/^/${red}/" -e s/'$'/"${std}"/`"
+
 # Make our wrapper script (or installed scripts, if running under
-# "installcheck") accessible by default.  And avoid to uselessly
-# extend $PATH multiple times if this file is sourced multiple times.
+# "installcheck") accessible by default.  And avoid uselessly
+# extending $PATH multiple times if this file is sourced multiple times.
 case $PATH in
   $am_bindir$PATH_SEPARATOR*) ;;
   *) PATH=$am_bindir$PATH_SEPARATOR$PATH;;

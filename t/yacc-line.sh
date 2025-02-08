@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ END
 mkdir dir sub sub/dir
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 SUBDIRS = sub
 bin_PROGRAMS = foo bar
 AM_YFLAGS = -d
@@ -45,6 +47,8 @@ END
 
 cat > sub/Makefile.am << 'END'
 AUTOMAKE_OPTIONS = subdir-objects
+AM_LFLAGS = --never-interactive
+
 noinst_PROGRAMS = foo bar
 foo_YFLAGS = -d
 foo_SOURCES = zardoz.y

@@ -1,7 +1,7 @@
 #!@AM_TEST_RUNNER_SHELL@
 # @configure_input@
 #
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,6 +45,11 @@ export srcdir
 # test scripts, but not from the environment.
 # Keep this in sync with the 'Makefile.am:AM_TESTS_ENVIRONMENT'.
 for v in \
+  ACLOCAL \
+  AUTOCONF \
+  AUTOHEADER \
+  AUTOMAKE \
+  AUTOUPDATE \
   required \
   am_test_protocol \
   am_serial_tests \

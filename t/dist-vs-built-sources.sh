@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2017-2021 Free Software Foundation, Inc.
+# Copyright (C) 2017-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ foo_SOURCES = foo.c
 END
 
 cat > foo.c << 'END'
+#include <stdio.h>
 #include "h.h"
 int main (void) { printf ("%s\n", F); return 0; }
 END

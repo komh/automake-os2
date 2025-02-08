@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2021 Free Software Foundation, Inc.
+# Copyright (C) 2002-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,6 +12,11 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
 
 package Automake::ChannelDefs;
 
@@ -69,7 +74,7 @@ our @EXPORT = qw (&prog_error &error &fatal &verb
 =head2 CHANNELS
 
 The following channels can be used as the first argument of
-C<Automake::Channel::msg>.  For some of them we list a shorthand
+C<Automake::Channels::msg>.  For some of them we list a shorthand
 function that makes the code more readable.
 
 =over 4
@@ -197,7 +202,7 @@ Return the warning category descriptions.
 
 sub usage ()
 {
-  return "Warning categories include:
+  return "Warning categories are:
   cross                  cross compilation issues
   gnu                    GNU coding standards (default in gnu and gnits modes)
   obsolete               obsolete features or constructions (default)
@@ -207,10 +212,12 @@ sub usage ()
   extra-portability      extra portability issues related to obscure tools
   syntax                 dubious syntactic constructs (default)
   unsupported            unsupported or incomplete features (default)
-  all                    all the warnings
-  no-CATEGORY            turn off warnings in CATEGORY
+
+-W also understands:
+  all                    turn on all the warnings
   none                   turn off all the warnings
-  error                  treat warnings as errors";
+  no-CATEGORY            turn off warnings in CATEGORY
+  error                  treat all enabled warnings as errors";
 }
 
 =item C<prog_error ($MESSAGE, [%OPTIONS])>
@@ -444,8 +451,8 @@ sub merge_WARNINGS (@)
         {
           # The character class in the second match group is ASCII \S minus
           # comma.  We are generous with this because category values may come
-          # from WARNINGS and we don't want to assume what other programs'
-          # syntaxes for warnings categories are.
+          # from WARNINGS and we don't want to assume other programs'
+          # syntax for warnings categories.
           /^(no-|)([\w\[\]\/\\!"#$%&'()*+-.:;<=>?@^`{|}~]+)$/
             or die "Invalid warnings category: $_";
           $warnings{$2} = $1;

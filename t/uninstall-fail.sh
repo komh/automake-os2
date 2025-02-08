@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ chmod a-w d || skip_ "cannot make directories unwritable"
 # "eat" the error message from 'rm' in some situation, although the 'rm'
 # utility itself correctly prints it when invoked from (say) 'env' or
 # 'bash'.  Yikes.
-# We'll cater to these incompatibilities by relaxing a test below if
+# We'll cater to this incompatibility by relaxing a test below if
 # a faulty shell or 'rm' program is detected.
 st=0; $SHELL -c 'rm -f d/f' 2>stderr || st=$?
 cat stderr >&2
@@ -97,5 +97,8 @@ run_make -M -e FAIL uninstall
 #   /bin/ksh[3]: unreadable: permission denied
 
 $EGREP "(cd|sh)(\[[0-9]*[0-9]\])?: .*$inst/share" output
+
+# restore reasonable permissions so the rest of the world doesn't have to deal.
+chmod u+rwx $inst/share
 
 :

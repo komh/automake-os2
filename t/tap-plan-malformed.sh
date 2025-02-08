@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # TAP support: a malformed TAP plan is not recognized.  The checks in
-# here should be consistent with the behaviour of the 'prove' utility.
+# here should be consistent with the behavior of the 'prove' utility.
 
 . test-init.sh
 

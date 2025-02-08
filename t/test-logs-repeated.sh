@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 
 # Check parallel-tests features:
 #  - $(TESTS_LOGS) can end up holding duplicated entries
-# Such behaviour can be useful for projects that want to verify that
+# Such behavior can be useful for projects that want to verify that
 # different test scripts don't end up sharing the same log file.
 # (Automake itself is such a project, BTW ;-)
 

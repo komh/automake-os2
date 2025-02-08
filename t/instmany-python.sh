@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2008-2021 Free Software Foundation, Inc.
+# Copyright (C) 2008-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ chmod +x x-bin/'rm' x-bin/my-install
 
 cat >setenv.in <<'END'
 orig_INSTALL='@INSTALL@'
-# In case we've falled back on the install-sh script (seen e.g.,
+# In case we've fallen back on the install-sh script (seen e.g.,
 # on AIX 7.1), we need to make sure we use its absolute path,
 # as we don't know from which directory we'll be run.
 case "$orig_INSTALL" in

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 . test-init.sh
 
 cat > Makefile.am << 'END'
-# The tests are *deliberately* listed in inversed order here.
+# The tests are *deliberately* listed in inverse order here.
 TESTS = c.test b.test a.test
 b.log: a.log
 c.log: b.log

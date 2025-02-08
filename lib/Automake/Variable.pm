@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -132,7 +132,9 @@ non-object).
 =cut
 
 my $_VARIABLE_CHARACTERS = '[.A-Za-z0-9_@]+';
-my $_VARIABLE_PATTERN = '^' . $_VARIABLE_CHARACTERS . "\$";
+my $_VARIABLE_PATTERN_EXTRA_POSIX = '[*?<%][DF]?';
+my $_VARIABLE_PATTERN = '^(' . $_VARIABLE_CHARACTERS
+                             . '|' . $_VARIABLE_PATTERN_EXTRA_POSIX . ")\$";
 my $_VARIABLE_RECURSIVE_PATTERN =
     '^([.A-Za-z0-9_@]|\$[({]' . $_VARIABLE_CHARACTERS . '[})]?)+' . "\$";
 
@@ -331,7 +333,7 @@ sub variables (;$)
     {
       @vars = values %_variable_dict;
     }
-  # The behaviour of the 'sort' built-in is undefined in scalar
+  # The behavior of the 'sort' built-in is undefined in scalar
   # context, hence we need an ad-hoc handling for such context.
   return wantarray ? sort { $a->name cmp $b->name } @vars : scalar @vars;
 }
@@ -746,9 +748,14 @@ sub scan_variable_expansions ($)
   $text =~ s/#.*$//;
 
   # Record each use of ${stuff} or $(stuff) that does not follow a $.
-  while ($text =~ /(?<!\$)\$(?:\{([^\}]*)\}|\(([^\)]*)\))/g)
+  while ($text =~ m{\$(?:\{([^\}]*)\}|\(([^\)]*)\)|(\$))}g)
     {
-      my $var = $1 || $2;
+      my $var = $1 || $2 || $3;
+      next if (! defined $var) || ($var eq '$');
+      # we check for $var being defined because NetworkManager and other
+      # packages use the strange construct $().
+      # https://lists.gnu.org/archive/html/automake/2024-06/msg00085.html
+      
       # The occurrence may look like $(string1[:subst1=[subst2]]) but
       # we want only 'string1'.
       $var =~ s/:[^:=]*=[^=]*$//;
@@ -856,6 +863,9 @@ sub define ($$$$$$$$)
   # conditional assignments.
   msg ('portability', $where, "':='-style assignments are not portable")
     if $type eq ':';
+
+  msg ('portability', $where, "escaping \\# comment markers is not portable")
+    if index ($value, '\#') != -1;
 
   check_variable_expansions ($value, $where);
 
@@ -1165,11 +1175,19 @@ sub require_variables ($$$@)
 	  $text .= "  The usual way to define '$var' is to add "
 	    . "'$mac'\n  to '$configure_ac' and run 'aclocal' and "
 	    . "'autoconf' again.";
+	  #
 	  # aclocal will not warn about undefined macros unless it
 	  # starts with AM_.
-	  $text .= "\n  If '$mac' is in '$configure_ac', make sure\n"
+	  $text .= "\n\n  If '$mac' is in '$configure_ac', make sure\n"
 	    . "  its definition is in aclocal's search path."
 	    unless $mac =~ /^AM_/;
+	  #
+	  # More hints for the libtool case.
+	  $text .= "\n\n  If you install Automake in its own prefix,\n"
+	    . "  you'll need to arrange for the Libtool m4 files\n"
+	    . "  to be found by aclocal.  For info on this, see:\n"
+	    . "    https://gnu.org/s/automake/manual/automake.html#Libtool-library-used-but-LIBTOOL-is-undefined"
+	    if $mac eq "LT_INIT";
 	}
       elsif (exists $_ac_macro_for_var{$var})
 	{

@@ -1,5 +1,5 @@
 #! /usr/bin/env perl
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ my $ME = "tap-driver.pl";
 
 my $USAGE = <<'END';
 Usage:
-  tap-driver --test-name=NAME --log-file=PATH --trs-file=PATH
-             [--expect-failure={yes|no}] [--color-tests={yes|no}]
-             [--enable-hard-errors={yes|no}] [--ignore-exit]
-             [--diagnostic-string=STRING] [--merge|--no-merge]
+  tap-driver --test-name NAME --log-file PATH --trs-file PATH
+             [--expect-failure {yes|no}] [--color-tests {yes|no}]
+             [--enable-hard-errors {yes|no}] [--ignore-exit]
+             [--diagnostic-string STRING] [--merge|--no-merge]
              [--comments|--no-comments] [--] TEST-COMMAND
 The '--test-name', '--log-file' and '--trs-file' options are mandatory.
 END
@@ -198,14 +198,14 @@ TEST_RESULTS :
   # Whether the test script should be re-run by "make recheck".
   sub must_recheck ()
   {
-    return grep { !/^(?:XFAIL|PASS|SKIP)$/ } (keys %test_results_seen);
+    return grep { !/^(?:XFAIL|PASS|SKIP)$/ } (sort keys %test_results_seen);
   }
 
   # Whether the content of the log file associated to this test should
   # be copied into the "global" test-suite.log.
   sub copy_in_global_log ()
   {
-    return grep { not $_ eq "PASS" } (keys %test_results_seen);
+    return grep { not $_ eq "PASS" } (sort keys %test_results_seen);
   }
 
   sub get_global_test_result ()

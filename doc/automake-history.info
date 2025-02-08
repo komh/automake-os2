@@ -1,10 +1,10 @@
-This is automake-history.info, produced by makeinfo version 6.8 from
+This is automake-history.info, produced by makeinfo version 7.1 from
 automake-history.texi.
 
 This manual describes (part of) the history of GNU Automake, a program
 that creates GNU standards-compliant Makefiles from template files.
 
-   Copyright (C) 1995-2021 Free Software Foundation, Inc.
+   Copyright © 1995-2024 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -27,7 +27,7 @@ Brief History of Automake
 This manual describes (part of) the history of GNU Automake, a program
 that creates GNU standards-compliant Makefiles from template files.
 
-   Copyright (C) 1995-2021 Free Software Foundation, Inc.
+   Copyright © 1995-2024 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -74,7 +74,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      started working on Automake (or AutoMake, as it was spelt then)
      this Monday.
 
-     The first version of the 'automake' script looks as follows.
+     The first version of the ‘automake’ script looks as follows.
 
           #!/bin/sh
 
@@ -93,7 +93,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
           done
 
      From this you can already see that Automake will be about reading
-     '*.am' file and producing '*.in' files.  You cannot see anything
+     ‘*.am’ file and producing ‘*.in’ files.  You cannot see anything
      else, but if you also know that David is the one who created
      Autoconf two years before you can guess the rest.
 
@@ -101,11 +101,11 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      reported to work for GNU fileutils and GNU m4.
 
      The modus operandi is the one that is still used today: variable
-     assignments in 'Makefile.am' files trigger injections of precanned
-     'Makefile' fragments into the generated 'Makefile.in'.  The use of
-     'Makefile' fragments was inspired by the 4.4BSD 'make' and include
+     assignments in ‘Makefile.am’ files trigger injections of precanned
+     ‘Makefile’ fragments into the generated ‘Makefile.in’.  The use of
+     ‘Makefile’ fragments was inspired by the 4.4BSD ‘make’ and include
      files, however Automake aims to be portable and to conform to the
-     GNU standards for 'Makefile' variables and targets.
+     GNU standards for ‘Makefile’ variables and targets.
 
      At this point, the most recent release of Autoconf is version 1.11,
      and David is preparing to release Autoconf 2.0 in late October.  As
@@ -114,7 +114,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 1994-11-05 David MacKenzie's last commit.
 
      At this point Automake is a 200 line portable shell script, plus
-     332 lines of 'Makefile' fragments.  In the 'README', David states
+     332 lines of ‘Makefile’ fragments.  In the ‘README’, David states
      his ambivalence between "portable shell" and "more appropriate
      language":
 
@@ -142,7 +142,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      After one year of inactivity, Tom Tromey takes over the package.
      Tom was working on GNU cpio back then, and doing this just for fun,
      having trouble finding a project to contribute to.  So while
-     hacking he wanted to bring the 'Makefile.in' up to GNU standards.
+     hacking he wanted to bring the ‘Makefile.in’ up to GNU standards.
      This was hard, and one day he saw Automake on
      <ftp://alpha.gnu.org/>, grabbed it and tried it out.
 
@@ -166,9 +166,9 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      Besides introducing automatic dependency tracking (*note Dependency
      Tracking Evolution::), this version also supplies a 9-page manual.
 
-     At this time 'aclocal' and 'AM_INIT_AUTOMAKE' did not exist, so
+     At this time ‘aclocal’ and ‘AM_INIT_AUTOMAKE’ did not exist, so
      many things had to be done by hand.  For instance, here is what a
-     configure.in (this is the former name of the 'configure.ac' we use
+     configure.in (this is the former name of the ‘configure.ac’ we use
      today) must contain in order to use Automake 0.20:
 
           PACKAGE=cpio
@@ -180,41 +180,41 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
           AC_ARG_PROGRAM
           AC_PROG_INSTALL
 
-     (Today all of the above is achieved by 'AC_INIT' and
-     'AM_INIT_AUTOMAKE'.)
+     (Today all of the above is achieved by ‘AC_INIT’ and
+     ‘AM_INIT_AUTOMAKE’.)
 
-     Here is how programs are specified in 'Makefile.am':
+     Here is how programs are specified in ‘Makefile.am’:
 
           PROGRAMS = hello
           hello_SOURCES = hello.c
 
-     This looks pretty much like what we do today, except the 'PROGRAMS'
-     variable has no directory prefix specifying where 'hello' should be
-     installed: all programs are installed in '$(bindir)'.
-     'LIBPROGRAMS' can be used to specify programs that must be built
-     but not installed (it is called 'noinst_PROGRAMS' nowadays).
+     This looks pretty much like what we do today, except the ‘PROGRAMS’
+     variable has no directory prefix specifying where ‘hello’ should be
+     installed: all programs are installed in ‘$(bindir)’.
+     ‘LIBPROGRAMS’ can be used to specify programs that must be built
+     but not installed (it is called ‘noinst_PROGRAMS’ nowadays).
 
-     Programs can be built conditionally using 'AC_SUBST'itutions:
+     Programs can be built conditionally using ‘AC_SUBST’itutions:
 
           PROGRAMS = @progs@
           AM_PROGRAMS = foo bar baz
 
-     ('AM_PROGRAMS' has since then been renamed to 'EXTRA_PROGRAMS'.)
+     (‘AM_PROGRAMS’ has since then been renamed to ‘EXTRA_PROGRAMS’.)
 
      Similarly scripts, static libraries, and data can be built and
-     installed using the 'LIBRARIES', 'SCRIPTS', and 'DATA' variables.
-     However 'LIBRARIES' were treated a bit specially in that Automake
-     did automatically supply the 'lib' and '.a' prefixes.  Therefore to
-     build 'libcpio.a', one had to write
+     installed using the ‘LIBRARIES’, ‘SCRIPTS’, and ‘DATA’ variables.
+     However ‘LIBRARIES’ were treated a bit specially in that Automake
+     did automatically supply the ‘lib’ and ‘.a’ prefixes.  Therefore to
+     build ‘libcpio.a’, one had to write
 
           LIBRARIES = cpio
           cpio_SOURCES = ...
 
-     Extra files to distribute must be listed in 'DIST_OTHER' (the
-     ancestor of 'EXTRA_DIST').  Also extra directories that are to be
-     distributed should appear in 'DIST_SUBDIRS', but the manual
+     Extra files to distribute must be listed in ‘DIST_OTHER’ (the
+     ancestor of ‘EXTRA_DIST’).  Also extra directories that are to be
+     distributed should appear in ‘DIST_SUBDIRS’, but the manual
      describes this as a temporary ugly hack (today extra directories
-     should also be listed in 'EXTRA_DIST', and 'DIST_SUBDIRS' is used
+     should also be listed in ‘EXTRA_DIST’, and ‘DIST_SUBDIRS’ is used
      for another purpose, *note Conditional Subdirectories:
      (automake)Conditional Subdirectories.).
 
@@ -227,10 +227,10 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      Automake.
 
      If you never used Perl 4, imagine Perl 5 without objects, without
-     'my' variables (only dynamically scoped 'local' variables), without
+     ‘my’ variables (only dynamically scoped ‘local’ variables), without
      function prototypes, with function calls that needs to be prefixed
-     with '&', etc.  Traces of this old style can still be found in
-     today's 'automake'.
+     with ‘&’, etc.  Traces of this old style can still be found in
+     today's ‘automake’.
 
 1995-11-28 Automake 0.22
 1995-11-29 Automake 0.23
@@ -241,12 +241,12 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 1995-12-10 Automake 0.25
 
      Releases are raining.  0.24 introduces the uniform naming scheme we
-     use today, i.e., 'bin_PROGRAMS' instead of 'PROGRAMS',
-     'noinst_LIBRARIES' instead of 'LIBLIBRARIES', etc.  (However
-     'EXTRA_PROGRAMS' does not exist yet, 'AM_PROGRAMS' is still in use;
-     and 'TEXINFOS' and 'MANS' still have no directory prefixes.)
+     use today, i.e., ‘bin_PROGRAMS’ instead of ‘PROGRAMS’,
+     ‘noinst_LIBRARIES’ instead of ‘LIBLIBRARIES’, etc.  (However
+     ‘EXTRA_PROGRAMS’ does not exist yet, ‘AM_PROGRAMS’ is still in use;
+     and ‘TEXINFOS’ and ‘MANS’ still have no directory prefixes.)
      Adding support for prefixes like that was one of the major ideas in
-     'automake'; it has lasted pretty well.
+     ‘automake’; it has lasted pretty well.
 
      AutoMake is renamed to Automake (Tom seems to recall it was
      François Pinard's doing).
@@ -271,28 +271,28 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
 1996-01-13 Automake 0.28
 
-     Automake starts scanning 'configure.in' for 'LIBOBJS' support.
+     Automake starts scanning ‘configure.in’ for ‘LIBOBJS’ support.
      This is an important step because until this version Automake only
-     knew about the 'Makefile.am's it processed.  'configure.in' was
+     knew about the ‘Makefile.am’s it processed.  ‘configure.in’ was
      Autoconf's world and the link between Autoconf and Automake had to
-     be done by the 'Makefile.am' author.  For instance, if 'config.h'
-     was generated by 'configure', it was the package maintainer's
-     responsibility to define the 'CONFIG_HEADER' variable in each
-     'Makefile.am'.
+     be done by the ‘Makefile.am’ author.  For instance, if ‘config.h’
+     was generated by ‘configure’, it was the package maintainer's
+     responsibility to define the ‘CONFIG_HEADER’ variable in each
+     ‘Makefile.am’.
 
      Succeeding releases will rely more and more on scanning
-     'configure.in' to better automate the Autoconf integration.
+     ‘configure.in’ to better automate the Autoconf integration.
 
-     0.28 also introduces the 'AUTOMAKE_OPTIONS' variable and the
-     '--gnu' and '--gnits' options, the latter being stricter.
+     0.28 also introduces the ‘AUTOMAKE_OPTIONS’ variable and the
+     ‘--gnu’ and ‘--gnits’ options, the latter being stricter.
 
 1996-02-07 Automake 0.29
 
-     Thanks to 'configure.in' scanning, 'CONFIG_HEADER' is gone, and
-     rebuild rules for 'configure'-generated file are automatically
+     Thanks to ‘configure.in’ scanning, ‘CONFIG_HEADER’ is gone, and
+     rebuild rules for ‘configure’-generated file are automatically
      output.
 
-     'TEXINFOS' and 'MANS' converted to the uniform naming scheme.
+     ‘TEXINFOS’ and ‘MANS’ converted to the uniform naming scheme.
 
 1996-02-24 Automake 0.30
 
@@ -300,30 +300,30 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      cases will be added pretty regularly (*note Releases::), and this
      proved to be really helpful later on.
 
-     'EXTRA_PROGRAMS' finally replaces 'AM_PROGRAMS'.
+     ‘EXTRA_PROGRAMS’ finally replaces ‘AM_PROGRAMS’.
 
      All the third-party Autoconf macros, written mostly by François
      Pinard (and later Jim Meyering), are distributed in Automake's
-     hand-written 'aclocal.m4' file.  Package maintainers are expected
+     hand-written ‘aclocal.m4’ file.  Package maintainers are expected
      to extract the necessary macros from this file.  (In previous
      versions you had to copy and paste them from the manual...)
 
 1996-03-11 Automake 0.31
 
-     The test suite in 0.30 was run via a long 'check-local' rule.  Upon
+     The test suite in 0.30 was run via a long ‘check-local’ rule.  Upon
      Ulrich Drepper's suggestion, 0.31 makes it an Automake rule output
-     whenever the 'TESTS' variable is defined.
+     whenever the ‘TESTS’ variable is defined.
 
-     'DIST_OTHER' is renamed to 'EXTRA_DIST', and the 'check_' prefix is
+     ‘DIST_OTHER’ is renamed to ‘EXTRA_DIST’, and the ‘check_’ prefix is
      introduced.  The syntax is now the same as today.
 
 1996-03-15 Gordon Matzigkeit starts writing libtool.
 
 1996-04-27 Automake 0.32
 
-     '-hook' targets are introduced; an idea from Dieter Baron.
+     ‘-hook’ targets are introduced; an idea from Dieter Baron.
 
-     '*.info' files, which were output in the build directory are now
+     ‘*.info’ files, which were output in the build directory are now
      built in the source directory, because they are distributed.  It
      seems these files like to move back and forth as that will happen
      again in future versions.
@@ -332,22 +332,22 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
      Gord Matzigkeit's main two contributions:
 
-        * very preliminary libtool support
-        * the distcheck rule
+        • very preliminary libtool support
+        • the distcheck rule
 
      Although they were very basic at this point, these are probably
      among the top features for Automake today.
 
-     Jim Meyering also provides the infamous 'jm_MAINTAINER_MODE', since
-     then renamed to 'AM_MAINTAINER_MODE' and abandoned by its author
+     Jim Meyering also provides the infamous ‘jm_MAINTAINER_MODE’, since
+     then renamed to ‘AM_MAINTAINER_MODE’ and abandoned by its author
      (*note maintainer-mode: (automake)maintainer-mode.).
 
 1996-05-28 Automake 1.0
 
-     After only six months of heavy development, the 'automake' script
-     is 3134 lines long, plus 973 lines of 'Makefile' fragments.  The
+     After only six months of heavy development, the ‘automake’ script
+     is 3134 lines long, plus 973 lines of ‘Makefile’ fragments.  The
      package has 30 pages of documentation, and 38 test cases.
-     'aclocal.m4' contains 4 macros.
+     ‘aclocal.m4’ contains 4 macros.
 
      From now on and until version 1.4, new releases will occur at a
      rate of about one a year.  1.1 did not exist, actually 1.1b to 1.1p
@@ -363,7 +363,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      stalled.  Roland McGrath has been working at the beginning of the
      year.  David comes back in November to release 2.12, but he won't
      touch Autoconf anymore after this year, and Autoconf then really
-     stagnates.  The desolate Autoconf 'ChangeLog' for 1997 lists only 7
+     stagnates.  The desolate Autoconf ‘ChangeLog’ for 1997 lists only 7
      commits.
 
 1997-02-28 <automake@gnu.ai.mit.edu> list alive
@@ -387,10 +387,10 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
      Before that people were discussing Automake privately, on the Gnits
      mailing list (which is not public either), and less frequently on
-     'gnu.misc.discuss'.
+     ‘gnu.misc.discuss’.
 
-     'gnu.ai.mit.edu' is now 'gnu.org', in case you never noticed.  The
-     archives of the early years of the 'automake@gnu.org' list have
+     ‘gnu.ai.mit.edu’ is now ‘gnu.org’, in case you never noticed.  The
+     archives of the early years of the ‘automake@gnu.org’ list have
      been lost, so today it is almost impossible to find traces of
      discussions that occurred before 1999.  This has been annoying more
      than once, as such discussions can be useful to understand the
@@ -400,34 +400,34 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 1997-06-22 Automake 1.2
 
      Automake developments continues, and more and more new Autoconf
-     macros are required.  Distributing them in 'aclocal.m4' and
+     macros are required.  Distributing them in ‘aclocal.m4’ and
      requiring people to browse this file to extract the relevant macros
      becomes uncomfortable.  Ideally, some of them should be contributed
      to Autoconf so that they can be used directly, however Autoconf is
-     currently inactive.  Automake 1.2 consequently introduces 'aclocal'
-     ('aclocal' was actually started on 1996-07-28), a tool that
-     automatically constructs an 'aclocal.m4' file from a repository of
+     currently inactive.  Automake 1.2 consequently introduces ‘aclocal’
+     (‘aclocal’ was actually started on 1996-07-28), a tool that
+     automatically constructs an ‘aclocal.m4’ file from a repository of
      third-party macros.  Because Autoconf has stalled, Automake also
      becomes a kind of repository for such third-party macros, even
      macros completely unrelated to Automake (for instance macros that
      fix broken Autoconf macros).
 
      The 1.2 release contains 20 macros, including the
-     'AM_INIT_AUTOMAKE' macro that simplifies the creation of
-     'configure.in'.
+     ‘AM_INIT_AUTOMAKE’ macro that simplifies the creation of
+     ‘configure.in’.
 
-     Libtool is fully supported using '*_LTLIBRARIES'.
+     Libtool is fully supported using ‘*_LTLIBRARIES’.
 
      The missing script is introduced by François Pinard; it is meant to
-     be a better solution than 'AM_MAINTAINER_MODE' (*note
+     be a better solution than ‘AM_MAINTAINER_MODE’ (*note
      maintainer-mode: (automake)maintainer-mode.).
 
      Conditionals support was implemented by Ian Lance Taylor.  At the
      time, Tom and Ian were working on an internal project at Cygnus.
      They were using ILU, which is pretty similar to CORBA.  They wanted
-     to integrate ILU into their build, which was all 'configure'-based,
-     and Ian thought that adding conditionals to 'automake' was simpler
-     than doing all the work in 'configure' (which was the standard at
+     to integrate ILU into their build, which was all ‘configure’-based,
+     and Ian thought that adding conditionals to ‘automake’ was simpler
+     than doing all the work in ‘configure’ (which was the standard at
      the time).  So this was actually funded by Cygnus.
 
      This very useful but tricky feature will take a lot of time to
@@ -435,8 +435,8 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      primaries that have not been updated to support conditional
      definitions in Automake 1.9.)
 
-     The 'automake' script has almost doubled: 6089 lines of Perl, plus
-     1294 lines of 'Makefile' fragments.
+     The ‘automake’ script has almost doubled: 6089 lines of Perl, plus
+     1294 lines of ‘Makefile’ fragments.
 
 1997-07-08 Gordon Matzigkeit releases Libtool 1.0.
 
@@ -448,25 +448,25 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      Perl 5.004_04 is out, but fixes to support Perl 4 are still
      regularly submitted whenever Automake breaks it.
 
-1998-09-06 'sourceware.cygnus.com' is on-line.
+1998-09-06 ‘sourceware.cygnus.com’ is on-line.
 
      Sourceware was setup by Jason Molenda to host open source projects.
 
-1998-09-19 Automake CVS repository moved to 'sourceware.cygnus.com'
-1998-10-26 'sourceware.cygnus.com' announces it hosts Automake:
-     Automake is now hosted on 'sourceware.cygnus.com'.  It has a
+1998-09-19 Automake CVS repository moved to ‘sourceware.cygnus.com’
+1998-10-26 ‘sourceware.cygnus.com’ announces it hosts Automake:
+     Automake is now hosted on ‘sourceware.cygnus.com’.  It has a
      publicly accessible CVS repository.  This CVS repository is a copy
      of the one Tom was using on his machine, which in turn is based on
      a copy of the CVS repository of David MacKenzie.  This is why we
      still have to full source history.  (Automake was on Sourceware
      until 2007-10-29, when it moved to a git repository on
-     'savannah.gnu.org', but the Sourceware host had been renamed to
-     'sources.redhat.com'.)
+     ‘savannah.gnu.org’, but the Sourceware host had been renamed to
+     ‘sources.redhat.com’.)
 
      The oldest file in the administrative directory of the CVS
      repository that was created on Sourceware is dated 1998-09-19,
-     while the announcement that 'automake' and 'autoconf' had joined
-     'sourceware' was made on 1998-10-26.  They were among the first
+     while the announcement that ‘automake’ and ‘autoconf’ had joined
+     ‘sourceware’ was made on 1998-10-26.  They were among the first
      projects to be hosted there.
 
      The heedful reader will have noticed Automake was exactly 4 years
@@ -476,22 +476,22 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
 1999-01-14 Automake 1.4
 
-     This release adds support for Fortran 77 and for the 'include'
-     statement.  Also, '+=' assignments are introduced, but it is still
+     This release adds support for Fortran 77 and for the ‘include’
+     statement.  Also, ‘+=’ assignments are introduced, but it is still
      quite easy to fool Automake when mixing this with conditionals.
 
      These two releases, Automake 1.4 and Autoconf 2.13 make a duo that
      will be used together for years.
 
-     'automake' is 7228 lines, plus 1591 lines of Makefile fragment, 20
+     ‘automake’ is 7228 lines, plus 1591 lines of Makefile fragment, 20
      macros (some 1.3 macros were finally contributed back to Autoconf),
      197 test cases, and 51 pages of documentation.
 
-1999-03-27 The 'user-dep-branch' is created on the CVS repository.
+1999-03-27 The ‘user-dep-branch’ is created on the CVS repository.
 
      This implements a new dependency tracking schemed that should be
      able to handle automatic dependency tracking using any compiler
-     (not just gcc) and any make (not just GNU 'make').  In addition,
+     (not just gcc) and any make (not just GNU ‘make’).  In addition,
      the new scheme should be more reliable than the old one, as
      dependencies are generated on the end user's machine.  Alexandre
      Oliva creates depcomp for this purpose.
@@ -499,7 +499,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      *Note Dependency Tracking Evolution::, for more details about the
      evolution of automatic dependency tracking in Automake.
 
-1999-11-21 The 'user-dep-branch' is merged into the main trunk.
+1999-11-21 The ‘user-dep-branch’ is merged into the main trunk.
 
      This was a huge problem since we also had patches going in on the
      trunk.  The merge took a long time and was very painful.
@@ -551,27 +551,27 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      mailing list was created in May.
 
      Year after year, Automake had drifted away from its initial design:
-     construct 'Makefile.in' by assembling various 'Makefile' fragments.
-     In 1.4, lots of 'Makefile' rules are being emitted at various
-     places in the 'automake' script itself; this does not help ensuring
+     construct ‘Makefile.in’ by assembling various ‘Makefile’ fragments.
+     In 1.4, lots of ‘Makefile’ rules are being emitted at various
+     places in the ‘automake’ script itself; this does not help ensuring
      a consistent treatment of these rules (for instance making sure
      that user-defined rules override Automake's own rules).  One of
      Akim's goal was moving all of these hard-coded rules to separate
-     'Makefile' fragments, so the logic could be centralized in a
-     'Makefile' fragment processor.
+     ‘Makefile’ fragments, so the logic could be centralized in a
+     ‘Makefile’ fragment processor.
 
      Another significant contribution of Akim is the interface with the
-     "trace" feature of Autoconf.  The way to scan 'configure.in' at
+     "trace" feature of Autoconf.  The way to scan ‘configure.in’ at
      this time was to read the file and grep the various macro of
      interest to Automake.  Doing so could break in many unexpected
-     ways; 'automake' could miss some definition (for instance
-     'AC_SUBST([$1], [$2])' where the arguments are known only when M4
+     ways; ‘automake’ could miss some definition (for instance
+     ‘AC_SUBST([$1], [$2])’ where the arguments are known only when M4
      is run), or conversely it could detect some macro that was not
      expanded (because it is called conditionally).  In the CVS version
-     of Autoconf, Akim had implemented the '--trace' option, which
+     of Autoconf, Akim had implemented the ‘--trace’ option, which
      provides accurate information about where macros are actually
      called and with what arguments.  Akim will equip Automake with a
-     second 'configure.in' scanner that uses this '--trace' interface.
+     second ‘configure.in’ scanner that uses this ‘--trace’ interface.
      Since it was not sensible to drop the Autoconf 2.13 compatibility
      yet, this experimental scanner was only used when an environment
      variable was set, the traditional grep-scanner being still the
@@ -604,47 +604,47 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
      Gary continues his patch-release series.  These also add support
      for some new Autoconf 2.50 idioms.  Essentially, Autoconf now
-     advocates 'configure.ac' over 'configure.in', and it introduces a
-     new syntax for 'AC_OUTPUT'ing files.
+     advocates ‘configure.ac’ over ‘configure.in’, and it introduces a
+     new syntax for ‘AC_OUTPUT’ing files.
 
 2001-08-23 Automake 1.5
 
      A major and long-awaited release, that comes more than two years
      after 1.4.  It brings many changes, among which:
-        * The new dependency tracking scheme that uses 'depcomp'.  Aside
+        • The new dependency tracking scheme that uses ‘depcomp’.  Aside
           from the improvement on the dependency tracking itself (*note
           Dependency Tracking Evolution::), this also streamlines the
-          use of 'automake'-generated 'Makefile.in's as the
-          'Makefile.in's used during development are now the same as
-          those used in distributions.  Before that the 'Makefile.in's
-          generated for maintainers required GNU 'make' and GCC, they
-          were different from the portable 'Makefile' generated for
+          use of ‘automake’-generated ‘Makefile.in’s as the
+          ‘Makefile.in’s used during development are now the same as
+          those used in distributions.  Before that the ‘Makefile.in’s
+          generated for maintainers required GNU ‘make’ and GCC, they
+          were different from the portable ‘Makefile’ generated for
           distribution; this was causing some confusion.
 
-        * Support for per-target compilation flags.
+        • Support for per-target compilation flags.
 
-        * Support for reference to files in subdirectories in most
-          'Makefile.am' variables.
+        • Support for reference to files in subdirectories in most
+          ‘Makefile.am’ variables.
 
-        * Introduction of the 'dist_', 'nodist_', and 'nobase_'
+        • Introduction of the ‘dist_’, ‘nodist_’, and ‘nobase_’
           prefixes.
-        * Perl 4 support is finally dropped.
+        • Perl 4 support is finally dropped.
 
      1.5 did break several packages that worked with 1.4.  Enough so
      that Linux distributions could not easily install the new Automake
      version without breaking many of the packages for which they had to
-     run 'automake'.
+     run ‘automake’.
 
      Some of these breakages were effectively bugs that would eventually
      be fixed in the next release.  However, a lot of damage was caused
      by some changes made deliberately to render Automake stricter on
-     some setup we did consider bogus.  For instance, 'make distcheck'
-     was improved to check that 'make uninstall' did remove all the
-     files 'make install' installed, that 'make distclean' did not omit
+     some setup we did consider bogus.  For instance, ‘make distcheck’
+     was improved to check that ‘make uninstall’ did remove all the
+     files ‘make install’ installed, that ‘make distclean’ did not omit
      some file, and that a VPATH build would work even if the source
      directory was read-only.  Similarly, Automake now rejects multiple
      definitions of the same variable (because that would mix very badly
-     with conditionals), and '+=' assignments with no previous
+     with conditionals), and ‘+=’ assignments with no previous
      definition.  Because these changes all occurred suddenly after 1.4
      had been established for more than two years, it hurt users.
 
@@ -656,19 +656,18 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      This release introduced versioned installation (*note API
      Versioning: (automake)API Versioning.).  This was mainly pushed by
      Havoc Pennington, taking the GNOME source tree as motive: due to
-     incompatibilities between the autotools it's impossible for the
-     GNOME packages to switch to Autoconf 2.53 and Automake 1.5 all at
-     once, so they are currently stuck with Autoconf 2.13 and Automake
-     1.4.
+     incompatibility between the autotools it's impossible for the GNOME
+     packages to switch to Autoconf 2.53 and Automake 1.5 all at once,
+     so they are currently stuck with Autoconf 2.13 and Automake 1.4.
 
-     The idea was to call this version 'automake-1.6', call all its
-     bug-fix versions identically, and switch to 'automake-1.7' for the
+     The idea was to call this version ‘automake-1.6’, call all its
+     bug-fix versions identically, and switch to ‘automake-1.7’ for the
      next release that adds new features or changes some rules.  This
      scheme implies maintaining a bug-fix branch in addition to the
      development trunk, which means more work from the maintainer, but
      providing regular bug-fix releases proved to be really worthwhile.
 
-     Like 1.5, 1.6 also introduced a bunch of incompatibilities,
+     Like 1.5, 1.6 also introduced a bunch of incompatibility,
      intentional or not.  Perhaps the more annoying was the dependence
      on the newly released Autoconf 2.53.  Autoconf seemed to have
      stabilized enough since its explosive 2.50 release and included
@@ -691,7 +690,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      This one and those following will be handled by Alexandre
      Duret-Lutz.  Tom is still around, and will be there until about
      1.7, but his interest into Automake is drifting away towards
-     projects like 'gcj'.
+     projects like ‘gcj’.
 
      Alexandre has been using Automake since 2000, and started to
      contribute mostly on Akim's incitement (Akim and Alexandre have
@@ -711,7 +710,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
 2002-09-25 Automake 1.7
 
-     This release switches to the new 'configure.ac' scanner Akim was
+     This release switches to the new ‘configure.ac’ scanner Akim was
      experimenting in 1.5.
 
 2002-10-16 Automake 1.7.1
@@ -734,29 +733,29 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      Marshall, one of the characters, is working on a computer virus
      that he has to modify before it gets into the wrong hands or
      something like that.  The screenshots you see do not show any
-     program code, they show a 'Makefile.in' generated by automake...
+     program code, they show a ‘Makefile.in’ generated by automake...
 
 2003-11-09 Automake 1.7.9
 
 2003-12-10 Automake 1.8
 
-     The most striking update is probably that of 'aclocal'.
+     The most striking update is probably that of ‘aclocal’.
 
-     'aclocal' now uses 'm4_include' in the produced 'aclocal.m4' when
+     ‘aclocal’ now uses ‘m4_include’ in the produced ‘aclocal.m4’ when
      the included macros are already distributed with the package (an
      idiom used in many packages), which reduces code duplication.  Many
      people liked that, but in fact this change was really introduced to
-     fix a bug in rebuild rules: 'Makefile.in' must be rebuilt whenever
-     a dependency of 'configure' changes, but all the 'm4' files
-     included in 'aclocal.m4' where unknown from 'automake'.  Now
-     'automake' can just trace the 'm4_include's to discover the
+     fix a bug in rebuild rules: ‘Makefile.in’ must be rebuilt whenever
+     a dependency of ‘configure’ changes, but all the ‘m4’ files
+     included in ‘aclocal.m4’ where unknown from ‘automake’.  Now
+     ‘automake’ can just trace the ‘m4_include’s to discover the
      dependencies.
 
-     'aclocal' also starts using the '--trace' Autoconf option in order
+     ‘aclocal’ also starts using the ‘--trace’ Autoconf option in order
      to discover used macros more accurately.  This will turn out to be
      very tricky (later releases will improve this) as people had
-     devised many ways to cope with the limitation of previous 'aclocal'
-     versions, notably using handwritten 'm4_include's: 'aclocal' must
+     devised many ways to cope with the limitation of previous ‘aclocal’
+     versions, notably using handwritten ‘m4_include’s: ‘aclocal’ must
      make sure not to redefine a rule that is already included by such
      statement.
 
@@ -777,7 +776,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
 
      This release tries to simplify the compilation rules it outputs to
      reduce the size of the Makefile.  The complaint initially come from
-     the libgcj developers.  Their 'Makefile.in' generated with Automake
+     the libgcj developers.  Their ‘Makefile.in’ generated with Automake
      1.4 and custom build rules (1.4 did not support compiled Java) is
      250KB.  The one generated by 1.8 was over 9MB!  1.9 gets it down to
      1.2MB.
@@ -790,7 +789,7 @@ File: automake-history.info,  Node: Timeline,  Next: Dependency Tracking Evoluti
      Automake has ten years.  This chapter of the manual was initially
      written for this occasion.
 
-2007-10-29 Automake repository moves to 'savannah.gnu.org'
+2007-10-29 Automake repository moves to ‘savannah.gnu.org’
      and uses git as primary repository.
 
 
@@ -823,48 +822,48 @@ Description
 -----------
 
 Our first attempt at automatic dependency tracking was based on the
-method recommended by GNU 'make'.  (*note Generating Prerequisites
+method recommended by GNU ‘make’.  (*note Generating Prerequisites
 Automatically: (make)Automatic Prerequisites.)
 
    This version worked by precomputing dependencies ahead of time.  For
-each source file, it had a special '.P' file that held the dependencies.
-There was a rule to generate a '.P' file by invoking the compiler
-appropriately.  All such '.P' files were included by the 'Makefile',
-thus implicitly becoming dependencies of 'Makefile'.
+each source file, it had a special ‘.P’ file that held the dependencies.
+There was a rule to generate a ‘.P’ file by invoking the compiler
+appropriately.  All such ‘.P’ files were included by the ‘Makefile’,
+thus implicitly becoming dependencies of ‘Makefile’.
 
 Bugs
 ----
 
 This approach had several critical bugs.
 
-   * The code to generate the '.P' file relied on 'gcc'.  (A limitation,
+   • The code to generate the ‘.P’ file relied on ‘gcc’.  (A limitation,
      not technically a bug.)
-   * The dependency tracking mechanism itself relied on GNU 'make'.  (A
+   • The dependency tracking mechanism itself relied on GNU ‘make’.  (A
      limitation, not technically a bug.)
-   * Because each '.P' file was a dependency of 'Makefile', this meant
-     that dependency tracking was done eagerly by 'make'.  For instance,
-     'make clean' would cause all the dependency files to be updated,
+   • Because each ‘.P’ file was a dependency of ‘Makefile’, this meant
+     that dependency tracking was done eagerly by ‘make’.  For instance,
+     ‘make clean’ would cause all the dependency files to be updated,
      and then immediately removed.  This eagerness also caused problems
      with some configurations; if a certain source file could not be
      compiled on a given architecture for some reason, dependency
      tracking would fail, aborting the entire build.
-   * As dependency tracking was done as a pre-pass, compile times were
+   • As dependency tracking was done as a pre-pass, compile times were
      doubled-the compiler had to be run twice per source file.
-   * 'make dist' re-ran 'automake' to generate a 'Makefile' that did not
+   • ‘make dist’ re-ran ‘automake’ to generate a ‘Makefile’ that did not
      have automatic dependency tracking (and that was thus portable to
-     any version of 'make').  In order to do this portably, Automake had
+     any version of ‘make’).  In order to do this portably, Automake had
      to scan the dependency files and remove any reference that was to a
      source file not in the distribution.  This process was error-prone.
-     Also, if 'make dist' was run in an environment where some object
+     Also, if ‘make dist’ was run in an environment where some object
      file had a dependency on a source file that was only conditionally
-     created, Automake would generate a 'Makefile' that referred to a
+     created, Automake would generate a ‘Makefile’ that referred to a
      file that might not appear in the end user's build.  A special,
      hacky mechanism was required to work around this.
 
 Historical Note
 ---------------
 
-The code generated by Automake is often inspired by the 'Makefile' style
+The code generated by Automake is often inspired by the ‘Makefile’ style
 of a particular author.  In the case of the first implementation of
 dependency tracking, I believe the impetus and inspiration was Jim
 Meyering.  (I could be mistaken.  If you know otherwise feel free to
@@ -885,9 +884,9 @@ was aimed at solving the most commonly reported problems with the first
 approach.  In particular we were most concerned with eliminating the
 weird rebuilding effect associated with make clean.
 
-   In this approach, the '.P' files were included using the '-include'
-command, which let us create these files lazily.  This avoided the 'make
-clean' problem.
+   In this approach, the ‘.P’ files were included using the ‘-include’
+command, which let us create these files lazily.  This avoided the ‘make
+clean’ problem.
 
    We only computed dependencies when a file was actually compiled.
 This avoided the performance penalty associated with scanning each file
@@ -899,23 +898,23 @@ architecture (because it in fact would never be compiled).
 Bugs
 ----
 
-   * This approach also relied on the existence of 'gcc' and GNU 'make'.
+   • This approach also relied on the existence of ‘gcc’ and GNU ‘make’.
      (A limitation, not technically a bug.)
-   * Dependency tracking was still done by the developer, so the
+   • Dependency tracking was still done by the developer, so the
      problems from the first implementation relating to massaging of
-     dependencies by 'make dist' were still in effect.
-   * This implementation suffered from the "deleted header file"
-     problem.  Suppose a lazily-created '.P' file includes a dependency
+     dependencies by ‘make dist’ were still in effect.
+   • This implementation suffered from the "deleted header file"
+     problem.  Suppose a lazily-created ‘.P’ file includes a dependency
      on a given header file, like this:
 
           maude.o: maude.c something.h
 
-     Now suppose that you remove 'something.h' and update 'maude.c' so
-     that this include is no longer needed.  If you run 'make', you will
-     get an error because there is no way to create 'something.h'.
+     Now suppose that you remove ‘something.h’ and update ‘maude.c’ so
+     that this include is no longer needed.  If you run ‘make’, you will
+     get an error because there is no way to create ‘something.h’.
 
      We fixed this problem in a later release by further massaging the
-     output of 'gcc' to include a dummy dependency for each header file.
+     output of ‘gcc’ to include a dummy dependency for each header file.
 
 
 File: automake-history.info,  Node: Dependencies for the User,  Next: Techniques for Dependencies,  Prev: Dependencies As Side Effects,  Up: Dependency Tracking Evolution
@@ -926,11 +925,11 @@ File: automake-history.info,  Node: Dependencies for the User,  Next: Techniques
 Description
 -----------
 
-The bugs associated with 'make dist', over time, became a real problem.
+The bugs associated with ‘make dist’, over time, became a real problem.
 Packages using Automake were being built on a large number of platforms,
 and were becoming increasingly complex.  Broken dependencies were
-distributed in "portable" 'Makefile.in's, leading to user complaints.
-Also, the requirement for 'gcc' and GNU 'make' was a constant source of
+distributed in "portable" ‘Makefile.in’s, leading to user complaints.
+Also, the requirement for ‘gcc’ and GNU ‘make’ was a constant source of
 bug reports.  The next implementation of dependency tracking aimed to
 remove these problems.
 
@@ -945,17 +944,17 @@ some form of include directive.  Also, we wrote a wrapper script that
 let us abstract away differences between dependency tracking methods for
 compilers.  For instance, some compilers cannot generate dependencies as
 a side effect of compilation.  In this case we simply have the script
-run the compiler twice.  Currently our wrapper script ('depcomp') knows
+run the compiler twice.  Currently our wrapper script (‘depcomp’) knows
 about twelve different compilers (including a "compiler" that simply
-invokes 'makedepend' and then the real compiler, which is assumed to be
+invokes ‘makedepend’ and then the real compiler, which is assumed to be
 a standard Unix-like C compiler with no way to do dependency tracking).
 
 Bugs
 ----
 
-   * Running a wrapper script for each compilation slows down the build.
-   * Many users don't really care about precise dependencies.
-   * This implementation, like every other automatic dependency tracking
+   • Running a wrapper script for each compilation slows down the build.
+   • Many users don't really care about precise dependencies.
+   • This implementation, like every other automatic dependency tracking
      scheme in common use today (indeed, every one we've ever heard of),
      suffers from the "duplicated new header" bug.
 
@@ -982,7 +981,7 @@ Bugs
      in Java.)  This problem is easy to fix, by modifying dependency
      generators to record every probe, instead of every successful open.
 
-   * Since Automake generates dependencies as a side effect of
+   • Since Automake generates dependencies as a side effect of
      compilation, there is a bootstrapping problem when header files are
      generated by running a program.  The problem is that, the first
      time the build is done, there is no way by default to know that the
@@ -992,7 +991,7 @@ Bugs
      This was also a problem in the previous dependency tracking
      implementation.
 
-     The current fix is to use 'BUILT_SOURCES' to list built headers
+     The current fix is to use ‘BUILT_SOURCES’ to list built headers
      (*note Sources: (automake)Sources.).  This causes them to be built
      before any other build rules are run.  This is unsatisfactory as a
      general solution, however in practice it seems sufficient for most
@@ -1003,19 +1002,19 @@ Bugs
    In GCC 3.0, we managed to convince the maintainers to add special
 command-line options to help Automake more efficiently do its job.  We
 hoped this would let us avoid the use of a wrapper script when
-Automake's automatic dependency tracking was used with 'gcc'.
+Automake's automatic dependency tracking was used with ‘gcc’.
 
    Unfortunately, this code doesn't quite do what we want.  In
 particular, it removes the dependency file if the compilation fails;
 we'd prefer that it instead only touch the file in any way if the
 compilation succeeds.
 
-   Nevertheless, since Automake 1.7, when a recent 'gcc' is detected at
-'configure' time, we inline the dependency-generation code and do not
-use the 'depcomp' wrapper script.  This makes compilations faster for
+   Nevertheless, since Automake 1.7, when a recent ‘gcc’ is detected at
+‘configure’ time, we inline the dependency-generation code and do not
+use the ‘depcomp’ wrapper script.  This makes compilations faster for
 those using this compiler (probably our primary user base).  The
 counterpart is that because we have to encode two compilation rules in
-'Makefile' (with or without 'depcomp'), the produced 'Makefile's are
+‘Makefile’ (with or without ‘depcomp’), the produced ‘Makefile’s are
 larger.
 
 
@@ -1027,10 +1026,10 @@ File: automake-history.info,  Node: Techniques for Dependencies,  Prev: Dependen
 There are actually several ways for a build tool like Automake to cause
 tools to generate dependencies.
 
-'makedepend'
+‘makedepend’
      This was a commonly-used method in the past.  The idea is to run a
      special program over the source and have it generate dependency
-     information.  Traditional implementations of 'makedepend' are not
+     information.  Traditional implementations of ‘makedepend’ are not
      completely precise; ordinarily they were conservative and
      discovered too many dependencies.
 The tool
@@ -1042,15 +1041,15 @@ The tool
 The file system
      It is possible to write a special file system that tracks opens,
      reads, writes, etc, and then feed this information back to the
-     build tool.  'clearmake' does this.  This is a very powerful
+     build tool.  ‘clearmake’ does this.  This is a very powerful
      technique, as it doesn't require cooperation from the tool.
      Unfortunately it is also very difficult to implement and also not
      practical in the general case.
-'LD_PRELOAD'
+‘LD_PRELOAD’
      Rather than use the file system, one could write a special library
-     to intercept 'open' and other syscalls.  This technique is also
+     to intercept ‘open’ and other syscalls.  This technique is also
      quite powerful, but unfortunately it is not portable enough for use
-     in 'automake'.
+     in ‘automake’.
 
 * Menu:
 
@@ -1065,7 +1064,7 @@ File: automake-history.info,  Node: Recommendations for Tool Writers,  Next: Fut
 
 We think that every compilation tool ought to be able to generate
 dependencies as a side effect of compilation.  Furthermore, at least
-while 'make'-based tools are nearly universally in use (at least in the
+while ‘make’-based tools are nearly universally in use (at least in the
 free software community), the tool itself should generate dummy
 dependencies for header files, to avoid the deleted header file bug.
 Finally, the tool should generate a dependency for each probe, instead
@@ -1089,19 +1088,19 @@ File: automake-history.info,  Node: Releases,  Next: Copying This Manual,  Prev:
 3 Release Statistics
 ********************
 
-The following table (inspired by 'perlhist(1)') quantifies the evolution
+The following table (inspired by ‘perlhist(1)’) quantifies the evolution
 of Automake using these metrics:
 
 Date, Rel
      The date and version of the release.
 am
-     The number of lines of the 'automake' script.
+     The number of lines of the ‘automake’ script.
 acl
-     The number of lines of the 'aclocal' script.
+     The number of lines of the ‘aclocal’ script.
 pm
-     The number of lines of the 'Perl' supporting modules.
-'*.am'
-     The number of lines of the 'Makefile' fragments.  The number in
+     The number of lines of the ‘Perl’ supporting modules.
+‘*.am’
+     The number of lines of the ‘Makefile’ fragments.  The number in
      parentheses is the number of files.
 m4
      The number of lines (and files) of Autoconf macros.
@@ -1111,7 +1110,7 @@ t
      The number of test cases in the test suite.  Of those, the number
      in parentheses is the number of generated test cases.
 
-Date         Rel      am     acl    pm     '*.am'      m4          doc   t
+Date         Rel      am     acl    pm     ‘*.am’      m4          doc   t
 ------------------------------------------------------------------------------------
 1994-09-19   CVS      141                  299 (24)
 1994-11-05   CVS      208                  332 (28)
@@ -1190,7 +1189,7 @@ A.1 GNU Free Documentation License
 
                      Version 1.3, 3 November 2008
 
-     Copyright (C) 2000-2021 Free Software Foundation, Inc.
+     Copyright © 2000-2024 Free Software Foundation, Inc.
      <https://fsf.org/>
 
      Everyone is permitted to copy and distribute verbatim copies
@@ -1199,7 +1198,7 @@ A.1 GNU Free Documentation License
   0. PREAMBLE
 
      The purpose of this License is to make a manual, textbook, or other
-     functional and useful document "free" in the sense of freedom: to
+     functional and useful document “free” in the sense of freedom: to
      assure everyone the effective freedom to copy and redistribute it,
      with or without modifying it, either commercially or
      noncommercially.  Secondarily, this License preserves for the
@@ -1667,18 +1666,18 @@ their use in free software.
 
 
 Tag Table:
-Node: Top854
-Node: Timeline2388
-Node: Dependency Tracking Evolution33849
-Node: First Take on Dependencies34691
-Node: Dependencies As Side Effects37349
-Node: Dependencies for the User39408
-Node: Techniques for Dependencies44438
-Node: Recommendations for Tool Writers46136
-Node: Future Directions for Dependencies46855
-Node: Releases47325
-Node: Copying This Manual52712
-Node: GNU Free Documentation License52939
+Node: Top853
+Node: Timeline2386
+Node: Dependency Tracking Evolution34540
+Node: First Take on Dependencies35382
+Node: Dependencies As Side Effects38130
+Node: Dependencies for the User40243
+Node: Techniques for Dependencies45337
+Node: Recommendations for Tool Writers47059
+Node: Future Directions for Dependencies47782
+Node: Releases48252
+Node: Copying This Manual53667
+Node: GNU Free Documentation License53894
 
 End Tag Table
 

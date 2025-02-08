@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2021 Free Software Foundation, Inc.
+# Copyright (C) 2021-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,8 +58,9 @@ EOF
   # In any case, the tarball should contain y.c, but not x.c.
   # The tarball is always named based on $0, regardless of our options.
   pkg_ver=$me-1.0
-  ! tar tf "${pkg_ver}".tar.gz "${pkg_ver}"/x.c
-  tar tf "${pkg_ver}".tar.gz "${pkg_ver}"/y.c
+  gzip -d "${pkg_ver}".tar.gz
+  ! tar tf "${pkg_ver}".tar "${pkg_ver}"/x.c
+  tar tf "${pkg_ver}".tar "${pkg_ver}"/y.c
 
   # And x.c should have been built only for the built-sources version.
   if test "$testopt" = no-built-sources; then
@@ -69,4 +70,8 @@ EOF
     # built-sources build should have it
     test -e x.c
   fi
+
+  # If the test runs fast enough, the make dist second time through
+  # won't do anything since the tarball will be considered up to date.
+  rm -f "${pkg_ver}".tar.gz "${pkg_ver}".tar
 done

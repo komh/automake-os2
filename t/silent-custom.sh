@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2009-2021 Free Software Foundation, Inc.
+# Copyright (C) 2009-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ do_check ()
     $FGREP 'cp ' output && exit 1
     $FGREP 'generate-header' output && exit 1
     $FGREP 'rm -f' output && exit 1
-    grep '[012]\.h' output && exit 1
+    grep '\bsub/[012]\.h\b' output && exit 1
     grep '^ XGEN    foo$' output
     grep '^ GEN     \[headers\]$' output
   else

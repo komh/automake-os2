@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -430,7 +430,7 @@ sub register_suffix_rule ($$$)
   # we know how to transform $src in that "something else".
   if (exists $suffix_rules->{$dest})
     {
-      for my $dest2 (keys %{$suffix_rules->{$dest}})
+      for my $dest2 (sort keys %{$suffix_rules->{$dest}})
 	{
 	  my $dist = $suffix_rules->{$dest}{$dest2}[1] + 1;
 	  # Overwrite an existing $src->$dest2 path only if
@@ -445,8 +445,8 @@ sub register_suffix_rule ($$$)
 
   # Similarly, any extension that can be derived into $src
   # can be derived into the same extensions as $src can.
-  my @dest2 = keys %{$suffix_rules->{$src}};
-  for my $src2 (keys %$suffix_rules)
+  my @dest2 = sort keys %{$suffix_rules->{$src}};
+  for my $src2 (sort keys %$suffix_rules)
     {
       if (exists $suffix_rules->{$src2}{$src})
 	{
@@ -695,6 +695,9 @@ sub _conditionals_for_rule ($$$$)
 
   return $cond if !$message; # No ambiguity.
 
+  # Don't coalesce the several pattern rules from footer.am into a single one.
+  return $cond if $target eq "%:" && $where->get =~ /\/am\/footer\.am$/;
+
   if ($owner == RULE_USER)
     {
       # For user rules, just diagnose the ambiguity.
@@ -764,23 +767,27 @@ sub define ($$$$$)
 
   my $tdef = _rule_defn_with_exeext_awareness ($target, $cond, $where);
 
-  # A GNU make-style pattern rule has a single "%" in the target name.
-  msg ('portability', $where,
-       "'%'-style pattern rules are a GNU make extension")
-    if $target =~ /^[^%]*%[^%]*$/;
-
-  # See whether this is a duplicated target declaration.
-  if ($tdef)
+  # The pattern rules in footer.am look like duplicates, but really aren't.
+  if ($source !~ /\/am\/footer\.am$/)
     {
-      # Diagnose invalid target redefinitions, if any.  Note that some
-      # target redefinitions are valid (e.g., for multiple-targets
-      # pattern rules).
-      _maybe_warn_about_duplicated_target ($target, $tdef, $source,
-                                           $owner, $cond, $where);
-      # Return so we don't redefine the rule in our tables, don't check
-      # for ambiguous condition, etc.  The rule will be output anyway
-      # because '&read_am_file' ignores the return code.
-      return ();
+      # A GNU make-style pattern rule has a single "%" in the target name.
+      msg ('portability', $where,
+           "'%'-style pattern rules are a GNU make extension")
+        if $target =~ /^[^%]*%[^%]*$/;
+
+      # See whether this is a duplicated target declaration.
+      if ($tdef)
+        {
+          # Diagnose invalid target redefinitions, if any.  Note that some
+          # target redefinitions are valid (e.g., for multiple-targets
+          # pattern rules).
+          _maybe_warn_about_duplicated_target ($target, $tdef, $source,
+                                               $owner, $cond, $where);
+          # Return so we don't redefine the rule in our tables, don't check
+          # for ambiguous condition, etc.  The rule will be output anyway
+          # because '&read_am_file' ignores the return code.
+          return ();
+        }
     }
 
   my $rule = _crule $target;

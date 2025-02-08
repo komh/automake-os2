@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ if IS_GNU_MAKE
 
  is_too_deep := $(shell test $(MAKELEVEL) -lt 10 && echo no)
 
-## Indenteation here required to avoid confusing Automake.
+## Indentation here required to avoid confusing Automake.
  ifeq ($(is_too_deep),no)
  else
  $(error $(errmsg), $(MAKELEVEL) levels)
@@ -48,9 +48,9 @@ if IS_GNU_MAKE
 else !IS_GNU_MAKE
 
 # We use mkdir to detect the level of recursion, since it is easy
-# to use and assured to be portably atomical.  Also use an higher
+# to use and assured to be portably atomic.  Also use a higher
 # number than with GNU make above, since the level used here can
-# be incremented by tow or more per recursion.
+# be incremented by two or more per recursion.
 recursion-not-too-deep:
 	@ok=no; \
 	for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 \

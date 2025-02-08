@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ EOF
 cat > Makefile.am <<'EOF'
 # Need generic and non-generic rules.
 AM_YFLAGS = -d
+AM_LFLAGS = --never-interactive
 bin_PROGRAMS = foo bar
 foo_SOURCES = parse.y
 bar_SOURCES = $(foo_SOURCES)

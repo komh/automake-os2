@@ -1,6 +1,6 @@
 # Maintainer checks for Automake.  Requires GNU make.
 
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ sc_no_brace_variable_expansions:
 sc_rm_minus_f:
 	@if grep -v '^#' $(ams) $(xtests) \
 	   | grep -vE '/(rm-f-probe\.sh|spy-rm\.tap|subobj-clean.*-pr10697\.sh):' \
-	   | grep -E '\<rm ([^-]|\-[^f ]*\>)'; \
+	   | grep -E '\<rm ([^-]|-[^f ]*\>)'; \
 	then \
 	  echo "Suspicious 'rm' invocation." 1>&2; \
 	  exit 1; \
@@ -328,6 +328,10 @@ sc_tests_here_document_format:
 # Makefile.am rules, configure.ac code and helper shell script created and
 # used by out shell scripts, because Autoconf (as of version 2.69) does not
 # yet ensure that $CONFIG_SHELL will be set to a proper POSIX shell.
+# We exclude failure_footer_text_colorized in test-defs.in from the
+# check because the result differs with $(...) and I (Karl) don't know why;
+# the testsuite-summary-color.sh and tap-summary-color tests fail when
+# $(...) is used. Life is too short.
 sc_tests_command_subst:
 	@found=false; \
 	scan () { \
@@ -335,6 +339,7 @@ sc_tests_command_subst:
 	         -e '/<<.*END/,/^END/b' -e '/<<.*EOF/,/^EOF/b' \
 	         -e 's/\\`/\\{backtick}/' \
 	         -e "s/[^\\]'\([^']*\`[^']*\)*'/'{quoted-text}'/g" \
+	         -e /failure_footer_text_colorized=/d \
 	         -e '/`/p' $$*; \
 	}; \
 	for file in $(xtests); do \
@@ -440,7 +445,8 @@ sc_tests_ls_t:
 # Use '$sleep' instead.  Some file systems (e.g., Windows) have only
 # a 2sec resolution.
 sc_tests_plain_sleep:
-	@if grep -E '\bsleep +[12345]\b' $(xtests); then \
+	@if grep -vE '^[ 	]*#' $(xtests) \
+	      | grep -E '\bsleep +[12345]\b' | grep .; then \
 	  echo 'Do not use "sleep x" in the above tests.  Use "$$sleep" instead.' 1>&2; \
 	  exit 1; \
 	fi

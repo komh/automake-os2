@@ -217,7 +217,7 @@ corresponding `.y' file.]
 Jim's idea: should look for @setfilename and warn if filenames too long
 * guess split size
 
-from joerg-martin schwarz:
+from Joerg-Martin Schwarz:
  -- If Makefile.am contains $(CC), $(COMPILE), $(YLWRAP), ....
     in an explicitly written rule,  you should emit the corresponding
     Makefile variables automatically.
@@ -254,7 +254,7 @@ djm wants ``LINKS'' variable; list of things to link together after
 install.  In BSD environment, use:
 	LINKS = from1 to1 from2 to2 ...
 
-Need way to say there are no suffixes in a Makefile (Franc,ois'
+Need way to say there are no suffixes in a Makefile (François'
 "override" idea suffices here)
 
 Check to make sure various scripts are executable (IE when looking for
@@ -362,9 +362,6 @@ Should include extended version of diagram from Autoconf (suggested by
 Greg Woods)
 
 Make a definition of the term "source"
-
-document how to use Automake with CVS.  Idea from Mark Galassi.  Also
-include Greg Woods' more sophisticated "cvs-dist" target.
 
 -- must document all variables that are supposed
    to be public knowledge
@@ -483,7 +480,7 @@ that aren't mentioned?
 
 * copyright notice
 
-Copyright 1994-2021 Free Software Foundation, Inc.
+Copyright 1994-2024 Free Software Foundation, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

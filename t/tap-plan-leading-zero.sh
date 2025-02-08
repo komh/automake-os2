@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 # TAP support:
 #  - TAP plans with numbers having leading zeroes, as in "1..01"
 #  - TAP "SKIP" plans with multiple zeroes, as in "1..00 # SKIP"
-# This is consistent with the behaviour of the 'prove' utility.
+# This is consistent with the behavior of the 'prove' utility.
 
 . test-init.sh
 

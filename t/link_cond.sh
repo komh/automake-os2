@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2021 Free Software Foundation, Inc.
+# Copyright (C) 2012-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ $AUTOCONF
 rm -f *.c++
 cat > less.c <<'END'
 /* Valid C but deliberately invalid C++ */
-main ()
+int main (void)
 {
   int new = 0;
   return new;

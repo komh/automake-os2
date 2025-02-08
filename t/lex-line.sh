@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ END
 mkdir dir sub sub/dir
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 SUBDIRS = sub
 bin_PROGRAMS = foo bar
 LDADD = $(LEXLIB)
@@ -44,6 +46,8 @@ bar-quux.@OBJEXT@: bar-quux.c
 END
 
 cat > sub/Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 AUTOMAKE_OPTIONS = subdir-objects
 noinst_PROGRAMS = foo bar
 ## We already used $(LEXLIB) above, so try @LEXLIB@ now.
@@ -57,9 +61,6 @@ dir/quux.@OBJEXT@: dir/quux.c
 END
 
 cat > zardoz.l << 'END'
-%{
-#define YY_NO_UNISTD_H 1
-%}
 %%
 "END"  return EOF;
 .

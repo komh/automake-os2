@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2002-2021 Free Software Foundation, Inc.
+# Copyright (C) 2002-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ END
 
 cat > Makefile.am << 'END'
 AUTOMAKE_OPTIONS = subdir-objects
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo/foo
 foo_foo_SOURCES = foo/parse.y
 AM_YFLAGS = -d

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2010-2021 Free Software Foundation, Inc.
+# Copyright (C) 2010-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@ END
 
 cat > Makefile.am <<'END'
 AUTOMAKE_OPTIONS = no-dependencies
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo bar
 foo_SOURCES = main.cc foo.yy
 bar_SOURCES = main.cc bar.y++

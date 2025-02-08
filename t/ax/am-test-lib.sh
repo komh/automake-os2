@@ -1,6 +1,6 @@
 # -*- shell-script -*-
 #
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -103,13 +103,14 @@ is_blocked_signal ()
   # Use perl, since trying to do this portably in the shell can be
   # very tricky, if not downright impossible.  For reference, see:
   # <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
-  if $PERL -w -e '
-    use strict;
-    use warnings FATAL => "all";
-    use POSIX;
-    my %oldsigaction = ();
-    sigaction('"$1"', 0, \%oldsigaction);
-    exit ($oldsigaction{"HANDLER"} eq "IGNORE" ? 0 : 77);
+  if $PERL -Mstrict -Mwarnings=FATAL,all -MPOSIX -Mconstant=SN,"$1" -e '
+    my $new = POSIX::SigAction->new(sub {});
+    my $old = POSIX::SigAction->new();
+    { no warnings q[uninitialized]; sigaction(SN, $new, $old) }
+    my $oldhandler;
+    if ($old->can(q[handler])) { $oldhandler = $old->handler }
+    else { $oldhandler = $old->{HANDLER} }
+    exit ($oldhandler eq "IGNORE" ? 0 : 77);
   '; then
     return 0
   elif test $? -eq 77; then
@@ -187,7 +188,7 @@ run_make ()
   am__make_redirect_stdall=no
   am__make_flags=
   am__make_rc_exp=0
-  # Follow-up code might want to analyse this, so mark is as
+  # Follow-up code might want to analyze this, so mark it as
   # publicly accessible (no double undesrscore).
   am_make_rc=0
   # Parse options for this function.
@@ -424,7 +425,7 @@ using_gmake ()
       fatal_ "invalid value for \$am__using_gmake: '$am__using_gmake'";;
   esac
 }
-am__using_gmake="" # Avoid interferences from the environment.
+am__using_gmake="" # Avoid interference from the environment.
 
 # make_can_chain_suffix_rules
 # ---------------------------
@@ -460,7 +461,7 @@ END
       *) fatal_ "make_can_chain_suffix_rules: internal error";;
   esac
 }
-am__can_chain_suffix_rules="" # Avoid interferences from the environment.
+am__can_chain_suffix_rules="" # Avoid interference from the environment.
 
 # useless_vpath_rebuild
 # ---------------------
@@ -632,6 +633,10 @@ python_has_pep3147 ()
 {
   if test -z "$am_pep3147_tag"; then
     am_pep3147_tag=$($PYTHON -c 'import imp; print(imp.get_tag())') \
+      || am_pep3147_tag=none
+  fi
+  if test "$am_pep3147_tag" = "none"; then
+    am_pep3147_tag=$($PYTHON -c 'import sys; print(sys.implementation.cache_tag)') \
       || am_pep3147_tag=none
   fi
   test $am_pep3147_tag != none
@@ -1057,7 +1062,7 @@ am_setup_testdir ()
 
 am_extra_info ()
 {
-  echo "Running from installcheck: $am_running_installcheck"
-  echo "Test Protocol: $am_test_protocol"
-  echo "PATH = $PATH"
+  echo "am-test-lib.sh: Running from installcheck: $am_running_installcheck"
+  echo "am-test-lib.sh: Test Protocol: $am_test_protocol"
+  echo "am-test-lib.sh: PATH = $PATH"
 }

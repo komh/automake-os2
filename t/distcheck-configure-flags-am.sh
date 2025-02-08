@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ grep 'DISTCHECK_CONFIGURE_FLAGS.*AM_DISTCHECK_CONFIGURE_FLAGS' Makefile.in \
 $AUTOCONF
 ./configure --enable-success sentence='it works :-)'
 
-# The configure call in "make distcheck" should honour
+# The configure call in "make distcheck" should honor
 # $(AM_DISTCHECK_CONFIGURE_FLAGS).
 
 $MAKE distcheck

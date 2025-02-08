@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,5 +81,8 @@ command_ok_ 'no spurious "missing plan" message' \
 command_ok_ 'no spurious results' \
   -D TODO -r 'still get "missing plan"' \
   count_test_results total=3 pass=0 fail=0 xpass=0 xfail=0 skip=0 error=3
+
+# restore sane permissions for future greps and finds.
+chmod u+r noread.test
 
 :

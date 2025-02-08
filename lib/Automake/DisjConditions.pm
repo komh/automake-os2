@@ -1,4 +1,4 @@
-# Copyright (C) 1997-2021 Free Software Foundation, Inc.
+# Copyright (C) 1997-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -250,7 +250,7 @@ otherwise.
 sub false ($ )
 {
   my ($self) = @_;
-  return 0 == keys %{$self->{'hash'}};
+  return 0 == keys %{$self->{'hash'}}; # sort keys not needed
 }
 
 =item C<$et = $set-E<gt>true>

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Test for various older bugs related to quoting, escaping and
-# line breaking in the use of AC_OUTPUT.  Synthesised by a bunch
+# line breaking in the use of AC_OUTPUT.  Synthesized by a bunch
 # of older tests (referenced below).
 
 . test-init.sh

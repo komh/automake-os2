@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Make sure 'py-compile' honours the PYTHON environment variable.
+# Make sure 'py-compile' honors the PYTHON environment variable.
 
 . test-init.sh
 
@@ -23,15 +23,13 @@ cp "$am_scriptdir/py-compile" . \
 
 cat > my-py <<'END'
 #!/bin/sh
+echo 2
 : > my-py.run
 END
 chmod a+x my-py
 
 mkdir sub1
 cd sub1
-
-PYTHON=: ../py-compile foo.py
-ls | grep . && exit 1
 
 PYTHON=false ../py-compile foo.py && exit 1
 ls | grep . && exit 1

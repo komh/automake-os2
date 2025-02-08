@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ cat > Makefile.am << 'END'
 bin_PROGRAMS = zardoz
 zardoz_SOURCES = zardoz.y foo.c
 AM_YFLAGS = -d --skeleton glr.c
+AM_LFLAGS = --never-interactive
+
 BUILT_SOURCES = zardoz.h
 END
 

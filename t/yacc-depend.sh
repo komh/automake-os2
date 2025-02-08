@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ END
 cat > Makefile.am << 'END'
 bin_PROGRAMS = foo
 AM_YFLAGS = -d
+AM_LFLAGS = --never-interactive
+
 foo_SOURCES = foo.y main.c
 BUILT_SOURCES = foo.h
 END
@@ -46,6 +48,7 @@ END
 
 cat > main.c << 'END'
 #include "foo.h"
+extern int yyparse (void);
 int main(void)
 {
   return yyparse ();

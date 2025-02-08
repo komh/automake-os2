@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2009-2021 Free Software Foundation, Inc.
+# Copyright (C) 2009-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -82,5 +82,14 @@ grep 'recursive variable expansion' stderr && exit 1
 AUTOMAKE_fails -Wno-portability -Wportability-recursive
 grep 'var-with-dash' stderr && exit 1
 grep 'recursive variable expansion' stderr
+
+#
+# Ensure that GNU make function calls give a portability warning
+# under a certain condition that older automake missed.
+#
+cat >Makefile.am <<'EOF'
+x = $$$(y z)
+EOF
+AUTOMAKE_fails -Wportability
 
 :

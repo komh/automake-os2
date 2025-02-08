@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2007-2021 Free Software Foundation, Inc.
+# Copyright (C) 2007-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ blu="$esc\[1;34m"
 mgn="$esc\[0;35m"
 std="$esc\[m"
 
-# This test requires a working a working 'expect' program.
+# This test requires a working 'expect' program.
 (set +e; expect -c 'exit 77'; test $? -eq 77) \
   || skip_ "requires a working expect program"
 

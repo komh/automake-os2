@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,6 +49,8 @@ END
 
 cat > Makefile.am <<'END'
 AUTOMAKE_OPTIONS = subdir-objects
+AM_LFLAGS = --never-interactive
+
 noinst_PROGRAMS = foo bar
 foo_SOURCES = sub/parse.y
 bar_SOURCES = $(foo_SOURCES)

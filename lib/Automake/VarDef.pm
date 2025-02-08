@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ sub append ($$$)
   #   VAR = foo # com bar
   # Furthermore keeping '#' would not be portable if the variable is
   # output on multiple lines.
-  $val =~ s/ ?#.*//;
+  $val =~ s/ ?(^|[^\\])#.*/$1/;
   # Insert a separator, if required.
   $val .= ' ' if $val;
   $self->{'value'} = $val . $value;

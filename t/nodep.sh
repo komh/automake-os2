@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1999-2021 Free Software Foundation, Inc.
+# Copyright (C) 1999-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,6 +37,6 @@ $ACLOCAL
 $AUTOMAKE
 
 sed 's/printf .*%s//' Makefile.in > Makefile.tmp
-grep '%' Makefile.tmp && exit 1
+grep -v '^%::' Makefile.tmp | grep '%' && exit 1
 
 :

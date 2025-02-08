@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2021 Free Software Foundation, Inc.
+# Copyright (C) 2011-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ END
 
 cat >> Makefile.am <<'END'
 ## We must use 'TESTS_ENVIRONMENT', not 'AM_TESTS_ENVIRONMENT',
-## because the latter is not hnoured by the old serial test
+## because the latter is not honored by the old serial test
 ## harness.
 TESTS_ENVIRONMENT = \
     if test x"$$jprog_doing_installcheck" != x"yes"; then \

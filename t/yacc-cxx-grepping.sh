@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 1997-2021 Free Software Foundation, Inc.
+# Copyright (C) 1997-2024 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ AC_PROG_YACC
 END
 
 cat > Makefile.am << 'END'
+AM_LFLAGS = --never-interactive
+
 bin_PROGRAMS = foo bar baz qux
 foo_SOURCES = foo.y++
 bar_SOURCES = bar.ypp
