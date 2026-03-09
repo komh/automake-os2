@@ -1,5 +1,5 @@
 #! /usr/bin/env perl
-# Copyright (C) 2011-2024 Free Software Foundation, Inc.
+# Copyright (C) 2011-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@
 #  Imports, static data, and setup.  #
 # ---------------------------------- #
 
-use warnings FATAL => 'all';
-use strict;
+use strict; use warnings;
 use Getopt::Long ();
+
 use TAP::Parser;
 
-my $VERSION = '2013-12-24.15'; # UTC
+my $VERSION = '2025-06-18.21'; # UTC
 
 my $ME = "tap-driver.pl";
 
@@ -555,9 +555,10 @@ main @ARGV;
 # cperl-extra-newline-before-brace: t
 # cperl-merge-trailing-else: nil
 # cperl-continued-statement-offset: 2
-# eval: (add-hook 'before-save-hook 'time-stamp)
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
+# time-stamp-line-limit: 50
 # time-stamp-start: "my $VERSION = "
-# time-stamp-format: "'%:y-%02m-%02d.%02H'"
+# time-stamp-format: "'%Y-%02m-%02d.%02H'"
 # time-stamp-time-zone: "UTC0"
 # time-stamp-end: "; # UTC"
 # End:

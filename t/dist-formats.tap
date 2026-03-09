@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2012-2024 Free Software Foundation, Inc.
+# Copyright (C) 2012-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@ setup_vars_for_compression_format ()
     lzip) suffix=tar.lz  compressor=lzip     ;;
       xz) suffix=tar.xz  compressor=xz       ;;
    bzip2) suffix=tar.bz2 compressor=bzip2    ;;
+   bzip3) suffix=tar.bz3 compressor=bzip3    ;;
      zip) suffix=zip     compressor=zip      ;;
     zstd) suffix=tar.zst compressor=zstd     ;;
        *) fatal_ "invalid compression format '$1'";;

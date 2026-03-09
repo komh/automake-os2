@@ -414,6 +414,7 @@ on_tap_with_common_setup_TESTS = \
   t/tap-planskip-badexit.sh \
   t/tap-planskip-bailout.sh \
   t/tap-planskip-later-errors.sh \
+  t/tap-stderr-prefix.tap \
   t/tap-test-number-0.sh \
   t/tap-recheck-logs.sh \
   t/tap-result-comment.sh \
@@ -483,6 +484,7 @@ t/tap-planskip-whitespace.log: t/ax/tap-setup.sh t/tap-common-setup.log
 t/tap-planskip-badexit.log: t/ax/tap-setup.sh t/tap-common-setup.log
 t/tap-planskip-bailout.log: t/ax/tap-setup.sh t/tap-common-setup.log
 t/tap-planskip-later-errors.log: t/ax/tap-setup.sh t/tap-common-setup.log
+t/tap-stderr-prefix.log: t/ax/tap-setup.sh t/tap-common-setup.log
 t/tap-test-number-0.log: t/ax/tap-setup.sh t/tap-common-setup.log
 t/tap-recheck-logs.log: t/ax/tap-setup.sh t/tap-common-setup.log
 t/tap-result-comment.log: t/ax/tap-setup.sh t/tap-common-setup.log

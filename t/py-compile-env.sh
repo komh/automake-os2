@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2024 Free Software Foundation, Inc.
+# Copyright (C) 2011-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,9 +31,15 @@ chmod a+x my-py
 mkdir sub1
 cd sub1
 
+# This py-compile invocation should succeed and do nothing.
+PYTHON=: ../py-compile foo.py
+ls | grep . && exit 1
+
+# This py-compile invocation should fail and do nothing.
 PYTHON=false ../py-compile foo.py && exit 1
 ls | grep . && exit 1
 
+# These should also do nothing, and succeed.
 PYTHON='echo GrEpMe AndMeToo' ../py-compile foo.py
 PYTHON='echo GrEpMe AndMeToo' ../py-compile foo.py | grep 'GrEpMe AndMeToo'
 ls | grep . && exit 1

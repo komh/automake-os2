@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2024 Free Software Foundation, Inc.
+# Copyright (C) 2002-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -92,6 +92,11 @@ my @tests = (
   ['1.5.1a', '1.5.1f', -1],
   ['1.5.1f', '1.5.1a', 1],
   ['1.5.1f', '1.5.1f', 0],
+# with four-part numeric versions, starting 2024
+  ['1.17.0.91', '1.17.0.91', 0],
+  ['1.17.0.91', '1.17.0.92', -1],
+  ['1.17.0.91', '1.17.1', -1],
+  ['1.17.0.91', '1.17', 1],
 # special exceptions
   ['1.6-p5a', '1.6.5a', 0],
   ['1.6', '1.6-p5a', -1],
@@ -103,7 +108,7 @@ my @tests = (
 );
 
 my @bad_versions = (
-  '', 'a', '1', '1a', '1.2.3.4', '-1.2'
+  '', 'a', '1', '1a', '-1.2'
 );
 
 test_version_compare (@{$_}) foreach @tests;

@@ -1,9 +1,83 @@
 For planned incompatibilities in a possible future Automake 2.0 release,
-please see NEWS-2.0 and start following the advice there now.
+please see NEWS-future and start following the advice there now.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+New in 1.18.1 (2025-06-25):
+
+* Bugs fixed
+
+  - Undo change to mdate-sh; once again, it does not look at
+    SOURCE_DATE_EPOCH. This change was a misunderstanding that causes
+    problems, not fixes, for reproducible builds.
+    (https://lists.gnu.org/archive/html/automake/2025-06/msg00021.html)
+
+  - Improve debuggability of installcheck failures. (bug#78850)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+New in 1.18 (2025-05-25):
+
+* New features added
+
+  - Default tar format is now ustar, mainly to support longer filenames;
+    the tar-v7 and other explicit options to force a particular tar
+    format are unchanged and still override the default. (bug#74847)
+
+  - The mdate-sh auxiliary script generally used with Texinfo now uses
+    SOURCE_DATE_EPOCH, if set, instead of the source file's mtime. (bug#77805)
+
+  - New option dist-bzip3 for bzip3 compression of distributions. (bug#73795)
+
+  - New option --stderr-prefix for tap-driver.sh, to prefix each line of
+    stderr from a test script with a given string. (bug#72536)
+
+  - Support for Algol 68 added, based on the GNU Algol 68 compiler. (bug#75807)
+
+* Bugs fixed
+
+  - Do not make Perl warnings fatal, per Perl's recommendation.
+    (https://lists.gnu.org/archive/html/automake/2025-01/msg00003.html)
+
+  - Avoid Perl 5.41.8+ precedence warning for use of !!.
+    (https://lists.gnu.org/archive/html/automake/2025-01/msg00000.html)
+
+  - a Perl path containing whitespace now emits a warning instead of
+    an error, so ./configure PERL='/usr/bin/env perl' can work. (bug#74453)
+
+  - The py-compile script once again does nothing (successfully) if the
+    PYTHON environment variable is set to ":", or anything that isn't a
+    Python interpreter (according to $PYTHON -V). Exception: if PYTHON
+    is set to "false", do nothing but exit unsuccessfully, also to match
+    previous behavior. (bug#74434)
+
+  - The no-dist-built-sources Automake option now operates (hopefully) as
+    intended, i.e., omits the dependency on $(BUILT_SOURCES) for the
+    distdir target. (bug#69908)
+
+  - Only warn about install.sh being found, instead of it being a fatal
+    error. (bug#19964)
+
+  - The compile script is more robust to Windows configurations;
+    specifically, avoids double-path translation on MSYS. (bug#75939)
+
+  - The test infrastructure sets the CONFIG_SITE environment variable to
+    /dev/null, to avoid the local system's Autoconf site defaults from
+    breaking the test environment. (bug#76622)
+    
+  - AM_SILENT_RULES once again always ends with a newline. (bug#72267)
+
+  - AM_SANITY_CHECK now outputs "no" on failure, so that a complete line
+    is written to stdout before the error message is written to stderr.
+    (bug#76448)
+
+* Miscellaneous changes
+
+  - Only require the presence of an ABOUT-NLS file at the 'gnits'
+    strictness level.
+    (https://lists.gnu.org/archive/html/automake/2024-10/msg00006.html)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.17:
+New in 1.17 (2024-07-11):
 
 * New features added
 
@@ -31,8 +105,8 @@ New in 1.17:
     retained when appended.  GNU Make & BSD Makes are known to support it.
     (bug#7610)
 
-  - GNU Make's default pattern rules are disabled, for speed and debugging.
-    (.SUFFIXES was already cleared.) (bug#64743)
+  - GNU Make's default pattern rules for RCS and SCCS are disabled, for
+    speed and debugging. (.SUFFIXES was already cleared.) (bug#64743)
 
   - For Texinfo documents, if a .texi.in file exists, but no .texi, the
     .texi.in will be read. Texinfo source files need not be present at
@@ -61,7 +135,7 @@ New in 1.17:
     timestamp granularity dynamically, greatly speeding up the sleep
     done by AC_OUTPUT when generating config.status (all packages) and
     Automake's make check.
-    
+
     However, this subsecond-mtime support requires an autom4te from
     Autoconf 2.72 or later (or random test failures and other timing
     problems may ensue), as well as a Perl, sleep program, make program,
@@ -69,14 +143,14 @@ New in 1.17:
     fall back to a two-second granularity, not even testing the (common)
     1s case since that would induce a 2s delay for all configure scripts
     in all packages on all systems that don't support subsecond mtimes.
-    
+
     When everything is supported, a line "Features: subsecond-mtime" is
-    now printed by automake --version and autom4te --version. 
-    
+    now printed by automake --version and autom4te --version.
+
     To override this check and delay, e.g. to use 1 second:
       am_cv_filesystem_timestamp_resolution=1
       export am_cv_filesystem_timestamp_resolution
-      
+
     (commit 720a11531,
       https://lists.gnu.org/archive/html/automake-commit/2022-02/msg00009.html
     then bug#60808, bug#64756, bug#67670, bug#68808, bug#71652,
@@ -150,7 +224,7 @@ New in 1.17:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.16.5:
+New in 1.16.5 (2021-10-03):
 
 * Bugs fixed
 
@@ -167,7 +241,7 @@ New in 1.16.5:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.16.4:
+New in 1.16.4 (2021-07-26):
 
 * New features added
 
@@ -203,7 +277,7 @@ New in 1.16.4:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.16.3:
+New in 1.16.3 (2020-11-18):
 
 * New features added
 
@@ -248,7 +322,7 @@ New in 1.16.3:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.16.2:
+New in 1.16.2 (2020-03-21):
 
 * New features added
 
@@ -282,7 +356,7 @@ New in 1.16.2:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.16.1:
+New in 1.16.1 (2018-03-11):
 
 * Bugs fixed:
 
@@ -297,7 +371,7 @@ New in 1.16.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.16:
+New in 1.16 (2018-02-25):
 
 * Miscellaneous changes
 
@@ -374,7 +448,7 @@ New in 1.16:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.15.1:
+New in 1.15.1 (2017-06-19):
 
 * Bugs fixed:
 
@@ -395,7 +469,7 @@ New in 1.15.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.15:
+New in 1.15 (2015-01-05):
 
 * Improvements and refactorings in the install-sh script:
 
@@ -495,7 +569,7 @@ New in 1.15:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.14.1:
+New in 1.14.1 (2013-12-24):
 
 * Bugs fixed:
 
@@ -525,7 +599,7 @@ New in 1.14.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.14:
+New in 1.14 (2013-06-21):
 
 * C compilation, and the AC_PROG_CC and AM_PROG_CC_C_O macros:
 
@@ -655,7 +729,7 @@ New in 1.14:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.13.4:
+New in 1.13.4 (2018-06-14):
 
 * Bugs fixed:
 
@@ -666,7 +740,7 @@ New in 1.13.4:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.13.3:
+New in 1.13.3 (2013-06-03):
 
 * Documentation fixes:
 
@@ -716,7 +790,7 @@ New in 1.13.3:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.13.2:
+New in 1.13.2 (2013-05-15):
 
 * Documentation fixes:
 
@@ -807,7 +881,7 @@ New in 1.13.2:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.13.1:
+New in 1.13.1 (2013-01-01):
 
 * Bugs fixed:
 
@@ -817,7 +891,7 @@ New in 1.13.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.13:
+New in 1.13 (2012-12-28):
 
 * Bugs fixed:
 
@@ -995,7 +1069,7 @@ New in 1.13:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.12.6:
+Bugs fixed in 1.12.6 (2012-12-15):
 
 * Python-related bugs:
 
@@ -1032,7 +1106,7 @@ Bugs fixed in 1.12.6:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.12.5:
+New in 1.12.5 (2012-11-17):
 
 * Vala support:
 
@@ -1078,7 +1152,7 @@ Bugs fixed in 1.12.5:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.12.4:
+New in 1.12.4 (2012-09-18):
 
 * Warnings and deprecations:
 
@@ -1119,7 +1193,7 @@ Bugs fixed in 1.12.3:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.12.2:
+New in 1.12.2 (2012-07-09):
 
 * Warnings and deprecations:
 
@@ -1177,7 +1251,7 @@ Bugs fixed in 1.12.2:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.12.1:
+New in 1.12.1 (2012-06-01):
 
 * New supported languages:
 
@@ -1247,7 +1321,7 @@ Bugs fixed in 1.12.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.12:
+New in 1.12 (2012-04-25):
 
 * Obsolete features removed:
 
@@ -1465,7 +1539,11 @@ Bugs fixed in 1.12:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.11.5:
+New in 1.11.6 (2012-07-09): (unknown)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Bugs fixed in 1.11.5 (2012-04-13):
 
 * Bugs introduced by 1.11.3:
 
@@ -1478,7 +1556,7 @@ Bugs fixed in 1.11.5:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.11.4:
+New in 1.11.4 (2012-04-02):
 
 * Miscellaneous changes:
 
@@ -1536,7 +1614,7 @@ Bugs fixed in 1.11.4:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.11.3:
+New in 1.11.3 (2012-02-01):
 
 * Miscellaneous changes:
 
@@ -1601,7 +1679,7 @@ Bugs fixed in 1.11.3:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.11.2:
+New in 1.11.2 (2011-12-22):
 
 * Changes to aclocal:
 
@@ -1730,7 +1808,7 @@ Bugs fixed in 1.11.2:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.11.1:
+Bugs fixed in 1.11.1 (2009-12-08):
 
   - Lots of minor bugfixes.
 
@@ -1760,7 +1838,7 @@ Bugs fixed in 1.11.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.11:
+New in 1.11 (2009-05-17):
 
 * Version requirements:
 
@@ -1999,7 +2077,7 @@ Bugs fixed in 1.11:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.10:
+New in 1.10 (2006-10-15):
 
 * Version requirements:
 
@@ -2169,7 +2247,7 @@ New in 1.10:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.9:
+New in 1.9 (2004-07-28):
 
 * Makefile.in bloat reduction:
 
@@ -2267,7 +2345,7 @@ New in 1.9:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.8.5:
+Bugs fixed in 1.8.5 (2004-05-16):
 
 * Long-standing bugs:
 
@@ -2282,7 +2360,7 @@ Bugs fixed in 1.8.5:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.8.4:
+Bugs fixed in 1.8.4 (2004-04-25):
 
 * Long-standing bugs:
 
@@ -2311,7 +2389,7 @@ Bugs fixed in 1.8.4:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.8.3:
+Bugs fixed in 1.8.3 (2008-03-07):
 
 * Long-standing bugs:
 
@@ -2381,7 +2459,7 @@ Bugs fixed in 1.8.3:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bug fixed in 1.8.2:
+Bug fixed in 1.8.2 (2008-01-12):
 
 * A (well known) portability bug slipped in the changes made to
   install-sh in Automake 1.8.1.  The broken install-sh would refuse to
@@ -2392,7 +2470,7 @@ Bug fixed in 1.8.2:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bug fixed in 1.8.1:
+Bug fixed in 1.8.1 (2004-01-11):
 
 * Bugs introduced by 1.8:
 
@@ -2503,7 +2581,7 @@ Bug fixed in 1.8.1:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-New in 1.8:
+New in 1.8 (2003-12-10):
 
 * Meta-News
 
@@ -2789,19 +2867,19 @@ New in 1.8:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugs fixed in 1.7.9:
+Bugs fixed in 1.7.9 (2003-11-12):
 * Fix install-strip to work with nobase_ binaries.
 * Fix renaming of #line directives in ylwrap.
 * Rebuild with Autoconf 2.59.  (1.7.8 was not installable with pdksh.)
 
-Bugs fixed in 1.7.8:
+Bugs fixed in 1.7.8 (2003-10-06):
 * Remove spurious blank lines in cleaning rules introduced in 1.7.7.
 * Fix detection of Debian's install-info, broken since version 1.5.
   (Debian bug #213524).
 * Honor -module if it appears in AM_LDFLAGS (i.e., relax name checking)
   This was only done for libfoo_LDFLAGS and LDFLAGS in previous versions.
 
-Bugs fixed in 1.7.7:
+Bugs fixed in 1.7.7 (2003-09-07):
 * The implementation of automake's --no-force option is unreliable,
   so this option is ignored in this version.  A real fix will appear in
   Automake 1.8.  (Debian Bug #206299)
@@ -2818,7 +2896,7 @@ Bugs fixed in 1.7.7:
     with Automake 1.8.
   - A Shared Library: Rewrite and split into subsections.
 
-Bugs fixed in 1.7.6:
+Bugs fixed in 1.7.6 (2003-07-10):
 * Fix depcomp's icc mode for ICC 7.1.
 * Diagnose calls to AC_CONFIG_FILES and friends with not enough arguments.
 * Fix maintainer-clean's removal of autom4te.cache in VPATH builds.
@@ -2827,7 +2905,7 @@ Bugs fixed in 1.7.6:
 * Remove Latin-1 characters from elisp-comp.
 * Update the manual's @dircategory to match the Free Software Directory.
 
-Bugs fixed in 1.7.5:
+Bugs fixed in 1.7.5 (2003-05-18):
 * Update install-sh's license to remove an advertising clause.
   (Debian bug #191717)
 * Fix a bug introduced in 1.7.4, related to BUILT_SOURCE handling,
@@ -2835,7 +2913,7 @@ Bugs fixed in 1.7.5:
 * Make sure AM_MAKE_INCLUDE doesn't fail when a `doit' file exists.
 * New FAQ entry: renamed objects.
 
-Bugs fixed in 1.7.4:
+Bugs fixed in 1.7.4 (2003-04-23):
 * Tweak the TAGS rule to support Exuberant Ctags (in addition to
   the Emacs implementation)
 * Fix output of aclocal.m4 dependencies in subdirectories.
@@ -2851,7 +2929,7 @@ Bugs fixed in 1.7.4:
 * `make install' will build `BUILT_SOURCES' first.
 * Minor documentation fixes.
 
-Bugs fixed in 1.7.3:
+Bugs fixed in 1.7.3 (2003-02-20):
 * Fix stamp files numbering (when using multiple AC_CONFIG_HEADERS).
 * Query distutils for `pythondir' and `pythonexecdir', instead of
   using an hardcoded path.  This should allow builds on 64-bit
@@ -2883,7 +2961,7 @@ Bugs fixed in 1.7.3:
     (Debian Bug #39542)
   - Document `AM_YFLAGS = -d'.  (PR/382)
 
-Bugs fixed in 1.7.2:
+Bugs fixed in 1.7.2 (2002-12-05):
 * Fix installation and uninstallation of Info files built in subdirectories.
 * Do not run `./configure --with-included-gettext' during `make distcheck'
   if AM_GNU_GETTEXT([external]) is used.
@@ -2913,7 +2991,7 @@ Bugs fixed in 1.7.2:
   - Augment the section about BUILT_SOURCES.
   - Mention that AM_PROG_CC_STDC is a relic that is better avoided today.
 
-Bugs fixed in 1.7.1:
+Bugs fixed in 1.7.1 (2002-10-18):
 * Honor `ansi2knr' for files built in subdirectories, or using per-targets
   flags.
 * Aclocal should now recognize macro names containing parentheses, e.g.
@@ -2939,7 +3017,7 @@ Bugs fixed in 1.7.1:
   spurious directories in the distribution. (PR/366)
 * Don't complain that a target lacks `.$(EXEEXT)' when it has it.
 
-New in 1.7:
+New in 1.7 (2002-09-25):
 * Autoconf 2.54 is required.
 * `aclocal' and `automake' will no longer warn about obsolete
   configure macros.  This is done by `autoconf -Wobsolete'.
@@ -2975,7 +3053,9 @@ New in 1.7:
   distuninstallcheck, so it can be overridden easily.
 * Many bug fixes.
 
-New in 1.6.3:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New in 1.6.3 (2002-07-28):
 * Support for AM_INIT_GETTEXT([external])
 * Bug fixes, including:
   - Fix Automake's own `make install' so it works even if `ln' doesn't.
@@ -2983,7 +3063,7 @@ New in 1.6.3:
   - Erase configure.lineno during `make distclean'.
   - Erase YACC and LEX outputs during `make maintainer-clean'.
 
-New in 1.6.2:
+New in 1.6.2 (2002-06-14):
 * Many bug fixes, including:
   - Requiring the current version works.
   - Fix "$@" portability issues (for Zsh).
@@ -2993,7 +3073,7 @@ New in 1.6.2:
   - Fix handling of _OBJECTS variables for targets sharing source variables.
   - Check dependency mode for Java when AM_PROG_GCJ is used.
 
-New in 1.6.1:
+New in 1.6.1 (2002-04-11):
 * automake --output-dir is deprecated
 * Many bug fixes, including:
   - Don't choke on AM_LDFLAGS definitions.
@@ -3002,7 +3082,7 @@ New in 1.6.1:
     (e.g. AC_SUBST(mumble_LDFLAGS) when 'mumble' is not a target).
   - Fix the definition of AUTOMAKE and ACLOCAL in configure.
 
-New in 1.6:
+New in 1.6 (2002-03-06):
 * Autoconf 2.52 is required.
 * automake no longer run libtoolize.
   This is the job of autoreconf (from GNU Autoconf).
@@ -3040,7 +3120,9 @@ New in 1.6:
   This lets you have multiple versions installed simultaneously.
 * Support for parsers and lexers in subdirectories.
 
-New in 1.5:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New in 1.5 (2001-08-23):
 * Support for `configure.ac'.
 * Support for `else COND', `endif COND' and negated conditions `!COND'.
 * `make dist-all' is much faster.
@@ -3058,7 +3140,9 @@ New in 1.5:
 * Support for per-executable and per-library compilation flags
 * Many bug fixes
 
-New in 1.4:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New in 1.4 (1999-01-14):
 * Added support for the Fortran 77 programming language.
 * Re-indexed the Automake Texinfo manual.
 * Added `AM_FOOFLAGS' variable for each compiler invocation;
@@ -3070,7 +3154,7 @@ New in 1.4:
 * Maintainer mode now a conditional.  @MAINT@ is now an anachronism.
 * Bug fixes
 
-New in 1.3:
+New in 1.3 (1998-04-06):
 * Bug fixes
 * Better Cygwin32 support
 * Support for suffix rules with _SOURCES variables
@@ -3086,7 +3170,7 @@ New in 1.3:
 * DESTDIR support at "make install" time
 * Improved ansi2knr support; you must use the latest ansi2knr.c (included)
 
-New in 1.2:
+New in 1.2 (1997-06-24):
 * Bug fixes
 * Better DejaGnu support
 * Added no-installinfo option
@@ -3121,10 +3205,12 @@ New in 1.2:
 * Cygwin32 support
 * Conditionals in Makefile.am, from Ian Taylor
 
-New in 1.0:
+New in 1.0 (1996-06-08):
 * Bug fixes
 * distcheck target runs install and installcheck targets
 * Added preliminary support for DejaGnu.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 New in 0.33:
 * More bug fixes
@@ -3248,7 +3334,7 @@ New in 0.20:
 
 -----
 
-Copyright (C) 1995-2024 Free Software Foundation, Inc.
+Copyright (C) 1995-2025 Free Software Foundation, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

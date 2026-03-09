@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2024 Free Software Foundation, Inc.
+# Copyright (C) 2011-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,8 +81,7 @@ do_check
 
 echo "#! $PERL -w" > foo.test
 cat >> foo.test <<'END'
-use warnings FATAL => 'all';
-use strict;
+use strict; use warnings;
 
 open (FD3, "<&=3") or die "opening FD3: $!";
 open (FD4, ">&=4") or die "opening FD4: $!";

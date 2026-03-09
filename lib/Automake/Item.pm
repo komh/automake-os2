@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2024 Free Software Foundation, Inc.
+# Copyright (C) 2003-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,9 +15,7 @@
 
 package Automake::Item;
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
+use 5.006; use strict; use warnings;
 
 use Carp;
 
@@ -116,10 +114,10 @@ sub set ($$$)
 
 =item C<$var-E<gt>conditions>
 
-Return an L<Automake::DisjConditions> describing the conditions that
+Return an L<Automake::DisjConditions> describing the conditions
 that an item is defined in.
 
-These are all the conditions for which is would be safe to call
+These are all the conditions for which it would be safe to call
 C<rdef>.
 
 =cut

@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2024 Free Software Foundation, Inc.
+# Copyright (C) 2011-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ END
 
 echo "#! $PERL -w" > bar.test
 cat >>bar.test <<'END'
-use warnings FATAL => 'all';
 use strict;
+use warnings;
 open(FD8, ">&=8") or die "$!";
 open(FD9, ">&=9") or die "$!";
 print FD8 "  $0: 8888\n";

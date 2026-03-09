@@ -1,5 +1,5 @@
 ## automake - create Makefile.in from Makefile.am
-## Copyright (C) 2001-2024 Free Software Foundation, Inc.
+## Copyright (C) 2001-2025 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ am__common_driver_flags = \
 # To be inserted before the command running the test.  Creates the
 # directory for the log if needed.  Stores in $dir the directory
 # containing $f, in $tst the test, in $log the log.  Executes the
-# developer- defined test setup AM_TESTS_ENVIRONMENT (if any), and
+# developer-defined test setup AM_TESTS_ENVIRONMENT (if any), and
 # passes TESTS_ENVIRONMENT.  Set up options for the wrapper that
 # will run the test scripts (or their associated LOG_COMPILER, if
 # thy have one).

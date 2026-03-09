@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2024 Free Software Foundation, Inc.
+# Copyright (C) 2011-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ test $(LC_ALL=C date '+%u') -gt 0 && test $(LC_ALL=C date '+%u') -lt 8 \
   && month=$(LC_ALL=C date '+%B') && test -n "$month" \
   && year=$(LC_ALL=C date '+%Y')  && test -n "$year" \
   || skip_ "'date' is not POSIX-compliant enough"
+#
 day=$(echo "$day" | sed 's/^0//')
 
 cat > configure.ac << END
