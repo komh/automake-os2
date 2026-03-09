@@ -1,5 +1,5 @@
 ## -*- makefile-automake -*-
-## Copyright (C) 1995-2024 Free Software Foundation, Inc.
+## Copyright (C) 1995-2025 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ AM_PL_LOG_FLAGS = -Mstrict -w
 
 TAP_LOG_DRIVER = AM_TAP_AWK='$(AWK)' $(SHELL) $(srcdir)/lib/tap-driver.sh
 
-AM_TAP_LOG_DRIVER_FLAGS = --merge
+AM_TAP_LOG_DRIVER_FLAGS = --merge --stderr-prefix '@%:@[stderr]'
 
 EXTRA_DIST += %D%/README %D%/ax/is %D%/ax/is_newest %D%/ax/deltree.pl
 

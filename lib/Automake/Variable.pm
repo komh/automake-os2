@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2024 Free Software Foundation, Inc.
+# Copyright (C) 2003-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,10 +15,7 @@
 
 package Automake::Variable;
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
-
+use 5.006; use strict; use warnings;
 use Carp;
 use Exporter;
 
@@ -183,6 +180,8 @@ my %_ac_macro_for_var =
    CXX => 'AC_PROG_CXX',
    CXXFLAGS => 'AC_PROG_CXX',
    F77 => 'AC_PROG_F77',
+   A68 => 'AC_PROG_A68',
+   A68FLAGS => 'AC_PROG_A68',
    FFLAGS => 'AC_PROG_F77',
    FC => 'AC_PROG_FC',
    FCFLAGS => 'AC_PROG_FC',
@@ -829,11 +828,11 @@ C<$where>: the C<Location> of the assignment.
 
 C<$pretty>: whether C<$value> should be pretty printed (one of
 C<VAR_ASIS>, C<VAR_PRETTY>, C<VAR_SILENT>, or C<VAR_SORTED>, defined
-by by L<Automake::VarDef>).  C<$pretty> applies only to real
+by L<Automake::VarDef>).  C<$pretty> applies only to real
 assignments.  I.e., it does not apply to a C<+=> assignment (except
 when part of it is being done as a conditional C<=> assignment).
 
-This function will all run any hook registered with the C<hook>
+This function will run any hook registered with the C<hook>
 function.
 
 =cut

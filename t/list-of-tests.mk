@@ -2,7 +2,7 @@
 ## testsuite.  This fragment is meant to be included by the Makefile.am,
 ## but also to be executed directly by make when bootstrapping automake.
 
-## Copyright (C) 2011-2024 Free Software Foundation, Inc.
+## Copyright (C) 2011-2025 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ handwritten_TESTS = \
 t/get-sysconf.sh \
 $(perl_TESTS) \
 t/instspc.tap \
+t/a68-demo.sh \
 t/aclocal.sh \
 t/aclocal-I-order-1.sh \
 t/aclocal-I-order-2.sh \
@@ -404,6 +405,7 @@ t/deprecated-acinit.sh \
 t/destdir.sh \
 t/dir-named-obj-is-bad.sh \
 t/discover.sh \
+t/dist-bzip3.sh \
 t/dist-formats.tap \
 t/dist-lzma.sh \
 t/dist-tarZ.sh \
@@ -1185,6 +1187,7 @@ t/tap-planskip-whitespace.sh \
 t/tap-planskip-badexit.sh \
 t/tap-planskip-bailout.sh \
 t/tap-planskip-later-errors.sh \
+t/tap-stderr-prefix.tap \
 t/tap-test-number-0.sh \
 t/tap-recheck-logs.sh \
 t/tap-result-comment.sh \

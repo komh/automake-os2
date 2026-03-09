@@ -1,7 +1,7 @@
 #!@PERL@
 # aclocal - create aclocal.m4 by scanning configure.ac      -*- perl -*-
 # @configure_input@
-# Copyright (C) 1996-2024 Free Software Foundation, Inc.
+# Copyright (C) 1996-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,9 +19,7 @@
 # Written by Tom Tromey <tromey@redhat.com>, and
 # Alexandre Duret-Lutz <adl@gnu.org>.
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
+use 5.006; use strict; use warnings;
 
 BEGIN
 {

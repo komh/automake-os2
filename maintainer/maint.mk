@@ -1,6 +1,6 @@
 # Maintainer makefile rules for Automake.
 #
-# Copyright (C) 1995-2024 Free Software Foundation, Inc.
+# Copyright (C) 1995-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -182,11 +182,11 @@ print-release-type:
 git-tag-release: maintainer-check
 	@set -e -u; \
 	case '$(AM_TAG_DRYRUN)' in \
-	  ""|[nN]|[nN]o|NO) run="";; \
-	  *) run="echo Running:";; \
+	  ""|[nN]|[nN]o|NO) run=;; \
+	  *) run="echo Would run:";; \
 	esac; \
 	$(git_must_have_clean_workdir); \
-	$$run $(GIT) tag -s "v$(VERSION)" -m "$(PACKAGE) $(VERSION)"
+	set -x; $$run $(GIT) tag -s "v$(VERSION)" -m "$(PACKAGE) $(VERSION)"
 
 git-upload-release:
 	@# Check this is a version we can cut a release (either test
@@ -205,8 +205,8 @@ git-upload-release:
 	@# Upload it to the correct FTP repository.
 	@$(determine_release_type) \
 	  && dest=$$dest.gnu.org:automake \
-	  && echo "Will upload to $$dest: $(DIST_ARCHIVES)" \
-	  && $(srcdir)/lib/gnupload $(GNUPLOADFLAGS) --to $$dest \
+	  && echo "Uploading to $$dest: $(DIST_ARCHIVES)" \
+	  && set -x && $(srcdir)/lib/gnupload $(GNUPLOADFLAGS) --to $$dest \
 	                            $(DIST_ARCHIVES)
 
 .PHONY: print-release-type git-upload-release git-tag-release
@@ -348,11 +348,19 @@ CLEANFILES += announcement
 # --------------------------------------------------------------------- #
 
 # Git repositories on Savannah.
-git-sv-host = git.savannah.gnu.org
+# In May 2025, we switched away from https://git.savannah.gnu.org/gitweb
+# because it has become unreliable, often returning 502 Bad Gateway
+# due to endless crawler bombardment of Savannah. The new
+# https://cgi.git.savannah.gnu.org url is an experimental read-only
+# mirror. It would probably be better to just switch to assuming local
+# checkouts instead of retrieving via a web interface. See thread around
+# https://lists.gnu.org/archive/html/savannah-hackers-public/2025-05/msg00040.html
+
+git-sv-host = cgit.git.savannah.gnu.org/cgit
 
 # Some repositories we sync files from.
-SV_GIT_CF = 'https://$(git-sv-host)/gitweb/?p=config.git;a=blob_plain;hb=HEAD;f='
-SV_GIT_GL = 'https://$(git-sv-host)/gitweb/?p=gnulib.git;a=blob_plain;hb=HEAD;f='
+SV_GIT_CF = https://$(git-sv-host)/config.git/plain/
+SV_GIT_GL = https://$(git-sv-host)/gnulib.git/plain/
 
 # Files that we fetch and which we compare against.
 # Note that the 'lib/COPYING' file and help2man must still be synced by hand.
@@ -374,7 +382,7 @@ FETCHFILES = \
 fetch:
 	$(AM_V_at)rm -rf Fetchdir
 	$(AM_V_at)mkdir Fetchdir
-	$(AM_V_GEN)set -e; \
+	$(AM_V_GEN)set -ex; \
 	if $(AM_V_P); then wget_opts=; else wget_opts=-nv; fi; \
 	for url in $(FETCHFILES); do \
 	   file=`printf '%s\n' "$$url" | sed 's|^.*/||; s|^.*=||'`; \

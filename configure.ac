@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1995-2024 Free Software Foundation, Inc.
+# Copyright (C) 1995-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.69])
-AC_INIT([GNU Automake], [1.17], [bug-automake@gnu.org])
+AC_INIT([GNU Automake], [1.18.1], [bug-automake@gnu.org])
 
 AC_CONFIG_SRCDIR([bin/automake.in])
 AC_CONFIG_AUX_DIR([lib])
@@ -44,12 +44,12 @@ AM_INIT_AUTOMAKE([-Wall -Werror dist-xz filename-length-max=99
 
 # Keep this on a line of its own, since it must be found and processed
 # by the 'update-copyright' rule in our Makefile.
-RELEASE_YEAR=2024
+RELEASE_YEAR=2025
 AC_SUBST([RELEASE_YEAR])
 
 # The API version is the base version.  We must guarantee
 # compatibility for all releases with the same API version.
-APIVERSION=1.17
+APIVERSION=1.18
 AC_SUBST([APIVERSION])
 
 AC_SUBST([pkgvdatadir], ["\${datadir}/$PACKAGE-$APIVERSION"])
@@ -73,9 +73,11 @@ case $PERL in
    AC_MSG_ERROR([perl not found])
    ;;
  *' '* | *'	'*)
-  AC_MSG_ERROR([The path to your Perl contains spaces or tabs.
-This would cause build failures later or unusable programs.
-Please use a path without spaces and try again.])
+  AC_MSG_WARN([The path to your Perl contains spaces or tabs.
+This will likely cause build failures later or unusable programs.
+Unless you're specifying a full string for a #! line,
+as in "/usr/bin/env perl",
+please use a path without spaces and try again.])
   ;;
 esac
 
@@ -561,6 +563,16 @@ if test "$GNU_F77" != false; then
   AS_IF([AM_RUN_LOG([$GNU_F77 --version && $GNU_F77 -v])], [],
         [AC_MSG_WARN([botched installation for GNU Fortran 77 compiler])
         _AM_SKIP_COMP_TESTS([GNU Fortran 77])])
+fi
+
+# GNU Algol 68 compiler.
+AC_ARG_VAR([GNU_A68],    [GNU Algol 68 compiler])
+AC_ARG_VAR([GNU_A68FLAGS], [GNU Algol 68 compiler flags])
+AC_CHECK_TOOLS([GNU_A68], [ga68], [false])
+if test "$GNU_A68" != false; then
+   AS_IF([AM_RUN_LOG([$GNU_A68 --version])], [],
+   [AC_MSG_WARN([botched installation for GNU Algol 68 compiler])
+   _AM_SKIP_COMP_TESTS([GNU Algol 68])])
 fi
 
 # GNU Java compiler.

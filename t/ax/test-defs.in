@@ -1,7 +1,7 @@
 # -*- shell-script -*-
 # @configure_input@
 #
-# Copyright (C) 1996-2024 Free Software Foundation, Inc.
+# Copyright (C) 1996-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,10 @@
 # IMPORTANT NOTES AND REQUIREMENTS
 #   - Multiple inclusions of this file should be idempotent.
 #   - This code has to be 'set -e' clean.
+
+# Ensure a consistent test environment by ignoring the system's Autoconf
+# `configure` site defaults.
+CONFIG_SITE=/dev/null; export CONFIG_SITE
 
 # See whether the current test script is expected to use TAP or not.
 # Use a sensible default, while allowing the scripts to override this check.

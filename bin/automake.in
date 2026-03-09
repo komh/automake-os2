@@ -1,7 +1,7 @@
 #!@PERL@
 # automake - create Makefile.in from Makefile.am            -*- perl -*-
 # @configure_input@
-# Copyright (C) 1994-2024 Free Software Foundation, Inc.
+# Copyright (C) 1994-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,9 +22,7 @@
 
 package Automake;
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
+use 5.006; use strict; use warnings;
 
 BEGIN
 {
@@ -1023,6 +1021,24 @@ register_language ('name' => 'java',
 		   'pure' => 1,
 		   'extensions' => ['.java', '.class', '.zip', '.jar']);
 
+# Algol 68 in GCC
+register_language ('name' => 'a68',
+                   'Name' => 'Algol 68',
+                   'config_vars' => ['A68'],
+                   'linker' => 'A68LINK',
+                   'link' => '$(A68LD) $(AM_A68FLAGS) $(A68FLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@',
+		   'flags' => ['A68FLAGS'],
+		   'compile' => '$(A68) $(AM_A68FLAGS) $(A68FLAGS)',
+		   'ccer' => 'A68',
+		   'compiler' => 'A68COMPILE',
+		   'compile_flag' => '-c',
+		   'output_flag' => '-o',
+		   'libtool_tag' => 'A68',
+		   'lder' => 'A68LD',
+		   'ld' => '$(A68)',
+		   'pure' => 1,
+		   'extensions' => ['.a68']);
+
 ################################################################
 
 # Error reporting functions.
@@ -1045,7 +1061,7 @@ sub err_ac
 
 # msg_am ($CHANNEL, $MESSAGE, [%OPTIONS])
 # ---------------------------------------
-# Messages about about the current Makefile.am.
+# Messages about the current Makefile.am.
 sub msg_am
 {
   my ($channel, $msg, %opts) = @_;
@@ -1054,7 +1070,7 @@ sub msg_am
 
 # msg_ac ($CHANNEL, $MESSAGE, [%OPTIONS])
 # ---------------------------------------
-# Messages about about configure.ac.
+# Messages about configure.ac.
 sub msg_ac
 {
   my ($channel, $msg, %opts) = @_;
@@ -3856,7 +3872,7 @@ sub handle_dist ()
     {
       my $archive_defined = option 'no-dist-gzip' ? 0 : 1;
       $archive_defined ||=
-	grep { option "dist-$_" } qw(shar zip tarZ bzip2 lzip xz zstd);
+	grep { option "dist-$_" } qw(shar zip tarZ bzip2 bzip3 lzip xz zstd);
       error (option 'no-dist-gzip',
 	     "no-dist-gzip specified but no dist-* specified,\n"
 	     . "at least one archive format must be enabled")
@@ -4549,8 +4565,7 @@ sub handle_gettext ()
 	if ($seen_gettext_external && ! $seen_gettext_intl
 	    && grep ($_ eq 'intl', @subdirs));
     }
-
-  require_file ($ac_gettext_location, GNU, 'ABOUT-NLS');
+  require_file ($ac_gettext_location, GNITS, 'ABOUT-NLS');
 }
 
 # Emit makefile footer.
@@ -5565,7 +5580,8 @@ EOF
 	  if (0 == keys %libtool_tags)
 	    {
 	      # Hardcode the tags supported by Libtool 1.5.
-	      %libtool_tags = (CC => 1, CXX => 1, GCJ => 1, F77 => 1);
+	      %libtool_tags = (CC => 1, CXX => 1, GCJ => 1, F77 => 1,
+     	                       A68 => 1);
 	    }
 	}
     }
@@ -5652,8 +5668,15 @@ sub scan_autoconf_files ()
     {
       require_conf_file ($required_aux_file{$file}->get, FOREIGN, $file)
     }
-  err_am "'install.sh' is an anachronism; use 'install-sh' instead"
-    if -f $config_aux_dir . '/install.sh';
+  
+  my $auxdir_install_dot_sh = "$config_aux_dir/install.sh";
+  # Maybe there is a way to report the line number of the
+  # AC_CONFIG_AUX_DIR call in configure.ac? Don't know.
+  msg 'obsolete', "$configure_ac", "'install.sh' is an anachronism\n"
+                                 . "  (found in $auxdir_install_dot_sh,\n"
+                                 . "   defined by AC_CONFIG_AUX_DIR);\n"
+                                 . "  use 'install-sh' instead"
+    if -f $auxdir_install_dot_sh;
 
   # Preserve dist_common for later.
   @configure_dist_common = @dist_common;
@@ -5938,7 +5961,7 @@ sub lang_yacc_target_hook
     my ($self, $aggregate, $output, $input, %transform) = @_;
 
     # If some relevant *YFLAGS variable contains the '-d' flag, we'll
-    # have to to generate special code.
+    # have to generate special code.
     my $yflags_contains_minus_d = 0;
 
     foreach my $pfx ("", "${aggregate}_")
@@ -6058,7 +6081,8 @@ sub resolve_linker
 {
     my (%linkers) = @_;
 
-    foreach my $l (qw(GCJLINK OBJCXXLINK CXXLINK F77LINK FCLINK OBJCLINK UPCLINK))
+    foreach my $l (qw(GCJLINK OBJCXXLINK CXXLINK F77LINK FCLINK
+                      OBJCLINK UPCLINK A68LINK))
     {
 	return $l if defined $linkers{$l};
     }
@@ -6177,11 +6201,12 @@ my %_am_macro_for_cond =
   (
   AMDEP => "one of the compiler tests\n"
 	   . "    AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC, AC_PROG_OBJCXX,\n"
-	   . "    AM_PROG_AS, AM_PROG_GCJ, AM_PROG_UPC",
+	   . "    AM_PROG_AS, AM_PROG_GCJ, AM_PROG_UPC, AM_PROG_A68",
   am__fastdepCC => 'AC_PROG_CC',
   am__fastdepCCAS => 'AM_PROG_AS',
   am__fastdepCXX => 'AC_PROG_CXX',
   am__fastdepGCJ => 'AM_PROG_GCJ',
+  am__fastdepA68 => 'AM_PROG_A68',
   am__fastdepOBJC => 'AC_PROG_OBJC',
   am__fastdepOBJCXX => 'AC_PROG_OBJCXX',
   am__fastdepUPC => 'AM_PROG_UPC'
@@ -6872,7 +6897,7 @@ sub transform ($\%)
     {
       my $neg = ($1 eq '!') ? 1 : 0;
       my $val = transform_token ($token, %$transform, $2);
-      return (!!$val == $neg) ? '##%' : '';
+      return ((!!$val) == $neg) ? '##%' : '';
     }
   else
     {
@@ -6898,12 +6923,13 @@ sub preprocess_file
 		 'XZ'          => !! option 'dist-xz',
 		 'LZIP'        => !! option 'dist-lzip',
 		 'BZIP2'       => !! option 'dist-bzip2',
+		 'BZIP3'       => !! option 'dist-bzip3',
 		 'COMPRESS'    => !! option 'dist-tarZ',
 		 'GZIP'        =>  ! option 'no-dist-gzip',
 		 'SHAR'        => !! option 'dist-shar',
 		 'ZIP'         => !! option 'dist-zip',
 		 'ZSTD'        => !! option 'dist-zstd',
-		 'DIST_BUILT_SOURCES' => !! option 'dist-built-sources',
+		 'DIST_BUILT_SOURCES' => ! option 'no-dist-built-sources',
 
 		 'INSTALL-INFO' =>  ! option 'no-installinfo',
 		 'INSTALL-MAN'  =>  ! option 'no-installman',
@@ -7530,8 +7556,7 @@ sub is_make_dir
 ################################################################
 
 # Find the aux dir.  This should match the algorithm used by
-# ./configure. (See the Autoconf documentation for for
-# AC_CONFIG_AUX_DIR.)
+# ./configure. See the Autoconf documentation for AC_CONFIG_AUX_DIR.
 sub locate_aux_dir ()
 {
   if (! $config_aux_dir_set_in_configure_ac)

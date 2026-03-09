@@ -25,7 +25,7 @@ This manual is for GNU Automake (version @value{VERSION},
 @value{UPDATED}), a program that creates GNU standards-compliant
 Makefiles from template files.
 
-Copyright @copyright{} 1995--2024 Free Software Foundation, Inc.
+Copyright @copyright{} 1995--2025 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -230,6 +230,7 @@ Building Programs and Libraries
 * Fortran 9x Support::          Compiling Fortran 9x sources
 * Java Support with gcj::       Compiling Java sources using gcj
 * Vala Support::                Compiling Vala sources
+* Algol 68 Support::            Compiling Algol 68 sources
 * Support for Other Languages:: Compiling other languages
 * Dependencies::                Automatic dependency tracking
 * EXEEXT::                      Support for executable extensions
@@ -677,7 +678,7 @@ Furthermore it may help to diagnose an incomplete installation.
 
 Presently most packages do not have any @code{installcheck} tests
 because the existence of @code{installcheck} is little known, and its
-usefulness is neglected.  Our little toy package is no better: @code{make
+usefulness is neglected.  Our toy package is no better: @code{make
 installcheck} does nothing.
 
 @node Standard Targets
@@ -690,37 +691,40 @@ Build System: @code{make}, @code{make check}, @code{make install}, and
 @dfn{targets}.  @code{make} is a shorthand for @code{make all},
 @code{all} being the default target in the GNU Build System.
 
-Here is a list of the most useful targets that the GNU Coding Standards
-specify.
+Here is a list of the most commonly useful targets that the GNU Coding
+Standards specify.
 
 @table @code
 @item make all
 @trindex all
 Build programs, libraries, documentation, etc.@: (same as @code{make}).
+
 @item make install
 @trindex install
 Install what needs to be installed, copying the files from the
 package's tree to system-wide directories.
-@item make install-strip
-@trindex install-strip
-Same as @code{make install}, then strip debugging symbols.  Some
-users like to trade space for useful bug reports@enddots{}
+
 @item make uninstall
 @trindex uninstall
 The opposite of @code{make install}: erase the installed files.
 (This needs to be run from the same build tree that was installed.)
+
 @item make clean
 @trindex clean
 Erase from the build tree the files built by @code{make all}.
+
 @item make distclean
 @trindex distclean
 Additionally erase anything @code{./configure} created.
+
 @item make check
 @trindex check
 Run the test suite, if any.
+
 @item make installcheck
 @trindex installcheck
 Check the installed programs or libraries, if supported.
+
 @item make dist
 @trindex dist
 Recreate @file{@var{package}-@var{version}.tar.gz} from all the source
@@ -1666,7 +1670,7 @@ mailing list of your package, or your own mail address.
 The argument to @code{AM_INIT_AUTOMAKE} is a list of options for
 @command{automake} (@pxref{Options}).  @option{-Wall} and
 @option{-Werror} ask @command{automake} to turn on all warnings and
-report them as errors.  We are speaking of @strong{Automake} warnings
+report them as errors.  We are speaking of @emph{Automake} warnings
 here, such as dubious instructions in @file{Makefile.am}.  This has
 absolutely nothing to do with how the compiler will be called, even
 though it may support options with similar names.  Using @option{-Wall
@@ -2414,7 +2418,7 @@ to provide the user with more context and information.
 @cmindex mkinstalldirs
 This script used to be a wrapper around @samp{mkdir -p}, which is not
 portable.  Now we prefer to use @samp{install-sh -d} when @command{configure}
-finds that @samp{mkdir -p} does not work, this makes one less script to
+finds that @samp{mkdir -p} does not work; this makes for one less script to
 distribute.
 
 For backward compatibility @file{mkinstalldirs} is still used and
@@ -2655,7 +2659,7 @@ therefore @command{autoconf} must be in your @env{PATH}.  If there is
 an @env{AUTOCONF} variable in your environment it will be used
 instead of @command{autoconf}; this allows you to select a particular
 version of Autoconf.  By the way, don't misunderstand this paragraph:
-@command{automake} runs @command{autoconf} to @strong{scan} your
+@command{automake} runs @command{autoconf} to @emph{scan} your
 @file{configure.ac}; this won't build @file{configure} and you still
 have to run @command{autoconf} yourself for this purpose.
 
@@ -4848,6 +4852,7 @@ to build programs and libraries.
 * Fortran 9x Support::          Compiling Fortran 9x sources
 * Java Support with gcj::       Compiling Java sources using gcj
 * Vala Support::                Compiling Vala sources
+* Algol 68 Support::            Compiling Algol 68 sources
 * Support for Other Languages::  Compiling other languages
 * Dependencies::                Automatic dependency tracking
 * EXEEXT::                      Support for executable extensions
@@ -4944,9 +4949,12 @@ and Lex}.
 
 If you need to link against libraries that are not found by
 @command{configure}, you can use @code{LDADD} to do so.  This variable is
-used to specify additional objects or libraries to link with; it is
-inappropriate for specifying specific linker flags; you should use
-@code{AM_LDFLAGS} for this purpose.
+used to specify additional objects or libraries to link with.
+Libraries to link with can be indicated either as file names or
+through @code{-L} and @code{-l} options.
+
+For other linker options (not @code{-L} or @code{-l}), @code{LDADD}
+is inappropriate.  You should use @code{AM_LDFLAGS} for this purpose.
 @vindex LDADD
 @vindex AM_LDFLAGS
 
@@ -7178,6 +7186,40 @@ Note that currently, you cannot use per-target @code{*_VALAFLAGS}
 (@pxref{Renamed Objects}) to produce different C files from one Vala
 source file.
 
+@node Algol 68 Support
+@section Algol 68 Support
+
+@cindex Algol 68 support
+@cindex Support for Algol 68
+
+Automake includes support for Algol 68, using GCC.
+
+Any package including Algol 68 code must define the output variable
+@code{A68} in @file{configure.ac}; the simplest way to do this is to use
+the @code{AC_PROG_A68} macro (@pxref{Particular Programs, , Particular
+Program Checks, autoconf, The Autoconf Manual}).
+
+A few additional variables are defined when an Algol 68 source file is
+seen:
+
+@vtable @code
+@item A68
+The name of the Algol 68 compiler.
+
+@item A68FLAGS
+Any flags to pass to the Algol 68 compiler.
+
+@item AM_A68FLAGS
+The maintainer's variant of @code{A68FLAGS}.
+
+@item A68COMPILE
+The command used to compile an Algol 68 source file.  The file name is
+appended to form the complete command line.
+
+@item A68LINK
+The command used to link a pure Algol 68 program or shared library.
+
+@end vtable
 
 @node Support for Other Languages
 @comment  node-name,  next,  previous,  up
@@ -8288,7 +8330,7 @@ All of these targets can be extended using @samp{-local} rules
 @cindex @code{EDITION} Texinfo flag
 @cindex @code{UPDATED-MONTH} Texinfo flag
 
-@cindex @file{mdate-sh}
+@cindex @file{mdate-sh}, Automake helper script
 
 If a @file{.texi} file @code{@@include}s @file{version.texi} (actually
 any file named @file{vers...texi}, then that file will be
@@ -8301,7 +8343,7 @@ Texinfo flags you can reference using @code{@@value@{EDITION@}},
 @item EDITION
 @itemx VERSION
 Both of these flags hold the version number of your program.  They are
-kept separate for clarity.
+kept separate for historical reasons.
 
 @item UPDATED
 This holds the date the primary @file{.texi} file was last modified.
@@ -8818,10 +8860,13 @@ archives.
 @vindex TAR_OPTIONS
 With GNU tar, you can also set the environment (or @code{Makefile.am})
 variable @code{TAR_OPTIONS} to pass options to @code{tar}.  One common
-case for this is wanting to avoid using the local user's uid and gid
-in the tar file, or the uid being larger than is supported by the tar
-format (not uncommon nowadays). This can be done with, for example>
+case for using this is to avoid having the local user's uid and gid in
+the tar file, or the uid being larger than is supported by the tar
+format. This can be done with, for example:
 
+@cindex tar uid/gid setting
+@cindex uid/gid, setting for tar
+@cindex too-large uid/gid for tar
 @example
 TAR_OPTIONS = --owner=0 --group=0
 export TAR_OPTIONS
@@ -8829,8 +8874,11 @@ export TAR_OPTIONS
 
 @noindent
 The @code{export} (a GNU make feature) is necessary to pass the
-variable in the environment to the @code{tar} invocation.
-(For more discussion, see @url{https://bugs.gnu.org/19615}.)
+variable in the environment to the @code{tar} invocation. Another
+possible fix is to use the @code{tar-pax} option
+(@pxref{tar-formats}), though this reduces portability.
+(For more discussion, see @url{https://bugs.gnu.org/19615}
+and @url{https://bugs.gnu.org/73316}.)
 
 For the most part, the files to distribute are automatically
 found by Automake:
@@ -9400,6 +9448,14 @@ Generate a @samp{bzip2} tar archive of the distribution.  bzip2
 archives are usually smaller than gzipped archives.  By default, this
 rule makes @samp{bzip2} use a compression option of @option{-9}.  To
 make it use a different one, set the @env{BZIP2} environment variable.
+
+@item @code{dist-bzip3}
+@trindex dist-bzip3
+@cmindex bzip3
+@vindex BZIP3
+Generate a @samp{bzip3} tar archive of the distribution.  Unlike the
+other compression programs here, @command{bzip3} does not read any
+environment variables.
 
 @item @code{dist-lzip}
 @trindex dist-lzip
@@ -10480,6 +10536,7 @@ with the @samp{#} character) in the testsuite progress output too; by
 default, TAP diagnostics are only copied to the @file{.log} file.
 @item --no-comments
 Revert the effects of @option{--comments}.
+
 @item --merge
 Instruct the test driver to merge the test scripts' standard error into
 their standard output.  This is necessary if you want to ensure that
@@ -10488,9 +10545,41 @@ relative to test results; this can be of great help in debugging
 (especially if your test scripts are shell scripts run with shell
 tracing active).  As a downside, this option might cause the test
 harness to get confused if anything that appears on standard error
-looks like a test result.
+looks like a test result.  Use @option{--stderr-prefix} to prefix each
+line of standard error to avoid this problem.
+
 @item --no-merge
 Revert the effects of @option{--merge}.
+
+@item --stderr-prefix @var{STRING}
+Prefix each line of the test script's standard error with
+@code{@var{STRING}}.  Defaults to the empty string.  This option makes
+it possible to avoid parsing ambiguity when @option{--merge} is in use,
+but it can also be used without @option{--merge} to make it easier to
+read test log files.  When used with @option{--merge}, users will
+typically want to start @code{@var{STRING}} with @samp{#}, which starts
+a TAP comment.  The @samp{#} character is difficult to portably include
+in a @command{make} variable, so the following quadrigraph
+substitutions, copied from Autoconf (@pxref{Quadrigraphs, , , autoconf,
+The Autoconf Manual}), are performed on @code{@var{STRING}}:
+
+@table @samp
+@item @@%:@@
+Replaced with @samp{#}.
+@item @@&t@@
+Replaced with the empty string.  This makes it possible to include the
+literal characters @samp{@@%:@@} in the prefix (@samp{@@%@@&t@@:@@}, for
+example).
+@end table
+
+For example, the option @samp{--stderr-prefix "@@%:@@[stderr] "}
+passed on the command line will prefix each line of the test script's
+standard error with @samp{#[stderr] }.
+
+For more details on @option{--stderr-prefix} processing, especially
+the occasional output reordering due to a race condition, @pxref{TAP
+prefixing stderr}.
+
 @item --diagnostic-string @var{STRING}
 Change the string that introduces TAP diagnostics from the default value
 of ``@code{#}'' to @code{@var{STRING}}.  This can be useful if your
@@ -10504,7 +10593,18 @@ the ``official'' TAP protocol does not allow for such a customization; so
 don't use it if you can avoid it.
 @end table
 
-@noindent
+@menu
+* TAP setup and examples:: Setup and examples of TAP usage.
+* TAP stderr examples::    Examples of stderr issues and processing.
+* TAP prefixing stderr::   Details about @option{--stderr-prefix} processing.
+@end menu
+
+@node TAP setup and examples
+@subsubsection TAP setup and examples
+
+@cindex TAP setup, example of
+@cindex setting up TAP, example
+
 Here is an example of how the TAP driver can be set up and used.
 
 @c Keep in sync with tap-doc2.sh
@@ -10579,6 +10679,140 @@ PASS: baz.test 1
 % @kbd{echo exit status: $?}
 exit status: 0
 @end example
+
+@node TAP stderr examples
+@subsubsection TAP stderr examples
+
+@cindex TAP stderr example
+@cindex stderr example in TAP
+
+Here is a sequence of examples showing the issue with merging stdout
+and stderr, and the resolution with @option{--stderr-prefix}.  Read
+the comments for specifics.
+
+@example
+% @kbd{cat stderr-demo.test}
+#!/bin/sh
+echo 'ok 1'
+# These sleeps help highlight the reordering of standard output and
+# standard error lines that can happen if --merge is not used.
+sleep 1
+# Note that this is a diagnostic message written to standard error, so
+# it should not affect the tests.  However, it will break the tests if
+# --merge is used without --stderr-prefix because "Bail out!" will be
+# interpreted as a TAP directive.
+echo 'Bail out! (this should not actually bail out)' >&2
+sleep 1
+echo 'ok 2'
+echo '1..2'
+
+% @kbd{make check TESTS=stderr-demo.test}
+...
+PASS: stderr-demo.test 1
+PASS: stderr-demo.test 2
+...
+
+% @kbd{cat stderr-demo.log}
+Bail out! (this should not actually bail out)
+ok 1
+PASS: stderr-demo.test 1
+ok 2
+PASS: stderr-demo.test 2
+1..2
+
+% @kbd{make check TESTS=stderr-demo.test \
+      TEST_LOG_DRIVER_FLAGS='--merge'}
+...
+PASS: stderr-demo.test 1
+ERROR: stderr-demo.test - Bail out! (this should not actually bail out)
+...
+
+% @kbd{make check TESTS=stderr-demo.test \
+      TEST_LOG_DRIVER_FLAGS='--merge --stderr-prefix "@@%:@@[stderr] "'}
+...
+PASS: stderr-demo.test 1
+PASS: stderr-demo.test 2
+...
+
+% @kbd{cat stderr-demo.log}
+ok 1
+PASS: stderr-demo.test 1
+#[stderr] Bail out! (this should not actually bail out)
+ok 2
+PASS: stderr-demo.test 2
+1..2
+@end example
+
+@node TAP prefixing stderr
+@subsubsection TAP prefixing stderr
+
+@cindex TAP prefixing stderr
+@cindex prefixing stderr in TAP
+@cindex stderr prefixing in TAP
+@cindex race condition in stderr prefixing
+
+@c see https://bugs.gnu.org/72536 for this feature and discussion.
+
+When using the above @option{--stderr-prefix} TAP option, the test
+program's standard error lines might occasionally be processed out of
+order relative to the test program's standard output lines, even when
+@option{--merge} is also used.  This can cause confusion when reading a
+test's log because a stdout line might appear earlier (or later) than a
+stderr line despite being output by the test program after (or before)
+the stderr line.  This reordering can be due to many factors, including:
+
+@itemize @bullet
+@item
+Output buffering in the test program: The test program might be
+accumulating output data and writing it to the operating system in
+batches, not as soon as it is available.  You can try setvbuf(3) to
+change the buffering mode in the test program, or you can add regular
+flushes.  OS-specific utilities to control buffering may be available,
+such as stdbuf(1) on GNU/Linux systems.
+
+@item
+Input buffering in the TAP driver: The TAP driver relies on the awk(1)
+utility, and some awk implementations (notably mawk) aggressively buffer
+their input (the test program output).  This causes stderr lines to
+appear in the test log much earlier than stdout lines.  The
+@option{--merge} option addresses this by sending the stderr lines to
+awk along with the stdout lines, rendering awk's input buffering
+irrelevant.  (This issue also applies when @option{--stderr-prefix} is
+not used.)
+
+@item
+Concurrent processing of standard output and standard error: Due to a
+limitation of the shell command language, the TAP driver processes
+standard output in a different thread or process than standard error,
+causing a race condition.  Processing order is influenced by how the
+operating system schedules the two threads or processes for execution,
+which is outside the TAP driver's control.
+
+@item
+Line-based processing: When prefixing standard error, the TAP driver
+waits until a complete line is read from the test program before
+processing the line.  This reduces the chances that characters from a
+standard output line are mixed with characters from a standard error
+line, but it delays processing until the line terminator is encountered.
+@end itemize
+
+All stderr lines are still processed in order relative to other stderr
+lines, and the same goes for the stdout lines relative to other stdout
+lines.  So the reordering shouldn't break a package's TAP tests, since
+there's no reason to output TAP commands to stderr; even more so when
+stderr lines are prefixed.
+
+When troubleshooting a particular test, if you find the reordering is
+causing confusion, you can omit @option{--stderr-prefix}, or run the
+test program directly (not via the TAP driver) to get a more accurate
+understanding of output timing.
+
+Overall, though, the order of processing (and logging) should not
+differ from the order of the test program's write(2) calls by much.
+Out-of-order processing only happens if the test program writes to
+stdout then stderr but the kernel wakes up the TAP driver's
+thread/process that is reading stderr before it wakes up the TAP
+driver's thread/process that is reading stdout, or vice versa.
 
 @node Incompatibility with other TAP parsers and drivers
 @subsection Incompatibility with other TAP parsers and drivers
@@ -10905,6 +11139,12 @@ Cause @command{dejagnu}-specific rules to be generated.  @xref{DejaGnu Tests}.
 Hook @code{dist-bzip2} to @code{dist}.
 @trindex dist-bzip2
 
+@item @option{dist-bzip3}
+@cindex Option, @option{dist-bzip3}
+@opindex dist-bzip3
+Hook @code{dist-bzip3} to @code{dist}.
+@trindex dist-bzip3
+
 @item @option{dist-lzip}
 @cindex Option, @option{dist-lzip}
 @opindex dist-lzip
@@ -11060,7 +11300,7 @@ this directory.
 @opindex posix
 Generate the special target @code{.POSIX} as the first non-comment
 line in the @file{Makefile.in} files.  This alters the behavior of the
-@code{make} program.  @xref{Special targets,, make, The GNU Make
+@code{make} program.  @xref{Special targets,,, make, The GNU Make
 Manual}.
 
 @item @option{serial-tests}
@@ -11145,7 +11385,7 @@ the source file.  For instance, if the source file is
 These three mutually exclusive options select the tar format to use
 when generating tarballs with @samp{make dist}.  (The tar file created
 is then compressed according to the set of @option{no-dist-gzip},
-@option{dist-bzip2}, @option{dist-lzip}, @option{dist-xz},
+@option{dist-bzip2}, @option{dist-bzip3}, @option{dist-lzip}, @option{dist-xz},
 @option{dist-zstd} and @option{dist-tarZ} options in use.)
 
 These options must be passed as arguments to @code{AM_INIT_AUTOMAKE}
@@ -11153,7 +11393,7 @@ These options must be passed as arguments to @code{AM_INIT_AUTOMAKE}
 Automake will complain if it sees such options in an
 @code{AUTOMAKE_OPTIONS} variable.
 
-@option{tar-v7} selects the old V7 tar format.  This is the historical
+@option{tar-v7} selects the old V7 tar format.  This was the historical
 default.  This antiquated format is understood by all tar
 implementations and supports file names with up to 99 characters.  When
 given longer file names some tar implementations will diagnose the
@@ -11163,7 +11403,8 @@ directories.  When using this format, consider using the
 @option{filename-length-max=99} option to catch file names too long.
 
 @option{tar-ustar} selects the ustar format defined by POSIX
-1003.1-1988.  This format is old enough to be portable:
+1003.1-1988.  This format became the default in Automake version 1.18
+(released in 2025).
 As of 2018, it is supported by the native @code{tar} command on
 GNU, FreeBSD, NetBSD, OpenBSD, AIX, HP-UX, and Solaris, at least.
 It fully supports empty directories.  It can store file names with up
@@ -11174,8 +11415,8 @@ shorter than 256 characters.
 
 @option{tar-pax} selects the new pax interchange format defined by POSIX
 1003.1-2001.  It does not limit the length of file names.  However,
-this format is very young and should probably be restricted to
-packages that target only very modern platforms.
+this format is relatively young and should probably be restricted to
+packages that target modern platforms.
 As of 2018, this format is supported by the native @code{tar} command only
 on GNU, FreeBSD, and OpenBSD systems; it is not supported by the native
 @code{tar} command on NetBSD, AIX, HP-UX, or Solaris.
@@ -11338,12 +11579,12 @@ bin_PROGRAMS = doit
 doit_SOURCES = doit.foo
 @end example
 
-This was the simpler and more common case.  In other cases, you will
-have to help Automake to figure out which extensions you are defining your
+That is the simpler and more common case.  In other cases, you have to
+help Automake to figure out which extensions you are defining your
 suffix rule for.  This usually happens when your extension does not
-start with a dot.  Then, all you have to do is to put a list of new
-suffixes in the @code{SUFFIXES} variable @strong{before} you define your
-implicit rule.
+start with a dot.  Then, you have to put the list of new suffixes in
+the @code{SUFFIXES} variable @emph{before} you define your implicit
+rule.
 
 For instance, the following definition prevents Automake from misinterpreting
 the @samp{.idlC.cpp:} rule as an attempt to transform @file{.idlC} files into
@@ -12413,10 +12654,10 @@ older than the requested version.
 
 @heading What is in the API
 
-Automake's programming interface is not easy to define.  Basically it
-should include at least all @strong{documented} variables and targets
-that a @file{Makefile.am} author can use, any behavior associated with
-them (e.g., the places where @samp{-hook}'s are run), the command line
+Automake's programming interface is not easy to define.  It includes
+at least all documented variables and targets that a
+@file{Makefile.am} author can use, any behavior associated with them
+(e.g., the places where @samp{-hook}'s are run), the command line
 interface of @command{automake} and @command{aclocal}, @dots{}
 
 @heading What is not in the API

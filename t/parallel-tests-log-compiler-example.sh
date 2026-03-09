@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2024 Free Software Foundation, Inc.
+# Copyright (C) 2011-2025 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ LOG_COMPILER = ./wrapper-script
 AM_LOG_FLAGS = -d
 END
 
+# intentionally reversed += operator to provoke warning; see below.
 echo 'my $a =+ 2; exit (0);' > foo.pl
 echo 'import sys; sys.exit(0);' > bar.py
 : > baz
@@ -54,7 +55,11 @@ $AUTOMAKE -a
 ./configure
 
 st=0
-$MAKE check || st=$?
+
+# Because we're intentionally generating a warning, we explicitly unset
+# PERL5OPT so that PERL5OPT=-Mwarnings=FATAL,all in the environment
+# won't cause a fatal error. See ../HACKING.
+PERL5OPT= $MAKE check || st=$?
 cat foo.log
 cat bar.log
 cat baz.log

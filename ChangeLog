@@ -1,3 +1,800 @@
+2025-06-26  Karl Berry  <karl@freefriends.org>
+
+	maint: prepare for 1.18.1 release.
+
+	* configure.ac (AC_INIT): 1.18.1. (APIVERSION remains 1.18.)
+	* m4/amversion.m4: likewise (auto-updated).
+	* HACKING: tweak release info some more.
+	* NEWS: likewise.
+
+2025-06-25  Karl Berry  <karl@freefriends.org>
+
+	mdate-sh: ignore $SOURCE_DATE_EPOCH (again).
+
+	* lib/mdate-sh: pay no attention to SOURCE_DATE_EPOCH.
+	The previous change (2025-05-15) was a misunderstanding;
+	looking at SOURCE_DATE_EPOCH causes spurious makeinfo rebuilds:
+	https://lists.gnu.org/archive/html/automake/2025-06/msg00021.html
+	* t/mdate5.sh: remove check for this.
+	* t/txinfo-vtexi4.sh: likewise.
+	* doc/automake.texi (Texinfo): remove mention of this.
+	* NEWS: update.
+
+2025-06-25  Karl Berry  <karl@freefriends.org>
+
+	doc: key maintenance, wording.
+
+	* HACKING: mention a couple of links wrt key maintenance.
+	* doc/automake.texi: wording tweaks.
+
+2025-06-20  Bruno Haible  <bruno@clisp.org>
+
+	automake: improve debuggability of installcheck failures.
+
+	From https://bugs.gnu.org/78850.
+
+	* lib/am/progs.am (installcheck-%DIR%PROGRAMS): Show the cause of
+	each failure.
+	* lib/am/scripts.am (installcheck-%DIR%SCRIPTS): Likewise.
+	* NEWS: mention this.
+
+2025-06-20  Karl Berry  <karl@freefriends.org>
+
+	test: adapt tests for SOURCE_DATE_EPOCH.
+
+	From https://lists.gnu.org/archive/html/automake/2025-06/msg00016.html.
+
+	* t/mdate5.sh: allow years 19xx for old SOURCE_DATE_EPOCH.
+	* t/txinfo-vtexi3.sh: likewise.
+	* t/txinfo-vtexi4.sh: if SDE is set, use mdate-sh to parse it into
+	the expected UPDATED and UPDATED-MONTH values.
+	Report from Frederic Berat.
+	* NEWS: mention this.
+
+2025-06-19  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* lib/gendocs.sh: update with make fetch.
+	* lib/gitlog-to-changelog: likewise.
+	* lib/gnupload: likewise.
+	* lib/texinfo.tex: likewise.
+	* lib/update-copyright: likewise.
+
+2025-06-19  Collin Funk  <collin.funk1@gmail.com>
+
+	maint: silence 'time-stamp' warnings with bleeding-edge Emacs.
+
+	* contrib/tap-driver.pl:  Use "%Y" instead of "%:y" for the
+	'time-stamp-format' local variable.
+	* lib/compile: Likewise.
+	* lib/depcomp: Likewise.
+	* lib/install-sh: Likewise.
+	* lib/mdate-sh: Likewise.
+	* lib/missing: Likewise.
+	* lib/mkinstalldirs: Likewise.
+	* lib/py-compile: Likewise.
+	* lib/tap-driver.sh: Likewise.
+	* lib/test-driver: Likewise.
+	* lib/ylwrap: Likewise.
+
+2025-06-19  Karl Berry  <karl@freefriends.org>
+
+	doc: more release stuff in HACKING.
+
+	* HACKING: more on announcement and signature. Still incomplete.
+
+2025-05-31  Bruno Haible  <bruno@clisp.org>
+
+	doc: Reference POSIX:2024 for rm -f future requirement.
+
+	* NEWS-future: The previously "next" POSIX version is the current
+	POSIX (2024) now, requiring rm -f to be a no-op.
+
+2025-05-27  Karl Berry  <karl@freefriends.org>
+
+	maint: 1.18 released, version now 1.18.0.91.
+
+	* configure.ac (AC_INIT): now 1.18.0.91.
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION): 1.18.0.91 (auto-update).
+	* HACKING: release tweaks.
+
+2025-05-27  Karl Berry  <karl@freefriends.org>
+
+	maint: more verbose git-tag-release.
+
+	* maintainer/maint.mk (git-tag-release): always show command being run.
+
+2025-05-26  Karl Berry  <karl@freefriends.org>
+
+	maint: more 1.18 preparations.
+
+	* HACKING: it's the distcheck results that get distributed; tags.
+	* maintainer/maint.mk (git-tag-release, git-upload-release):
+	show commands that are being run.
+
+2025-05-26  Karl Berry  <karl@freefriends.org>
+
+	typo
+
+2025-05-26  Karl Berry  <karl@freefriends.org>
+
+	maint: prepare for 1.18 release.
+
+	* configure.ac (AC_INIT): 1.18
+	(APIVERSION): also 1.18.
+	* m4/amversion.m4: likewise (auto-updated).
+	* doc/automake.texi: missing comma in make xref.
+	* HACKING: tweak release info some more.
+	* NEWS: likewise.
+	* INSTALL: missed top-level update from make fetch.
+
+2025-05-23  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* maintainer/maint.mk (git-sv-host): switch to
+	cgit.git.savannah.gnu.org/cgit, since https://git.savannah.gnu.org
+	has become unreliable, due to AI crawler bombardment.
+	(SV_GIT_CF, SV_GIT_GL): update.
+	https://lists.gnu.org/archive/html/savannah-hackers-public/2025-05/msg00040.html
+
+	* lib/INSTALL: update with make fetch.
+	* lib/gendocs.sh: likewise.
+
+2025-05-21  Jose Marchesi  <jemarch@gnu.org>
+
+	automake: algol68: rename A68C and A68CFLAGS back to A68 and A68FLAGS.
+
+	From https://bugs.gnu.org/78518, discussion at 78481
+	(both automake-patches).
+
+	* bin/automake.in: Rename A68C and A68CFLAGS to A68 and A68FLAGS.
+	* doc/automake.texi: Likewise.
+	* configure.ac: Rename GNU_A68C and GNU_A68FLAGS to GNU_A68 and
+	GNU_A68FLAGS.
+	* lib/Automake/Variable.pm: Likewise.
+	* t/a68-demo.sh: Likewise.
+
+2025-05-21  Collin Funk  <collin.funk1@gmail.com>
+
+	test: skip test py-compile-usage instead of failing without python.
+
+	From https://bugs.gnu.org/78525 (automake-patches).
+
+	* t/py-compile-usage.sh: Add 'required=python' before sourcing
+	test-init.sh.
+
+2025-05-20  Karl Berry  <karl@freefriends.org>
+
+	mdate-sh: support $SOURCE_DATE_EPOCH.
+
+	From https://bugs.gnu.org/77805.
+
+	* lib/mdate-sh: if $SOURCE_DATE_EPOCH is set, use it
+	instead of the mtime of any file. Debian was removing
+	@value{UPDATED}, etc., from manuals because of varying output.
+	Try date --date, then date -r, then perl gmtime, then
+	fall back to the file's mtime.
+	Also, warn if more than one file argument is given.
+	(mon_to_month): factor out conversion of Jan to January.
+	* t/mdate5.sh: test it.
+	* doc/automake.texi (Texinfo): mention it.
+	* NEWS: mention it.
+
+2025-05-14  Bruno Haible  <bruno@clisp.org>
+
+	doc: Clarify where to put -L and -l options.
+
+	From https://bugs.gnu.org/78411.
+
+	* doc/automake.texi (Linking): Clarify that -L and -l options
+	belong in LDADD.
+
+2025-05-03  Reuben Thomas  <rrt@sc3d.org>
+
+	tap: fix typo in usage message.
+
+	* lib/tap-driver.sh: The usage message was missing a hyphen in
+	'--log-file'.
+
+2025-04-28  Karl Berry  <karl@freefriends.org>
+
+	automake: algol68: also rename [AM_]A68FLAGS to [AM_]A68CFLAGS.
+
+	From https://bugs.gnu.org/78033 (automake-patches).
+
+	* bin/automake.in (a68): change link and compile values.
+	* lib/Automake/Variable.pm: likewise rename.
+	* configure.ac: likewise rename.
+	* doc/automake.texi: likewise rename.
+
+2025-04-24  Jose Marchesi  <jemarch@gnu.org>
+
+	automake: algol68: rename A68 to A68C and AM_PROG_A68 to AM_PROG_A68C.
+
+	From https://bugs.gnu.org/78033 (automake-patches).
+
+	While upstreaming the Algol 68 autoconf support it was pointed
+	out that the shell variable A68 should be renamed to A68C and
+	that the macro AC_PROG_A68 should be renamed to AC_PROG_A68C.
+	This is to be more consistent to the support for other languages
+	like Go. This patch updates the Automake side.
+
+	The Algol 68 code snippets are also updated to use modern
+	stropping, which is the stropping regime now used by default by ga68.
+
+	* bin/automake.in (a68): change config_vars, libtool_tags et al.
+	* lib/Automake/Variable.pm: likewise rename.
+	* doc/automake.texi: likewise rename.
+	* t/a68-demo.sh: likewise modify.
+
+2025-04-18  Reuben Thomas  <rrt@sc3d.org>
+
+	doc: fix whitespace typo in comment.
+
+	* lib/am/check.am: remove a spurious space after a hyphen.
+
+2025-04-12  Karl Berry  <karl@freefriends.org>
+
+	maint: 1.17.92 pretest released, 1.17.93 for dev.
+
+	* configure.ac (AC_INIT): now 1.17.93.
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION): 1.17.93 (auto-update).
+	* HACKING: mention delay between upload and appearance on server.
+
+2025-04-11  Karl Berry  <karl@freefriends.org>
+
+	maint: doc fixes for 1.17.92 pretest.
+
+	* NEWS: forgot to update the version.
+	* HACKING: mention this.
+
+2025-04-11  Karl Berry  <karl@freefriends.org>
+
+	maint: doc and maintainer-check in preparation for 1.17.92.
+
+	* configure.ac (AC_INIT): now 1.17.92.
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION): 1.17.92 (auto-update).
+	* HACKING: release wording.
+
+2025-04-11  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* lib/texinfo.tex: update with make fetch.
+
+2025-04-09  Richard Hansen  <rhansen@rhansen.org>
+
+	test: force Autoconf config.site to /dev/null.
+
+	From https://bugs.gnu.org/76622 (automake-patches).
+
+	* t/ax/test-defs.in: Set `CONFIG_SITE' to `/dev/null' to avoid
+	the local system's Autoconf site defaults from breaking the test
+	environment. Original report from Nelson Beebe, 26 Feb 2025.
+	* NEWS: mention this.
+
+2025-04-09  Karl Berry  <karl@freefriends.org>
+
+	doc: wording, --news-file.
+
+	* doc/automake.texi: avoid @strong for emphasis; wording.
+	* HACKING: add --news-file option to sample announce-gen invocation.
+
+2025-03-13  Jose Marchesi  <jemarch@gnu.org>
+
+	doc: Algol 68 typo.
+
+	From https://bugs.gnu.org/76995 (automake-patches).
+
+	* doc/automake.texi (Algol 68 Support): Fortran 77 -> Algol 68.
+	(typo from #75807)
+
+2025-03-13  Karl Berry  <karl@freefriends.org>
+
+	dist: document bzip3 support.
+
+	More from https://bugs.gnu.org/73795 (automake-patches).
+
+	* doc/automake.texi (The Types of Distributions): add item for bzip3.
+	Analogous changes throughout.
+	* lib/am/distdir.am (dist-bzip3): bzip3 does not read any envvars;
+	don't set BZIP2.
+
+2025-02-25  Karl Berry  <karl@freefriends.org>
+
+	maint: 1.17.90 pretest released, 1.17.91 for dev.
+
+	* configure.ac (AC_INIT): now 1.17.91.
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION): 1.17.91 (auto-update).
+
+2025-02-25  Karl Berry  <karl@freefriends.org>
+
+	maint: doc and maintainer-check in preparation for 1.17.90.
+
+	* HACKING: mention thanks to individuals.
+	* NEWS: update for 1.17.90.
+	* configure.ac (AC_INIT): now 1.17.90.
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION): 1.17.90 (auto-update).
+	* maintainer/syntax-checks.mk (sc_tests_command_subst): allow
+	whitespace before # shell comment line.
+	(sc_tests_plain_sleep): emphasize using $sleep without a number;
+	only replace sleep 1 or sleep 2; longer than that would be fine.
+	* t/tap-stderr-prefix.tap: use $sleep instead of sleep 1.
+
+2025-02-25  Karl Berry  <karl@freefriends.org>
+
+	doc: tiny.
+
+	* HACKING: mention tag list.
+	* doc/automake.texi: wording.
+
+2025-02-25  Karl Berry  <karl@freefriends.org>
+
+	maint: secondary updates from make fetch.
+
+	* lib/texinfo.tex: update with make fetch.
+
+2025-02-24  Karl Berry  <karl@freefriends.org>
+
+	automake: warn about install.sh being found, rather than error.
+
+	Report from https://bugs.gnu.org/19964.
+
+	* bin/automake.in (scan_autoconf_files): give a msg 'obsolete'
+	rather than err_am. Mention where install.sh was found.
+	(En passant, fix some doubled words.)
+	* NEWS: mention this.
+
+2025-02-24  Karl Berry  <karl@freefriends.org>
+
+	dist: change tar format default to ustar.
+
+	Suggested in https://bugs.gnu.org74847.
+
+	* m4/init.m4 (tar-ustar): make ustar the default instead of tar-v7.
+	* doc/automake.texi (tar-formats): document this.
+	* NEWS: mention this.
+	* t/tar-override.sh: force tar-v7 for purposes of this test.
+
+2025-02-24  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: test TAP stdout/stderr order with --merge --stderr-prefix
+
+	* t/tap-stderr-prefix.tap: Add a test checking the processing order of stdout
+	lines relative to stderr lines when the TAP driver is passed `--merge' and
+	`--stderr-prefix'.
+
+2025-02-24  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: add shell function support to `command_ok_'
+
+	* t/ax/tap-functions.sh (command_ok_): Run the command without testing
+	the exit status with `||' in case the command is a shell function.
+	This avoids unintentionally disabling `set -e' inside the shell
+	function.
+
+2025-02-24  Richard Hansen  <rhansen@rhansen.org>
+
+	doc: Revise `--stderr-prefix' documentation
+
+	* doc/automake.texi (TAP prefixing stderr): Tweak the wording to
+	clarify, and mention awk input buffering.
+
+2025-02-24  Bogdan  <bogdro_rep@gmx.us>
+
+	dist: correct sense of no-dist-built-sources option.
+
+	Primarily from https://bugs.gnu.org/69908.
+
+	* bin/automake.in (preprocess_file) <DIST_BUILT_SOURCES>:
+	make the option name be "no-dist-built-sources",
+	per Options.pm and automake.texi; then set it with a single !.
+	* lib/am/distdir.am (distdir) [DIST_BUILT_SOURCES]: insert the
+	dependency on $(BUILT_SOURCES) when DIST_BUILT_SOURCES is true,
+	not false; i.e., sense was reversed.
+	* t/dist-no-built-sources.sh: edit the test configure.ac
+	in the no-dist-built-sources case. Rename the testopt value to
+	match the Automake option.
+	* NEWS: mention this.
+
+2025-02-23  Karl Berry  <karl@freefriends.org>
+
+	doc: tar-pax also works around too-large uid/gid for tar.
+
+	From https://bugs.gnu.org/73316.
+
+	* doc/automake.texi (Basics of Distribution): also mention
+	the tar-pax format as a fix for out of range uid/gid for tar.
+
+2025-02-23  Karl Berry  <karl@freefriends.org>
+
+	doc: move --stderr-prefix doc details to a new subsubsection.
+
+	Still in https://bugs.gnu.org/72536.
+
+	* doc/automake.texi (TAP setup and examples):
+	(TAP stderr examples),
+	TAP stderr prefixing): split TAP examples
+	into new subsubsections. Add discussion of race condition and
+	other reordering from the open bug.
+	* NEWS: mention --stderr-prefix.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: use `--stderr-prefix' for TAP tests
+
+	* t/local.mk: Pass `--stderr-prefix' to `lib/tap-driver.sh' when
+	running TAP tests to prevent stderr lines from being confused with
+	test results and to improve the readability of the test log files.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tap: include malformed output in error message to aid with debugging
+
+	* lib/tap-driver.sh: If the line that should contain the test script's exit
+	status is not an integer (which would indicate a bug with the driver, not the
+	code under test), include the line in the error message to help with
+	debugging.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tap: new `--stderr-prefix' option to prefix test script's stderr
+
+	* lib/tap-driver.sh: Add a new `--stderr-prefix' option to instruct
+	the TAP driver to prefix each line of the test script's standard error
+	with the given string.  This is useful when `--merge' is enabled and
+	standard error lines might be confused with test results.
+	* doc/automake.texi: Document the new `--stderr-prefix' option.
+	* t/tap-stderr-prefix.tap: New test.
+	* t/list-of-tests.mk (handwritten_TESTS): Add it.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tap: minimize stderr redirection to just the test script
+
+	* lib/tap-driver.sh: Keep driver stderr separate from test script
+	stderr to aid with debugging (e.g., `set -x').
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tap: close fd 3 before invoking the test script
+
+	* lib/tap-driver.sh: Close file descriptor 3 before invoking the test
+	script to avoid potential conflicts with the test script.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: move space from `diag_()' to `$diag_string_'
+
+	* t/ax/tap-functions.sh (diag_): Moved the space separating
+	`$diag_string_' from the diagnostic message to `$diag_string_' so that
+	callers can eliminate the space.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: support getting `diag_' message from stdin
+
+	* t/ax/tap-functions.sh (diag_): Read the diagnostic message from
+	stdin if no arguments are given.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: use `printf' instead of `echo'
+
+	* t/ax/tap-functions (diag_): Use `printf' instead of `echo' in case
+	`echo' processes backslash escapes or the argument looks like an
+	option.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: prefix every line of diag_ text, not just the first
+
+	* t/ax/tap-function.sh (diag_): Prefix every line of the diagnostic
+	text, not just the first.
+
+2025-02-22  Richard Hansen  <rhansen@rhansen.org>
+
+	tests: turn off `set -x' in `diag_'
+
+	* t/ax/tap-functions.sh (diag_): Turn off `set -x' to reduce log spam.
+
+2025-02-21  Karl Berry  <karl@freefriends.org>
+
+	m4: force newline after AM_SILENT_RULES, as before 1.17.
+
+	From https://bugs.gnu.org/72267.
+
+	* m4/silent.m4 (AM_SILENT_RULES): m4_newline() after the assignment.
+	Report from Francis Dupont, suggestions from Francis and Nick Bowler.
+	* NEWS: mention this.
+	* THANKS: add Francis.
+
+2025-02-21  Kamila Szewczyk  <kspalaiologos@gmail.com>
+
+	dist: add bzip3 support.
+
+	From https://bugs.gnu.org/73795 (automake-patches).
+
+	* bin/automake.in (handle_dist): add bzip3 support.
+	https://github.com/kspalaiologos/bzip3
+	* lib/Automake/Options.pm (_is_valid_easy_option): likewise.
+	* lib/am/distdir.am (dist-bzip3): likewise.
+	* t/dist-formats.tap: likewise.
+	* t/dist-bzip3.sh: new test.
+	* t/list-of-tests.mk (handwritten_TESTS): add it.
+	* NEWS: mention this.
+	* THANKS: add Kamila.
+
+2025-02-21  Karl Berry  <karl@freefriends.org>
+
+	doc: dates of releases.
+
+	* NEWS: add dates of releases.
+
+2025-02-20  Richard Hansen  <rhansen@rhansen.org>
+
+	automake: add missing AC_MSG_RESULT calls to AM_SANITY_CHECK.
+
+	From https://bugs.gnu.org/76448 (automake-patches).
+
+	* m4/sanity.m4 (AM_SANITY_CHECK): Call AC_MSG_RESULT before erroring
+	out so that a complete line is printed to stdout before the error
+	message is written to stderr.
+	* NEWS: mention this.
+	* THANKS: add Richard.
+
+2025-02-09  Karl Berry  <karl@freefriends.org>
+
+	test: unset PERL5OPT later, in parallel-tests-log-compiler-example.sh.
+
+	* t/parallel-tests-log-compiler-example.sh: unset PERL5OPT
+	just for the make check warning.
+
+2025-02-09  Karl Berry  <karl@freefriends.org>
+
+	python: restore more compatible behavior for $PYTHON.
+
+	For https://bugs.gnu.org/74434.
+
+	* lib/py-compile: if $PYTHON -V does not include the
+	string "python" (case-insensitive), consider the support
+	intentionally disabled and exit successfully, unless PYTHON is set
+	to false, in which case exit unsuccessfully. This is closer to
+	the old behavior. Mention this in the help message.
+	* t/py-compile-env.sh: add test for PYTHON=:.
+	* NEWS: mention this. (And, en passant, add some past bug#s and
+	clarify that only RCS/SCCS pattern rules were disabled, not all.)
+
+2025-02-06  Karl Berry  <karl@freefriends.org>
+
+	test: unset PERL5OPT for parallel-tests-log-compiler-example.sh.
+
+	* t/parallel-tests-log-compiler-example.sh: unset PERL5OPT
+	since the test expects a warning.
+
+2025-02-04  Karl Berry  <karl@freefriends.org>
+
+	test: allow running with fatal warnings given in PERL5OPT.
+
+	* HACKING: mention running the test suite with
+	PERL5OPT=-Mwarnings=FATAL,all  in the environment at new Perl (and
+	Automake releases), to try to keep up with new Perl warnings.
+	Suggestion from Jacob Bachmeyer,
+	https://lists.gnu.org/archive/html/automake/2025-02/msg00001.html
+	* t/parallel-tests-log-compiler-example.sh: explicitly use warnings
+	so that this PERL5OPT setting won't be a fatal error.
+	* NEWS: formatting.
+
+2025-02-03  Bruno Haible  <bruno@clisp.org>
+
+	compile: Improve support for C++ compilations on MSYS2.
+
+	* lib/compile (func_file_conv): Use 'cygpath -w', not 'cygpath -m'
+	(c:\... vs. c:/... resp.).
+	* lib/ar-lib (func_file_conv): Likewise.
+
+2025-02-03  Bruno Haible  <bruno@clisp.org>
+
+	compile: Distinguish various MinGW, MSYS, MSYS2 environments correctly.
+
+	* lib/compile (func_file_conv): Use not only "uname -s", but also
+	$MSYSTEM and the presence of cygpath, in order to distinguish the
+	original MinGW and MSYS2.
+	* lib/ar-lib (func_file_conv): Likewise.
+
+2025-02-03  Bruno Haible  <bruno@clisp.org>
+
+	compile: Simplify, no need for nonexistent $file_conv=msys case,
+
+	* lib/compile (func_file_conv): Remove unnecessary |msys, added on
+	2019-11-11.
+	* lib/ar-lib (func_file_conv): Likewise.
+
+2025-02-03  Karl Berry  <karl@freefriends.org>
+
+	maint: text/test cleanups.
+
+	* THANKS: add Jose.
+	* NEWS: mention non-fatal Perl warnings and !! warning workaround.
+	* t/list-of-tests.mk (handwritten_TESTS): add a68-demo.sh.
+
+2025-02-02  Jose Marchesi  <jemarch@gnu.org>
+
+	Add support for the Algol 68 programming language.
+
+	* bin/automake.in: Call register_language for Algol 68.
+	  (resolve_linker): handle A68LINK.
+	  (%_am_macro_for_cond): Add entry for am__fastdepGA68.
+	* configure.ac: Look for ga68 and set GNU_GA68 and GNU_A68FLAGS
+	 	  if found.
+	* lib/Automake/Variable.pm (%_ac_macro_for_var): Add entries for GA68
+	  and GA68FLAGS.
+	* t/a68-demo.sh: New test.
+	* doc/automake.texi (Algol 68 Support): New section.
+	* NEWS: Add entry for Algol 68.
+
+2025-01-31  Karl Berry  <karl@freefriends.org>
+
+	automake: just use warnings, with no => FATAL.
+
+	Per Perl recommendation:
+	  https://perldoc.perl.org/warnings#Fatal-Warnings
+	Suggested by Collin Funk:
+	  https://lists.gnu.org/archive/html/automake/2025-01/msg00003.html
+	And in the Perl discussion:
+	  https://github.com/Perl/perl5/issues/22954#issuecomment-2622966302
+
+	* bin/aclocal.in: just use warnings, not making them fatal.
+	* bin/automake.in:
+	* contrib/tap-driver.pl:
+	* gen-testsuite-part:
+	* lib/Automake/ChannelDefs.pm:
+	* lib/Automake/Channels.pm:
+	* lib/Automake/Condition.pm:
+	* lib/Automake/Config.in:
+	* lib/Automake/Configure_ac.pm:
+	* lib/Automake/DisjConditions.pm:
+	* lib/Automake/FileUtils.pm:
+	* lib/Automake/General.pm:
+	* lib/Automake/Getopt.pm:
+	* lib/Automake/Item.pm:
+	* lib/Automake/ItemDef.pm:
+	* lib/Automake/Language.pm:
+	* lib/Automake/Location.pm:
+	* lib/Automake/Options.pm:
+	* lib/Automake/Rule.pm:
+	* lib/Automake/RuleDef.pm:
+	* lib/Automake/VarDef.pm:
+	* lib/Automake/Variable.pm:
+	* lib/Automake/Version.pm:
+	* lib/Automake/Wrap.pm:
+	* lib/Automake/XFile.pm:
+	* t/ax/deltree.pl:
+	* t/ax/extract-testsuite-summary.pl:
+	* t/check-fd-redirect.sh:
+	* t/tap-signal.tap:
+	* t/tests-environment-fd-redirect.sh:
+	* t/testsuite-summary-count-many.sh:
+
+2025-01-30  Collin Funk  <collin.funk1@gmail.com>
+
+	automake: avoid precedence error when using Perl 5.41+.
+
+	Reported by Igor Todorovski <itodorov@ca.ibm.com> in
+	<https://lists.gnu.org/archive/html/automake/2025-01/msg00000.html>.
+
+	* bin/automake.in (transform): Parentheses the '!' operators so
+	Perl 5.41.8 doesn't warn about "possible precedence problem".
+
+2025-01-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Rename file to fix copyright update glitch
+
+	* Makefile.am (EXTRA_DIST), NEWS: Adjust to file renaming.
+	* NEWS-future: Rename from NEWS-2.0, so that "make update-copyright"
+	does not think this is a man page and use \(en rather than - in year
+	ranges.  Change \(en back to -.
+
+2025-01-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: make update-copyright
+
+2025-01-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	make fetch
+
+2024-12-03  Collin Funk  <collin.funk1@gmail.com>
+
+	lib scripts: Make time-stamp after-save-hooks buffer-local.
+
+	From https://bugs.gnu.org/74661.
+
+	* contrib/tap-driver.pl: Add time-stamp-line-limit so Emacs updates the
+	timestamp. Pass optional arguments to 'add-hook'.
+	* lib/tap-driver.sh: Likewise.
+	* lib/compile: Pass optional arguments to 'add-hook'.
+	* lib/depcomp: Likewise.
+	* lib/install-sh: Likewise.
+	* lib/mdate-sh: Likewise.
+	* lib/missing: Likewise.
+	* lib/mkinstalldirs: Likewise.
+	* lib/py-compile: Likewise.
+	* lib/test-driver: Likewise.
+	* lib/ylwrap: Likewise.
+
+2024-11-23  Karl Berry  <karl@freefriends.org>
+
+	configure: make perl path with whitespace a warning, not error.
+
+	For https://bugs.gnu.org/74453.
+	See also https://bugs.gnu.org/62896.
+
+	* configure.ac (PERL): use AC_MSG_WARN.
+
+2024-10-20  Gavin Smith  <gavinsmith0123@gmail.com>
+
+	automake: require ABOUT-NLS only at gnits strictness.
+
+	From https://lists.gnu.org/archive/html/automake/2024-10/msg00006.html.
+
+	* bin/automake.in (handle_gettext): In require_file for ABOUT-NLS,
+	change strictness level from GNU to GNITS.
+	* NEWS: Add notice.
+
+2024-10-16  Karl Berry  <karl@freefriends.org>
+
+	doc: doubled words in source comments.
+
+	Fixes https://bugs.gnu.org/73828 and https://bugs.gnu.org/73829.
+
+	* lib/Automake/Item.pm: repeated "that".
+	* lib/Automake/Variable.pm: repeated "by".
+	Reports from Bjarni Ingi Gislason.
+	Other English fixes en passant.
+
+2024-09-10  Karl Berry  <karl@freefriends.org>
+
+	automake: recognize all-numeric MAJ.MIN.MICROa.ALPHA versions better.
+
+	* HACKING: more doc on version numbers.
+	* configure.ac (AC_INIT): 1.17.0.91, since we want (I guess)
+	to retain odd numbers for development and even numbers for pretests.
+	* m4/amversion.m4 (AM_AUTOMAKE_VERSION): 1.17.0.91 (auto-update).
+	(AM_SET_CURRENT_AUTOMAKE_VERSION): likewise.
+	* lib/Automake/Options.pm (_process_option_list): recognize
+	four-part numeric versions as Automake options.
+	* lib/Automake/Version.pm (split): recognize four-part numeric
+	versions.
+	* t/pm/Version.pl (@tests, @bad_versions): update test
+	to check (not reject) four-part numeric versions.
+
+2024-09-07  Eric Gallager  <egall@gwmail.gwu.edu>
+
+	m4: align removal after compilation with autoconf.
+
+	From https://bugs.gnu.org/72225, and
+	fixes https://bugs.gnu.org/72852.
+
+	* m4/prog-cc-c-o.m4: remove conftest[12]*.dSYM, and don't remove core.
+	* THANKS: add Eric.
+
+2024-07-14  Karl Berry  <karl@freefriends.org>
+
+	maint: it seems APIVERSION only changes for minor/major releases.
+
+	* configure.ac (APIVERSION): back to 1.17 (from 1.17.0.90).
+	* m4/amversion.m4: likewise (auto-updated).
+
+2024-07-11  Jim Meyering  <meyering@meta.com>
+
+	maint: post-release version bump to 1.17.0.90
+
+	* configure.ac (AC_INIT): 1.17.0.90.
+	* m4/amversion.m4: likewise (auto-updated).
+	* HACKING: Fix typo in version example.
+
 2024-07-10  Karl Berry  <karl@freefriends.org>
 
 	maint: prepare for 1.17 release.

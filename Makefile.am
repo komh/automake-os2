@@ -2,7 +2,7 @@
 
 ## Makefile for Automake.
 
-# Copyright (C) 1995-2024 Free Software Foundation, Inc.
+# Copyright (C) 1995-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ EXTRA_DIST += \
   bootstrap \
   GNUmakefile \
   HACKING \
-  NEWS-2.0 \
+  NEWS-future \
   PLANS
 
 # We want a handful of substitutions to be fully-expanded by make;

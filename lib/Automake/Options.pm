@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2024 Free Software Foundation, Inc.
+# Copyright (C) 2003-2025 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,10 +15,7 @@
 
 package Automake::Options;
 
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
-
+use 5.006; use strict; use warnings;
 use Exporter;
 
 use Automake::Config;
@@ -275,6 +272,7 @@ sub _is_valid_easy_option ($)
     color-tests
     dejagnu
     dist-bzip2
+    dist-bzip3
     dist-lzip
     dist-xz
     dist-zip
@@ -378,7 +376,8 @@ sub _process_option_list (\%@)
               $ret = 0;
             }
         }
-      elsif (/^\d+\.\d+(?:\.\d+)?[a-z]?(?:-[A-Za-z0-9]+)?$/)
+      elsif (/^\d+\.\d+(?:\.\d+)?(?:\.\d+)?[a-z]?(?:-[A-Za-z0-9]+)?$/)
+            # MAJOR.MINOR (all digits) are required, all else optional.
         {
           # Got a version number.
           if (Automake::Version::check ($VERSION, $&))

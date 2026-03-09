@@ -1,10 +1,11 @@
-This is automake.info, produced by makeinfo version 7.1 from
+This is automake.info, produced by makeinfo version 7.2 from
 automake.texi.
 
-This manual is for GNU Automake (version 1.17, 12 July 2024), a program
-that creates GNU standards-compliant Makefiles from template files.
+This manual is for GNU Automake (version 1.18.1, 25 June 2025), a
+program that creates GNU standards-compliant Makefiles from template
+files.
 
-   Copyright © 1995-2024 Free Software Foundation, Inc.
+   Copyright © 1995-2025 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -30,10 +31,11 @@ File: automake.info,  Node: Top,  Next: Introduction,  Up: (dir)
 GNU Automake
 ************
 
-This manual is for GNU Automake (version 1.17, 12 July 2024), a program
-that creates GNU standards-compliant Makefiles from template files.
+This manual is for GNU Automake (version 1.18.1, 25 June 2025), a
+program that creates GNU standards-compliant Makefiles from template
+files.
 
-   Copyright © 1995-2024 Free Software Foundation, Inc.
+   Copyright © 1995-2025 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -175,6 +177,7 @@ Building Programs and Libraries
 * Fortran 9x Support::          Compiling Fortran 9x sources
 * Java Support with gcj::       Compiling Java sources using gcj
 * Vala Support::                Compiling Vala sources
+* Algol 68 Support::            Compiling Algol 68 sources
 * Support for Other Languages:: Compiling other languages
 * Dependencies::                Automatic dependency tracking
 * EXEEXT::                      Support for executable extensions
@@ -363,7 +366,6 @@ Indices
 * Macro Index::                 Index of Autoconf macros
 * Variable Index::              Index of Makefile variables
 * General Index::               General index
-
 
 
 File: automake.info,  Node: Introduction,  Next: Autotools Introduction,  Prev: Top,  Up: Top
@@ -597,8 +599,8 @@ installation.
 
    Presently most packages do not have any ‘installcheck’ tests because
 the existence of ‘installcheck’ is little known, and its usefulness is
-neglected.  Our little toy package is no better: ‘make installcheck’
-does nothing.
+neglected.  Our toy package is no better: ‘make installcheck’ does
+nothing.
 
 
 File: automake.info,  Node: Standard Targets,  Next: Standard Directory Variables,  Prev: Basic Installation,  Up: Use Cases
@@ -612,28 +614,32 @@ The words ‘check’, ‘install’, and ‘installcheck’, passed as argument
 ‘make’, are called “targets”.  ‘make’ is a shorthand for ‘make all’,
 ‘all’ being the default target in the GNU Build System.
 
-   Here is a list of the most useful targets that the GNU Coding
-Standards specify.
+   Here is a list of the most commonly useful targets that the GNU
+Coding Standards specify.
 
 ‘make all’
      Build programs, libraries, documentation, etc. (same as ‘make’).
+
 ‘make install’
      Install what needs to be installed, copying the files from the
      package's tree to system-wide directories.
-‘make install-strip’
-     Same as ‘make install’, then strip debugging symbols.  Some users
-     like to trade space for useful bug reports...
+
 ‘make uninstall’
      The opposite of ‘make install’: erase the installed files.  (This
      needs to be run from the same build tree that was installed.)
+
 ‘make clean’
      Erase from the build tree the files built by ‘make all’.
+
 ‘make distclean’
      Additionally erase anything ‘./configure’ created.
+
 ‘make check’
      Run the test suite, if any.
+
 ‘make installcheck’
      Check the installed programs or libraries, if supported.
+
 ‘make dist’
      Recreate ‘PACKAGE-VERSION.tar.gz’ from all the source files.
 
@@ -1371,13 +1377,13 @@ tools should be invoked and why.  (But for the curious: the basic idea
 is to run:
 
   1. ‘aclocal’ (*note aclocal Invocation::),
-  2. ‘autoconf’ (*note (autoconf)::),
+  2. ‘autoconf’ (*note (autoconf)Top::),
   3. (if needed) ‘autoheader’ (part of the Autoconf distribution), and
   4. ‘automake’ (*note automake Invocation::).
 
-If needed, tools related to Gettext (*note (gettext)::) and Libtool
-(*note (libtool)::) are also invoked at different points.  Thus, as you
-can see, using ‘autoreconf’ is quite a bit more convenient.
+If needed, tools related to Gettext (*note (gettext)Top::) and Libtool
+(*note (libtool)Top::) are also invoked at different points.  Thus, as
+you can see, using ‘autoreconf’ is quite a bit more convenient.
 
    Nevertheless, because Autoconf and Automake have separate manuals, an
 essential idea to understand is that Autoconf is in charge of creating
@@ -1426,7 +1432,7 @@ your package, or your own mail address.
    The argument to ‘AM_INIT_AUTOMAKE’ is a list of options for
 ‘automake’ (*note Options::).  ‘-Wall’ and ‘-Werror’ ask ‘automake’ to
 turn on all warnings and report them as errors.  We are speaking of
-*Automake* warnings here, such as dubious instructions in ‘Makefile.am’.
+_Automake_ warnings here, such as dubious instructions in ‘Makefile.am’.
 This has absolutely nothing to do with how the compiler will be called,
 even though it may support options with similar names.  Using ‘-Wall
 -Werror’ is a safe setting when starting to work on a package: you do
@@ -2013,8 +2019,8 @@ source in case you need more recent versions.
 ‘mkinstalldirs’
      This script used to be a wrapper around ‘mkdir -p’, which is not
      portable.  Now we prefer to use ‘install-sh -d’ when ‘configure’
-     finds that ‘mkdir -p’ does not work, this makes one less script to
-     distribute.
+     finds that ‘mkdir -p’ does not work; this makes for one less script
+     to distribute.
 
      For backward compatibility ‘mkinstalldirs’ is still used and
      distributed when ‘automake’ finds it in a package.  But it is no
@@ -2210,7 +2216,7 @@ dependencies (i.e., ‘aclocal.m4’ and any included file), therefore
 ‘autoconf’ must be in your ‘PATH’.  If there is an ‘AUTOCONF’ variable
 in your environment it will be used instead of ‘autoconf’; this allows
 you to select a particular version of Autoconf.  By the way, don't
-misunderstand this paragraph: ‘automake’ runs ‘autoconf’ to *scan* your
+misunderstand this paragraph: ‘automake’ runs ‘autoconf’ to _scan_ your
 ‘configure.ac’; this won't build ‘configure’ and you still have to run
 ‘autoconf’ yourself for this purpose.
 
@@ -4052,6 +4058,7 @@ to build programs and libraries.
 * Fortran 9x Support::          Compiling Fortran 9x sources
 * Java Support with gcj::       Compiling Java sources using gcj
 * Vala Support::                Compiling Vala sources
+* Algol 68 Support::            Compiling Algol 68 sources
 * Support for Other Languages::  Compiling other languages
 * Dependencies::                Automatic dependency tracking
 * EXEEXT::                      Support for executable extensions
@@ -4129,9 +4136,11 @@ File: automake.info,  Node: Linking,  Next: Conditional Sources,  Prev: Program 
 
 If you need to link against libraries that are not found by ‘configure’,
 you can use ‘LDADD’ to do so.  This variable is used to specify
-additional objects or libraries to link with; it is inappropriate for
-specifying specific linker flags; you should use ‘AM_LDFLAGS’ for this
-purpose.
+additional objects or libraries to link with.  Libraries to link with
+can be indicated either as file names or through ‘-L’ and ‘-l’ options.
+
+   For other linker options (not ‘-L’ or ‘-l’), ‘LDADD’ is
+inappropriate.  You should use ‘AM_LDFLAGS’ for this purpose.
 
    Sometimes, multiple programs are built in one directory but do not
 share the same link-time requirements.  In this case, you can use the
@@ -5971,7 +5980,7 @@ the ‘--main=’ option.  The easiest way to do this is to use the
 ‘_LDFLAGS’ variable for the program.
 
 
-File: automake.info,  Node: Vala Support,  Next: Support for Other Languages,  Prev: Java Support with gcj,  Up: Programs
+File: automake.info,  Node: Vala Support,  Next: Algol 68 Support,  Prev: Java Support with gcj,  Up: Programs
 
 8.17 Vala Support
 =================
@@ -6029,9 +6038,41 @@ Renamed Objects::) to produce different C files from one Vala source
 file.
 
 
-File: automake.info,  Node: Support for Other Languages,  Next: Dependencies,  Prev: Vala Support,  Up: Programs
+File: automake.info,  Node: Algol 68 Support,  Next: Support for Other Languages,  Prev: Vala Support,  Up: Programs
 
-8.18 Support for Other Languages
+8.18 Algol 68 Support
+=====================
+
+Automake includes support for Algol 68, using GCC.
+
+   Any package including Algol 68 code must define the output variable
+‘A68’ in ‘configure.ac’; the simplest way to do this is to use the
+‘AC_PROG_A68’ macro (*note Particular Program Checks:
+(autoconf)Particular Programs.).
+
+   A few additional variables are defined when an Algol 68 source file
+is seen:
+
+‘A68’
+     The name of the Algol 68 compiler.
+
+‘A68FLAGS’
+     Any flags to pass to the Algol 68 compiler.
+
+‘AM_A68FLAGS’
+     The maintainer's variant of ‘A68FLAGS’.
+
+‘A68COMPILE’
+     The command used to compile an Algol 68 source file.  The file name
+     is appended to form the complete command line.
+
+‘A68LINK’
+     The command used to link a pure Algol 68 program or shared library.
+
+
+File: automake.info,  Node: Support for Other Languages,  Next: Dependencies,  Prev: Algol 68 Support,  Up: Programs
+
+8.19 Support for Other Languages
 ================================
 
 Automake currently only includes full support for C, C++ (*note C++
@@ -6047,7 +6088,7 @@ the suffix rule handling (*note Suffixes::).
 
 File: automake.info,  Node: Dependencies,  Next: EXEEXT,  Prev: Support for Other Languages,  Up: Programs
 
-8.19 Automatic dependency tracking
+8.20 Automatic dependency tracking
 ==================================
 
 As a developer it is often painful to continually update the
@@ -6102,7 +6143,7 @@ to the shell variable ‘$enable_dependency_tracking’ (all
 
 File: automake.info,  Node: EXEEXT,  Prev: Dependencies,  Up: Programs
 
-8.20 Support for executable extensions
+8.21 Support for executable extensions
 ======================================
 
 On some platforms, such as Windows, executables are expected to have an
@@ -6963,7 +7004,7 @@ Extending::).
 ‘EDITION’
 ‘VERSION’
      Both of these flags hold the version number of your program.  They
-     are kept separate for clarity.
+     are kept separate for historical reasons.
 
 ‘UPDATED’
      This holds the date the primary ‘.texi’ file was last modified.
